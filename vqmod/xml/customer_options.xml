@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Customer Options</id>
+	<version>2.0</version>
+	<vqmver required="true">2.4.0</vqmver>
+	<author>ittoysline</author>
+
+  <file name="admin/customers.app/edit_customer.inc.php">
+		<operation error="log">
+			<search position="after"><![CDATA[
+       if (empty($_POST['newsletter'])) $_POST['newsletter'] = 0;
+      ]]></search>
+			<add><![CDATA[
+       if (empty($_POST['forbidden'])) $_POST['forbidden'] = 0;
+       if (empty($_POST['disable_default_price'])) $_POST['disable_default_price'] = 0;
+       if (empty($_POST['disable_guest_price'])) $_POST['disable_guest_price'] = 0;
+       if (empty($_POST['enable_wholesale_price'])) $_POST['enable_wholesale_price'] = 0;
+       if (empty($_POST['disable_wholesale_price'])) $_POST['disable_wholesale_price'] = 0;
+       if (empty($_POST['disable_shipping_module'])) $_POST['disable_shipping_module'] = 0;
+       if (empty($_POST['discount_code_info'])) $_POST['discount_code_info'] = 0;
+       if (empty($_POST['attempts'])) $_POST['attempts'] = 0;
+       if (empty($_POST['wholesale_subtotal'])) $_POST['wholesale_subtotal'] = 0;
+       if (empty($_POST['genuine'])) $_POST['genuine'] = 0;
+       if (empty($_POST['international'])) $_POST['international'] = 0;
+       if (empty($_POST['enable_quantity_price'])) $_POST['enable_quantity_price'] = 0;
+       if (empty($_POST['enable_hide_product'])) $_POST['enable_hide_product'] = 0;
+       if (empty($_POST['vip'])) $_POST['vip'] = 0;
+      ]]></add>
+		</operation>         
+      
+		<operation error="log">
+			<search position="after" index="1"><![CDATA[
+       'notes',
+      ]]></search>
+			<add><![CDATA[
+       'forbidden',
+       'disable_default_price',
+       'disable_guest_price',
+       'enable_wholesale_price',
+       'disable_wholesale_price',
+       'disable_shipping_module',
+       'discount_code_info',
+       'attempts',
+       'wholesale_subtotal',
+       'genuine',
+       'enable_quantity_price',
+       'enable_hide_product',
+       'international',
+       'vip',
+      ]]></add>
+		</operation>      
+      
+		<operation error="log">
+			<search position="before" offset="3"><![CDATA[
+       <?php echo functions::form_draw_form_end(); ?>
+      ]]></search>
+			<add><![CDATA[
+       <div class="col-md-4">
+       
+        <div class="form-group">
+         <label><?php echo language::translate('title_rank', 'Rank'); ?></label>
+         <div class="checkbox">
+         <label><?php echo functions::form_draw_checkbox('vip', '1', true); ?> <?php echo language::translate('title_vip', 'VIP'); ?></label>
+        </div>	
+        
+       </br>       
+       
+        <div class="form-group">
+         <label><?php echo language::translate('title_nation', 'Nation'); ?></label>
+         <div class="checkbox">
+         <label><?php echo functions::form_draw_checkbox('international', '1', true); ?> <?php echo language::translate('title_international', 'International'); ?></label>
+        </div>	
+        
+       </br>
+       
+        <div class="form-group">
+         <label><?php echo language::translate('title_enable', 'Enable'); ?></label>
+         <div class="checkbox">
+         <label><?php echo functions::form_draw_checkbox('forbidden', '1', true); ?> <?php echo language::translate('title_forbidden', 'Enable Forbidden'); ?></label>
+        </div>		
+
+         <div class="checkbox">
+         <label><?php echo functions::form_draw_checkbox('enable_hide_product', '1', true); ?> <?php echo language::translate('title_enable_hide_product', 'Enable Hide Product'); ?></label>
+        </div>
+			
+         <div class="checkbox">
+         <label><?php echo functions::form_draw_checkbox('enable_wholesale_price', '1', true); ?> <?php echo language::translate('title_enable_wholesale_price', 'Enable Wholesale Price'); ?></label>
+        </div>			
+		
+		</br>	
+
+        <div class="form-group">
+         <label><?php echo language::translate('title_disable', 'Disable'); ?></label>
+
+         <div class="checkbox">
+         <label><?php echo functions::form_draw_checkbox('disable_guest_price', '1', true); ?> <?php echo language::translate('title_disable_guest_price', 'Disable Guest Price'); ?></label>
+        </div>
+
+         <div class="checkbox">
+         <label><?php echo functions::form_draw_checkbox('enable_quantity_price', '1', true); ?> <?php echo language::translate('title_disable_quantity_price', 'Disable Quantity Price'); ?></label>
+        </div>
+
+         <div class="checkbox">
+         <label><?php echo functions::form_draw_checkbox('disable_default_price', '1', true); ?> <?php echo language::translate('title_disable_default_price', 'Disable Default Price'); ?></label>
+        </div>
+
+         <div class="checkbox">
+         <label><?php echo functions::form_draw_checkbox('disable_wholesale_price', '1', true); ?> <?php echo language::translate('title_disable_wholesale_price', 'Disable Wholesale Price'); ?></label>
+        </div>	
+
+         <div class="checkbox">
+         <label><?php echo functions::form_draw_checkbox('disable_shipping_module', '1', true); ?> <?php echo language::translate('title_disable_shipping_module', 'Disable Shipping Module'); ?></label>
+        </div>
+        
+        </br>
+
+        <div class="form-group">
+          <label><?php echo language::translate('title_genuine', 'Genuine'); ?></label>
+          <?php echo functions::form_draw_text_field('genuine', true, 'style="height: 32px;"'); ?>
+        </div>
+        
+        <div class="form-group">
+          <label><?php echo language::translate('title_wholesale_subtotal', 'Wholesale Subtotal'); ?></label>
+          <?php echo functions::form_draw_text_field('wholesale_subtotal', true, 'style="height: 32px;"'); ?>
+        </div>
+
+        <div class="form-group">
+          <label><?php echo language::translate('title_discount_code_info', 'Discount Code Info'); ?></label>
+          <?php echo functions::form_draw_text_field('discount_code_info', true, 'style="height: 32px;"'); ?>
+        </div>      
+      
+        <div class="form-group">
+          <label><?php echo language::translate('title_attempts_count', 'Attempts Count'); ?></label>
+          <?php echo functions::form_draw_decimal_field('attempts', true, 'style="height: 32px;"'); ?>
+        </div>
+      ]]></add>
+		</operation>		
+	</file>		
+		
+  <file name="includes/entities/ent_customer.inc.php">
+ 		<operation error="log">
+			<search position="after" ><![CDATA[    
+        notes = '". database::input($this->data['notes']) ."',
+      ]]></search>
+			<add><![CDATA[
+        forbidden = '". (!empty($this->data['forbidden']) ? '1' : '0') ."',
+        disable_default_price = '". (!empty($this->data['disable_default_price']) ? '1' : '0') ."',
+        disable_guest_price = '". (!empty($this->data['disable_guest_price']) ? '1' : '0') ."',
+        enable_wholesale_price = '". (!empty($this->data['enable_wholesale_price']) ? '1' : '0') ."',
+        disable_wholesale_price = '". (!empty($this->data['disable_wholesale_price']) ? '1' : '0') ."',
+        disable_shipping_module = '". (!empty($this->data['disable_shipping_module']) && $this->data['disable_shipping_module'] === '1' ? '1' : '0') ."',
+        discount_code_info = '". database::input($this->data['discount_code_info']) ."',
+        attempts = '". database::input($this->data['attempts']) ."',
+        wholesale_subtotal = '". database::input($this->data['wholesale_subtotal']) ."',
+        genuine = '". database::input($this->data['genuine']) ."',
+        enable_quantity_price = '". database::input($this->data['enable_quantity_price']) ."', 
+        enable_hide_product = '". database::input($this->data['enable_hide_product']) ."', 
+        international = '". database::input($this->data['international']) ."', 
+        vip = '". database::input($this->data['vip']) ."', 
+      ]]></add>
+		</operation>  
+	</file>
+
+</modification>

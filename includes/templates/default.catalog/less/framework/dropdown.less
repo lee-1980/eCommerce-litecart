@@ -1,0 +1,183 @@
+.caret {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 2px;
+  vertical-align: middle;
+  border-top: 4px dashed;
+  border-top: 4px solid \9;
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
+}
+.hamburger-menu, .fixed-sidebar {
+    display: none;
+}
+@media only screen and (max-width: 767px) {
+body.overflow-hidden {
+    overflow-y: hidden;
+}
+.bg-blur { background-color: #000000a7; bottom: 0; display: none; height: 100%; left: 0; right: 0; position: fixed; top: 0; width: 100%; z-index: 3; }
+.bg-blur.active { display: block; }
+.hamburger-menu,
+.fixed-sidebar { display: block; }
+.hamburger-menu { left: 0; position: fixed; top: 31%; transition: 0.5s linear; -webkit-transition: 0.5s linear; -moz-transition: 0.5s linear; -ms-transition: 0.5s linear; -o-transition: 0.5s linear; z-index: 9999;}
+.hamburger-menu.active { left: 200px; }
+.burger-menu span {animation: flasher_red 2s linear infinite; opacity:0.7; border-radius: 0 30px 30px 0; -webkit-border-radius: 0 30px 30px 0; -moz-border-radius: 0 30px 30px 0; -ms-border-radius: 0 30px 30px 0; -o-border-radius: 0 30px 30px 0; height: 40px; position: relative; width: 40px; background-image: url(/images/button/goldbrush.navbar-togglel.jpg); left: 50%; position: absolute; top: 50%; transform: translate(-20%,-20%); -webkit-transform: translate(-20%,-20%); -moz-transform: translate(-20%,-20%); -ms-transform: translate(-20%,-20%); -o-transform: translate(-20%,-20%);}
+.burger-menu span:hover {opacity:1}
+.burger-menu span:before { content: ">>"; animation: flasher_red 2s linear infinite; height: 2px; left: 10px; position: absolute; top: 6px; width: 25px; color: red; font-size: 20px;}
+.burger-menu span:after { content: "<<"; position: absolute; left: -35px; top: 6px; width: 25px; color: red; font-size: 20px;}
+.hamburger-menu.active .burger-menu span:before {left: -35px;}
+.hamburger-menu.active .burger-menu span:after {left: 8px;}
+.fixed-sidebar { background-image: url("/images/customize/Back Ground Hamburger.jpg"); background-size: cover; background-position: center; height: 100%; left: 0; position: fixed; top: 0; transform: translateX(-100%); -webkit-transform: translateX(-100%); -moz-transform: translateX(-100%); -ms-transform: translateX(-100%); -o-transform: translateX(-100%); transition: 0.5s linear; -webkit-transition: 0.5s linear; -moz-transition: 0.5s linear; -ms-transition: 0.5s linear; -o-transition: 0.5s linear; width: 200px; z-index: 9999; padding: 5px; overflow-y: overlay;}
+.fixed-sidebar.active { transform: translateX(0); -webkit-transform: translateX(0); -moz-transform: translateX(0); -ms-transform: translateX(0); -o-transform: translateX(0); }
+.fixed-sidebar .hidden-xs {display: block !important;}
+}
+.dropup,
+.dropdown {
+  position: relative;
+}
+
+.dropdown-toggle:focus {
+  outline: 0;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  display: none;
+  float: left;
+  min-width: 160px;
+  padding: 5px 0;
+  margin: 2px 0 0;
+  list-style: none;
+  text-align: left;
+  background-color: #fff;
+  border: 1px solid @default-border-color;
+  border-radius: @default-border-radius;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+  background-clip: padding-box;
+  &.pull-right {
+    right: 0;
+    left: auto;
+  }
+  .divider {
+    height: 1px;
+    margin: 9px 0;
+    overflow: hidden;
+    background-color: #e5e5e5;
+  }
+  > li > a {
+    display: block;
+    padding: @default-gutter-size/4 @default-gutter-size;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.42857143;
+    color: #333333;
+    white-space: nowrap;
+    &a:hover,
+    &a:focus {
+      text-decoration: none;
+      color: #262626;
+      background-color: #f5f5f5;
+    }
+  }
+  > .active > a,
+  > .active > a:hover,
+  > .active > a:focus {
+    color: #fff;
+    text-decoration: none;
+    outline: 0;
+    background-color: #337ab7;
+  }
+  > .disabled > a,
+  > .disabled > a:hover,
+  > .disabled > a:focus {
+    color: #777777;
+  }
+  > .disabled > a:hover,
+  > .disabled > a:focus {
+    text-decoration: none;
+    background-color: transparent;
+    background-image: none;
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+    cursor: not-allowed;
+  }
+  @media (min-width: @media-breakpoint-sm) {
+    .navbar-form {
+      min-width: 320px;
+      margin: @default-gutter-size;
+    }
+  }
+}
+
+// Multi-level dropdown
+.dropdown .dropdown {
+  .dropdown-menu {
+    top: 0;
+    left: 100%;
+  }
+  .caret {
+    border-left: 4px dashed;
+    border-left: 4px solid \9;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+  }
+}
+
+.open > .dropdown-menu {
+  display: block;
+}
+.open > a {
+  outline: 0;
+}
+
+.dropdown-header {
+  display: block;
+  padding: 3px 20px;
+  font-size: 12px;
+  line-height: 1.42857143;
+  color: #777777;
+  white-space: nowrap;
+}
+
+.dropdown-backdrop {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  z-index: 990;
+}
+
+.pull-right > .dropdown-menu {
+  right: 0;
+  left: auto;
+}
+
+.dropup .caret,
+.navbar-fixed-bottom .dropdown .caret {
+  border-top: 0;
+  border-bottom: 4px dashed;
+  border-bottom: 4px solid \9;
+  content: "";
+}
+
+.dropup .dropdown-menu,
+.navbar-fixed-bottom .dropdown .dropdown-menu {
+  top: auto;
+  bottom: 100%;
+  margin-bottom: 2px;
+}
+
+@media (min-width: @media-breakpoint-sm) {
+  .navbar-right .dropdown-menu {
+    left: auto;
+    right: 0;
+  }
+  .navbar-right .dropdown-menu-left {
+    left: 0;
+    right: auto;
+  }
+}

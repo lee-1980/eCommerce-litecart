@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>V.I.P Price </id>
+	<version>2.0</version>
+	<vqmver required="true">2.4.0</vqmver>
+	<author>ittoysline.com</author>
+
+    <file name="includes/functions/func_catalog.inc.php">
+
+        <operation error="log">
+            <search position="replace"><![CDATA[pp.price, ]]></search>
+            <add><![CDATA[
+            pp.price, 
+            ppvip.vip_price_price,
+
+            ]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="after"><![CDATA[
+      ) pp on (pp.product_id = p.id)
+      ]]></search>
+            <add><![CDATA[
+
+      left join (
+        select product_id, if(`". database::input(currency::$selected['code']) ."`, `". database::input(currency::$selected['code']) ."` / ". (float)currency::$selected['value'] .", `". database::input(settings::get('store_currency_code')) ."`) as vip_price_price
+        from ". DB_TABLE_PRODUCTS_PRICES_BY_VIP_PRICE ."
+        where (start_date <= '". date('Y-m-d H:i:s') ."')
+        and (year(end_date) < '1971' or end_date >= '". date('Y-m-d H:i:s') ."')
+        order by end_date asc
+      ) ppvip on (ppvip.product_id = p.id)
+
+ 
+	  
+      ]]></add>
+        </operation>
+    </file> 
+
+    <file name="pages/search.inc.php">
+        <operation error="log">
+            <search position="replace"><![CDATA[pp.price, ]]></search>
+            <add><![CDATA[
+            pp.price,  
+            ppvip.vip_price_price, 
+
+            ]]></add>
+        </operation>	
+
+        <operation error="log">
+            <search position="after"><![CDATA[
+      ) pp on (pp.product_id = p.id)
+      ]]></search>
+            <add><![CDATA[	
+      left join (
+        select product_id, if(`". database::input(currency::$selected['code']) ."`, `". database::input(currency::$selected['code']) ."` / ". (float)currency::$selected['value'] .", `". database::input(settings::get('store_currency_code')) ."`) as vip_price_price
+        from ". DB_TABLE_PRODUCTS_PRICES_BY_VIP_PRICE ."
+        where (start_date <= '". date('Y-m-d H:i:s') ."')
+        and (year(end_date) < '1971' or end_date >= '". date('Y-m-d H:i:s') ."')
+        order by end_date asc
+      ) ppvip on (ppvip.product_id = p.id)
+            ]]></add>
+        </operation>	  
+	</file>
+
+</modification>

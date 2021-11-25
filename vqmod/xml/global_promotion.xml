@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Global promotion</id>
+	<version>0.1</version>
+	<vqmver required="true">2.2.0</vqmver>
+	<author>designbox.pro</author>
+
+	<file name="includes/functions/func_form.inc.php">
+		<operation error="log">
+			<search position="after"><![CDATA[
+    switch ($matches[1]) {
+			]]></search>
+			<add><![CDATA[
+	  case 'datetime';
+	    return form_draw_date_field($name, $input);
+      ]]></add>
+		</operation>
+	</file>
+
+</modification>

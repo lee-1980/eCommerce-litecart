@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+      <id>EyeCandy Cosmetic extender</id>
+      <version>1.0</version>
+      <vqmver required="true">2.4.0</vqmver>
+      <author>EyeCandy</author>
+
+      <file path="admin/appearance.app/" name="config.inc.php">
+            <operation error="log">
+                  <search position="after" regex="false">
+                        <![CDATA['menu' => array(]]></search>
+                  <add>
+                        <![CDATA[array(
+        'title' => language::translate('title_eyecandy_cosmetics', 'EyeCandy Cosmetics'),
+        'doc' => 'eyecandy_cosmetics',
+        'params' => array(),
+      ),]]>
+                  </add>
+            </operation>
+            <operation error="log">
+                  <search position="after" regex="false">
+                        <![CDATA['docs' => array(]]></search>
+                  <add>
+                        <![CDATA['eyecandy_cosmetics' => 'eyecandy_cosmetics.inc.php',]]>
+                  </add>
+            </operation>
+      </file>
+</modification>
+

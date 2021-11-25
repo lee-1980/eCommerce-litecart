@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Multi Update Products</id>
+	<version>1.0</version>
+	<vqmver required="true">2.4.0</vqmver>
+	<author>tim-international.net</author>
+	
+	<file path="admin/catalog.app/" name="config.inc.php">
+		<operation error="log">
+			<search position="after" regex="false" offset="3"><![CDATA[
+      'title' => language::translate('title_csv_import_export', 'CSV Import/Export'),
+      ]]></search>
+			<add><![CDATA[
+    // BOF: Multi Update Products
+      array(
+        'title' => language::translate('title_multi_update', 'Multi Update'),
+        'doc' => 'multi_update',
+        'params' => array(),
+      ),
+    // EOF: Multi Update Products
+      ]]></add>
+		</operation>
+    
+		<operation error="log">
+			<search position="after" regex="false"><![CDATA[
+    'csv' => 'csv.inc.php',
+      ]]></search>
+			<add><![CDATA[
+  // BOF: Multi Update Products
+    'multi_update' => 'multi_update.inc.php',
+  // EOF: Multi Update Products
+      ]]></add>
+		</operation>
+	</file>
+
+</modification>

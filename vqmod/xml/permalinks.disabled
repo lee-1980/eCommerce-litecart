@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+  <id>Permalinks</id>
+  <version>1.0</version>
+  <vqmver required="true">2.4.0</vqmver>
+  <author>tim-international.net</author>
+
+  <file name="admin/catalog.app/edit_category.inc.php">
+    <operation error="log">
+      <search position="after"><![CDATA[
+        'meta_description',
+      ]]></search>
+      <add><![CDATA[
+        'permalink',
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+      <search position="after" offset="2"><![CDATA[
+              <?php echo functions::form_draw_regional_input_field($language_code, 'meta_description['. $language_code .']', true); ?>
+      ]]></search>
+      <add><![CDATA[
+          <div class="form-group">
+            <label><?php echo language::translate('title_permalink', 'Permalink'); ?></label>
+            <?php echo functions::form_draw_regional_input_field($language_code, 'permalink['. $language_code .']', true, ''); ?>
+          </div>
+      ]]></add>
+    </operation>
+  </file>
+
+  <file name="admin/catalog.app/edit_manufacturer.inc.php">
+    <operation error="log">
+      <search position="after"><![CDATA[
+        'meta_description',
+      ]]></search>
+      <add><![CDATA[
+        'permalink',
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+      <search position="after" offset="2"><![CDATA[
+              <?php echo functions::form_draw_regional_input_field($language_code, 'meta_description['. $language_code .']', true); ?>
+      ]]></search>
+      <add><![CDATA[
+          <div class="form-group">
+            <label><?php echo language::translate('title_permalink', 'Permalink'); ?></label>
+            <?php echo functions::form_draw_regional_input_field($language_code, 'permalink['. $language_code .']', true, ''); ?>
+          </div>
+      ]]></add>
+    </operation>
+  </file>
+
+  <file name="admin/catalog.app/edit_product.inc.php">
+    <operation error="log">
+      <search position="after" index="1"><![CDATA[
+        'meta_description',
+      ]]></search>
+      <add><![CDATA[
+        'permalink',
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+      <search position="after" offset="2"><![CDATA[
+            <?php echo functions::form_draw_regional_input_field($language_code, 'meta_description['. $language_code .']', true); ?>
+      ]]></search>
+      <add><![CDATA[
+        <div class="form-group">
+          <label><?php echo language::translate('title_permalink', 'Permalink'); ?></label>
+          <?php echo functions::form_draw_regional_input_field($language_code, 'permalink['. $language_code .']', true, ''); ?>
+        </div>
+      ]]></add>
+    </operation>
+  </file>
+
+  <file name="admin/catalog.app/csv.inc.php">
+    <operation error="log">
+      <search position="after"><![CDATA[
+            'head_title',
+      ]]></search>
+      <add><![CDATA[
+            'permalink',
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+      <search position="after"><![CDATA[
+          'head_title' => $category->head_title,
+      ]]></search>
+      <add><![CDATA[
+          'permalink' => $category->permalink,
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+      <search position="after"><![CDATA[
+          'head_title' => $product->head_title,
+      ]]></search>
+      <add><![CDATA[
+          'permalink' => $product->permalink,
+      ]]></add>
+    </operation>
+  </file>
+
+  <file name="includes/entities/ent_category.inc.php">
+    <operation error="log">
+      <search position="after" index="1"><![CDATA[
+      $this->data['filters'] = array();
+      ]]></search>
+      <add><![CDATA[
+      foreach (array_keys(language::$languages) as $language_code) {
+        $this->data['permalink'][$language_code] = null;
+      }
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+      <search position="before" offset="1"><![CDATA[
+      $category_filters_query = database::query(
+      ]]></search>
+      <add><![CDATA[
+    // Permalinks
+      $permalinks_query = database::query(
+        "select * from ". DB_TABLE_PERMALINKS ."
+        where resource = 'category'
+        and resource_id = ". (int)$category_id .";"
+      );
+
+      while ($permalink = database::fetch($permalinks_query)) {
+        $this->data['permalink'][$permalink['language_code']] = $permalink['permalink'];
+      }
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+      <search position="before"><![CDATA[
+    // Delete filters
+      ]]></search>
+      <add><![CDATA[
+      foreach ($this->data['permalink'] as $language_code => $permalink) {
+        if (!empty($permalink)) {
+          database::query(
+            "replace into ". DB_TABLE_PERMALINKS ."
+            (resource, resource_id, language_code, permalink)
+            values ('category', ". (int)$this->data['id'] .", '". database::input($language_code) ."', '". database::input(ltrim($permalink, '/')) ."');"
+          );
+        } else {
+          database::query(
+            "delete from ". DB_TABLE_PERMALINKS ."
+            where resource = 'category'
+            and resource_id = ". (int)$this->data['id'] ."
+            and language_code = '". database::input($language_code) ."'
+            limit 1;"
+          );
+        }
+      }
+      ]]></add>
+    </operation>
+  </file>
+
+  <file name="includes/entities/ent_manufacturer.inc.php">
+    <operation error="log">
+      <search position="after" offset="2"><![CDATA[
+          $this->data[$field['Field']][$language_code] = null;
+      ]]></search>
+      <add><![CDATA[
+      foreach (array_keys(language::$languages) as $language_code) {
+        $this->data['permalink'][$language_code] = null;
+      }
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+      <search position="after" offset="2"><![CDATA[
+          $this->data[$key][$manufacturer_info['language_code']] = $value;
+      ]]></search>
+      <add><![CDATA[
+      $permalinks_query = database::query(
+        "select * from ". DB_TABLE_PERMALINKS ."
+        where resource = 'manufacturer'
+        and resource_id = '". (int)$manufacturer_id ."';"
+      );
+
+      while ($permalink = database::fetch($permalinks_query)) {
+        $this->data['permalink'][$permalink['language_code']] = $permalink['permalink'];
+      }
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+      <search position="before"><![CDATA[
+      cache::clear_cache('manufacturers');
+      ]]></search>
+      <add><![CDATA[
+      foreach ($this->data['permalink'] as $language_code => $permalink) {
+        if (!empty($permalink)) {
+          database::query(
+            "replace into ". DB_TABLE_PERMALINKS ."
+            (resource, resource_id, language_code, permalink)
+            values ('manufacturer', ". (int)$this->data['id'] .", '". database::input($language_code) ."', '". database::input(ltrim($permalink, '/')) ."');"
+          );
+        } else {
+          database::query(
+            "delete from ". DB_TABLE_PERMALINKS ."
+            where resource = 'manufacturer'
+            and resource_id = '". (int)$this->data['id'] ."'
+            and language_code = '". database::input($language_code) ."'
+            limit 1;"
+          );
+        }
+      }
+      ]]></add>
+    </operation>
+  </file>
+
+  <file name="includes/entities/ent_product.inc.php">
+    <operation error="log">
+      <search position="before"><![CDATA[
+      $this->data['categories'] = array();
+      ]]></search>
+      <add><![CDATA[
+      foreach (array_keys(language::$languages) as $language_code) {
+        $this->data['permalink'][$language_code] = null;
+      }
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+      <search position="after" offset="1"><![CDATA[
+        $this->data['images'][$image['id']] = $image;
+      ]]></search>
+      <add><![CDATA[
+      $permalinks_query = database::query(
+        "select * from ". DB_TABLE_PERMALINKS ."
+        where resource = 'product'
+        and resource_id = '". (int)$product_id ."';"
+      );
+
+      while ($permalink = database::fetch($permalinks_query)) {
+        $this->data['permalink'][$permalink['language_code']] = $permalink['permalink'];
+      }
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+      <search position="before" index="3"><![CDATA[
+      $this->previous = $this->data;
+      ]]></search>
+      <add><![CDATA[
+      foreach ($this->data['permalink'] as $language_code => $permalink) {
+        if (!empty($permalink)) {
+          database::query(
+            "replace into ". DB_TABLE_PERMALINKS ."
+            (resource, resource_id, language_code, permalink)
+            values ('product', ". (int)$this->data['id'] .", '". database::input($language_code) ."', '". database::input(ltrim($permalink, '/')) ."');"
+          );
+        } else {
+          database::query(
+            "delete from ". DB_TABLE_PERMALINKS ."
+            where resource = 'product'
+            and resource_id = ". (int)$this->data['id'] ."
+            and language_code = '". database::input($language_code) ."'
+            limit 1;"
+          );
+        }
+      }
+      ]]></add>
+    </operation>
+  </file>
+
+  <file name="includes/routes/url_category.inc.php">
+    <operation error="log">
+      <search position="after"><![CDATA[
+      if (empty($link->query['category_id'])) return;
+      ]]></search>
+      <add><![CDATA[
+      $permalinks_query = database::query(
+        "select * from ". DB_TABLE_PERMALINKS ."
+        where resource = 'category'
+        and resource_id = ". (int)$link->query['category_id'] ."
+        and language_code = '". database::input($language_code) ."'
+        limit 1;"
+      );
+
+      if ($permalink = database::fetch($permalinks_query)) {
+        $link->unset_query('category_id');
+        $link->path = $permalink['permalink'];
+        return $link;
+      }
+      ]]></add>
+    </operation>
+  </file>
+
+  <file name="includes/routes/url_manufacturer.inc.php">
+    <operation error="log">
+      <search position="after"><![CDATA[
+      if (empty($link->query['manufacturer_id'])) return;
+      ]]></search>
+      <add><![CDATA[
+      $permalinks_query = database::query(
+        "select * from ". DB_TABLE_PERMALINKS ."
+        where resource = 'manufacturer'
+        and resource_id = ". (int)$link->query['manufacturer_id'] ."
+        and language_code = '". database::input($language_code) ."'
+        limit 1;"
+      );
+
+      if ($permalink = database::fetch($permalinks_query)) {
+        $link->unset_query('manufacturer_id');
+        $link->path = $permalink['permalink'];
+        return $link;
+      }
+      ]]></add>
+    </operation>
+  </file>
+
+  <file name="includes/routes/url_product.inc.php">
+    <operation error="log">
+      <search position="after"><![CDATA[
+      if (empty($link->query['product_id'])) return;
+      ]]></search>
+      <add><![CDATA[
+      $permalinks_query = database::query(
+        "select * from ". DB_TABLE_PERMALINKS ."
+        where resource = 'product'
+        and resource_id = ". (int)$link->query['product_id'] ."
+        and language_code = '". database::input($language_code) ."'
+        limit 1;"
+      );
+
+      if ($permalink = database::fetch($permalinks_query)) {
+        $link->unset_query('product_id');
+        $link->path = $permalink['permalink'];
+        return $link;
+      }
+      ]]></add>
+    </operation>
+  </file>
+
+  <file name="includes/references/ref_category.inc.php">
+    <operation error="log">
+      <search position="before"><![CDATA[
+        case 'parent':
+      ]]></search>
+      <add><![CDATA[
+        case 'permalink':
+
+          $this->_data['permalink'] = '';
+
+          $permalink_query = database::query(
+          "select * from ". DB_TABLE_PERMALINKS ."
+            where resource = 'category'
+            and resource_id = ". (int)$this->_id ."
+            and language_code = '". database::input($this->_language_codes[0]) ."'
+            limit 1;"
+          );
+
+          if ($permalink = database::fetch($permalink_query)) {
+            $this->_data['permalink'] = $permalink['permalink'];
+          }
+
+          break;
+      ]]></add>
+    </operation>
+  </file>
+
+  <file name="includes/references/ref_manufacturer.inc.php">
+    <operation error="log">
+      <search position="before"><![CDATA[
+        default:
+      ]]></search>
+      <add><![CDATA[
+        case 'permalink':
+
+          $this->_data['permalink'] = '';
+
+          $permalink_query = database::query(
+            "select * from ". DB_TABLE_PERMALINKS ."
+            where resource = 'manufacturer'
+            and resource_id = ". (int)$this->_id ."
+            and language_code = '". database::input($this->_language_codes[0]) ."'
+            limit 1;"
+          );
+
+          if ($permalink = database::fetch($permalink_query)) {
+            $this->_data['permalink'] = $permalink['permalink'];
+          }
+
+          break;
+      ]]></add>
+    </operation>
+  </file>
+
+  <file name="includes/references/ref_product.inc.php">
+    <operation error="log">
+      <search position="before"><![CDATA[
+        case 'price':
+      ]]></search>
+      <add><![CDATA[
+        case 'permalink':
+
+          $this->_data['permalink'] = '';
+
+          $permalink_query = database::query(
+            "select * from ". DB_TABLE_PERMALINKS ."
+            where resource = 'product'
+            and resource_id = ". (int)$this->_id ."
+            and language_code = '". database::input($this->_language_codes[0]) ."'
+            limit 1;"
+          );
+
+          if ($permalink = database::fetch($permalink_query)) {
+            $this->_data['permalink'] = $permalink['permalink'];
+          }
+
+          break;
+      ]]></add>
+    </operation>
+  </file>
+
+</modification>

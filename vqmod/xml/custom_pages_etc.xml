@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Custom Pages Etc</id>
+	<version>1.0</version>
+	<vqmver required="true">2.4.0</vqmver>
+	<author>ittoysline</author>
+
+   <file path="pages/category.inc.php">
+         
+	<operation error="skip">
+		<search position="replace"><![CDATA[
+      if (empty($_GET['sort'])) $_GET['sort'] = 'price';
+      ]]></search>
+			<add><![CDATA[
+      if (empty($_GET['sort'])) $_GET['sort'] = 'popularity';
+      ]]></add>
+		</operation>       
+       
+	<operation error="skip">
+		<search position="replace"><![CDATA[
+      'campaigns_first' => true,
+      ]]></search>
+			<add><![CDATA[
+      'campaigns_first' => false,
+      ]]></add>
+		</operation>     
+
+	<operation error="skip">
+		<search position="replace"><![CDATA[
+      breadcrumbs::add(language::translate('title_categories', 'Categories'), document::ilink('categories'));
+      ]]></search>
+			<add><![CDATA[
+      breadcrumbs::add(language::translate('title_categories', 'Categories'));
+      ]]></add>
+		</operation> 
+
+  </file>
+  
+
+  
+</modification>
+
+

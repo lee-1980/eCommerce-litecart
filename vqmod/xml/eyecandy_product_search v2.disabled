@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Eyecandy Product Search</id>
+	<version>2.0</version>
+	<vqmver required="true">2.4.0</vqmver>
+	<author>EyeCandy</author>
+
+  <file path="admin/appearance.app/" name="eyecandy_cosmetics.inc.php">
+    <operation error="log">
+      <search position="after" regex="false"><![CDATA[/*<input:settings_button_top>*/]]></search>
+        <h2>capture=camera</h2>
+  <input type="file" accept="image/*;capture=camera"></input>
+      <add><![CDATA['productsearch' => array('doc' => 'productsearch_settings', 'title' => 'Product Search'),]]></add>
+    </operation>
+  </file>
+
+  <file path="admin/appearance.app/" name="config.inc.php">
+    <operation error="log">
+      <search position="after" regex="false">
+      <![CDATA['docs' => array(]]></search>
+      <add>
+      <![CDATA['productsearch_settings' => 'productsearch_settings.inc.php',]]>
+      </add>
+    </operation>
+  </file>
+
+  <file name="includes/library/lib_document.inc.php">
+    <operation error="log">
+      <search position="after"><![CDATA[
+      self::$snippets['head_tags']['favicon'] = '<link rel="shortcut icon" href="'. WS_DIR_APP . 'favicon.ico">';
+      ]]></search>
+      <add><![CDATA[
+      self::$snippets['head_tags']['eyecandyproductsearch'] = '<link rel="stylesheet" href="'. WS_DIR_EXT .'eyecandy/eyecandy_product_search.css" />';
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+      <search position="after"><![CDATA[
+      self::$snippets['head_tags']['favicon'] = '<link rel="shortcut icon" href="'. WS_DIR_APP . 'favicon.ico">';
+      ]]></search>
+      <add><![CDATA[
+      self::$snippets['foot_tags']['eyecandyproductsearch'] = '<script src="'. WS_DIR_EXT .'eyecandy/eyecandy_product_search.js"></script>';
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+      <search position="after"><![CDATA[
+      self::$snippets['head_tags']['favicon'] = '<link rel="shortcut icon" href="'. WS_DIR_APP . 'favicon.ico">';
+      ]]></search>
+      <add><![CDATA[
+      include_once(FS_DIR_APP . 'ext/eyecandy/eyecandy_product_search.inc.php');
+      ]]></add>
+    </operation>
+  </file>
+</modification>

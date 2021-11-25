@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Custom Deafult Catalog Admin Layout Default</id>
+	<version>2.0</version>
+	<vqmver required="true">2.4.0</vqmver>
+	<author>ittoysline</author>
+
+
+
+  <file name="includes/templates/*.admin/layouts/default.inc.php">
+	    <operation error="log">
+      <search position="replace"><![CDATA[     
+         <img class="center-block img-responsive" src="<?php echo WS_DIR_TEMPLATE; ?>images/logotype.svg" alt="<?php echo settings::get('store_name'); ?>" />
+      ]]></search>
+      <add><![CDATA[     
+         <img class="center-block img-responsive" src="<?php echo WS_DIR_TEMPLATE; ?>images/logotype.png" alt="<?php echo settings::get('store_name'); ?>" />
+      ]]></add>
+    </operation>
+		
+
+
+
+    
+	</file>
+
+</modification>

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Custom Edit Customers</id>
+	<version>2.0</version>
+	<vqmver required="true">2.4.0</vqmver>
+	<author>ittoysline</author>
+
+  <file name="admin/customers.app/edit_customer.inc.php">
+		<operation error="log">
+			<search position="replace" offset="3"><![CDATA[
+      <?php echo functions::form_draw_password_field('new_password', '', 'autocomplete="off"'); ?>
+      ]]></search>
+			<add><![CDATA[
+      <?php echo functions::form_draw_password_field('new_password', '', 'autocomplete="off"'); ?>
+            </div>
+          </div>			
+			
+          <div class="row">
+              <div class="form-group col-md-6">
+                <label><?php echo language::translate('title_date_valid_from', 'Date Valid From'); ?></label>
+                <?php echo functions::form_draw_validdate_field('date_valid_from', true); ?>
+              </div>
+
+              <div class="form-group col-md-6">
+                <label><?php echo language::translate('title_date_valid_to', 'Date Valid To'); ?></label>
+                <?php echo functions::form_draw_validdate_field('date_valid_to', true); ?>
+              </div>
+           
+          </div>
+      ]]></add>
+		</operation>
+		
+	  <operation error="log">
+		  <search position="before"><![CDATA[
+		  <label><?php echo language::translate('title_discount_code_info', 'Discount Code Info'); ?></label>
+      ]]></search>
+		  <add><![CDATA[
+              <div class="form-group">
+                <label><?php echo language::translate('title_discount_code_date_valid_from', 'Discount Code Date Valid From'); ?></label>
+                <?php echo functions::form_draw_discount_code_date_valid_from_field('discount_code_date_valid_from', true); ?>
+              </div>
+              
+              <div class="form-group">
+                <label><?php echo language::translate('title_discount_code_date_valid_to', 'Discount Code Date Valid To'); ?></label>
+                <?php echo functions::form_draw_discount_code_date_valid_to_field('discount_code_date_valid_to', true); ?>
+              </div>               
+          </div>
+      ]]></add>
+	  </operation>	
+		
+	  <operation error="log">
+		  <search position="after" offset="8"><![CDATA[
+		  if (empty($_POST['different_shipping_address'])) $_POST['different_shipping_address'] = 0;
+      ]]></search>
+		  <add><![CDATA[
+		  'date_valid_from',
+		  'date_valid_to',
+		  'discount_code_date_valid_from',
+		  'discount_code_date_valid_to',
+      ]]></add>
+	  </operation>
+	</file>
+	
+	<file name="admin/customers.app/customers.inc.php">
+		<operation error="log">
+			<search position="after"><![CDATA[
+      "concat(c.firstname, ' ', c.lastname) like '%". database::input($_GET['query']) ."%'",
+      ]]></search>
+			<add><![CDATA[
+          "date_valid_from like '%". database::input($_GET['query']) ."%'",
+          "date_valid_to like '%". database::input($_GET['query']) ."%'",
+          "discount_code_date_valid_from like '%". database::input($_GET['query']) ."%'",
+          "discount_code_date_valid_to like '%". database::input($_GET['query']) ."%'",
+      ]]></add>
+      
+			<operation error="log">
+				<search position="before"><![CDATA[
+          <th data-sort="date_created" class="text-center"><?php echo language::translate('title_date_registered', 'Date Registered'); ?></th>
+      ]]></search>
+				<add><![CDATA[
+          <th class="text-center">Date valid from</th>
+          <th class="text-center">Date valid to</th>
+      ]]></add>
+			</operation>
+			
+			<operation error="log">
+				<search position="before"><![CDATA[
+          <td class="text-right"><?php echo language::strftime(language::$selected['format_datetime'], strtotime($customer['date_created'])); ?></td>
+      ]]></search>
+				<add><![CDATA[
+          <th class="text-center"><?php echo $customer['date_valid_from']; ?></td>
+          <th class="text-center"><?php echo $customer['date_valid_to']; ?></td>
+      ]]></add>
+			</operation>
+		</operation>
+	</file>
+
+  <file name="/includes/entities/ent_customer.inc.php">	
+		<operation error="log">
+			<search position="after"><![CDATA[
+          lastname = '". database::input($this->data['lastname']) ."',
+      ]]></search>
+			<add><![CDATA[
+          date_valid_from = '". database::input($this->data['date_valid_from']) ."',
+          date_valid_to = '". database::input($this->data['date_valid_to']) ."',
+          discount_code_date_valid_from = '". database::input($this->data['discount_code_date_valid_from']) ."',
+          discount_code_date_valid_to = '". database::input($this->data['discount_code_date_valid_to']) ."',
+      ]]></add>
+		</operation>
+	</file>	
+	
+  <file name="/includes/functions/func_form.inc.php">	
+		<operation error="log">
+			<search position="before"><![CDATA[
+      function form_draw_hidden_field($name, $value=true, $parameters='') {
+      ]]></search>
+			<add><![CDATA[
+      function form_draw_validdate_field($name, $value='', $parameters=''){
+        if ($value === true) $value = form_reinsert_value($name);
+          $value = date('Y-m-d', strtotime($value));
+          
+      return '<input '. (!preg_match('#class="([^"]+)?"#', $parameters) ? 'class="form-control"' : '') .' type="date" name="'. htmlspecialchars($name) .'" value="'. htmlspecialchars($value) .'" data-type="date" maxlength="10" pattern="^[0-9]{4}-[0-9]{2}-[0-9]{2}" placeholder="YYYY-MM-DD"'. (($parameters) ? ' '.$parameters : false) .' />';
+  }
+      ]]></add>
+		</operation>
+		
+		<operation error="log">
+			<search position="before"><![CDATA[
+      function form_draw_hidden_field($name, $value=true, $parameters='') {
+      ]]></search>
+			<add><![CDATA[
+      function form_draw_discount_code_date_valid_from_field($name, $value='', $parameters=''){
+        if ($value === true) $value = form_reinsert_value($name);
+          $value = date('Y-m-d', strtotime($value));
+          
+      return '<input '. (!preg_match('#class="([^"]+)?"#', $parameters) ? 'class="form-control"' : '') .' type="date" name="'. htmlspecialchars($name) .'" value="'. htmlspecialchars($value) .'" data-type="date" maxlength="10" pattern="^[0-9]{4}-[0-9]{2}-[0-9]{2}" placeholder="YYYY-MM-DD"'. (($parameters) ? ' '.$parameters : false) .' />';
+  }
+      ]]></add>
+		</operation>
+		
+		<operation error="log">
+			<search position="before"><![CDATA[
+      function form_draw_hidden_field($name, $value=true, $parameters='') {
+      ]]></search>
+			<add><![CDATA[
+      function form_draw_discount_code_date_valid_to_field($name, $value='', $parameters=''){
+        if ($value === true) $value = form_reinsert_value($name);
+          $value = date('Y-m-d', strtotime($value));
+          
+      return '<input '. (!preg_match('#class="([^"]+)?"#', $parameters) ? 'class="form-control"' : '') .' type="date" name="'. htmlspecialchars($name) .'" value="'. htmlspecialchars($value) .'" data-type="date" maxlength="10" pattern="^[0-9]{4}-[0-9]{2}-[0-9]{2}" placeholder="YYYY-MM-DD"'. (($parameters) ? ' '.$parameters : false) .' />';
+  }
+      ]]></add>
+		</operation>		
+	</file>			
+			
+			
+</modification>
+
+
+<!--
+33
+	  <operation error="log">
+		  <search position="before"><![CDATA[
+		  <label><?php echo language::translate('title_discount_code_info', 'Discount Code Info'); ?></label>
+      ]]></search>
+		  <add><![CDATA[
+              <div class="form-group">
+                <label><?php echo language::translate('title_discount_code_date_valid_from', 'Discount Code Date Valid From'); ?></label>
+                <?php echo functions::form_draw_discount_code_date_valid_from_field('discount_code_date_valid_from', true); ?>
+              </div>
+              
+              <div class="form-group">
+                <label><?php echo language::translate('title_discount_code_date_valid_to', 'Discount Code Date Valid To'); ?></label>
+                <?php echo functions::form_draw_discount_code_date_valid_to_field('discount_code_date_valid_to', true); ?>
+              </div>               
+          </div>
+      ]]></add>
+	  </operation>	
+	  
+	  -->
+

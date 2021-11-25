@@ -1,0 +1,930 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Buttons Product Listing Col Row</id>
+	<version>1.0</version>
+	<vqmver required="true">2.4.0</vqmver>
+	<author>ittoysline</author>
+
+  <file name="includes/templates/*.catalog/views/listing_product_column.inc.php">
+      
+       <operation error="log">
+      <search position="after" offset="7"><![CDATA[
+          <div class="price-wrapper">
+      ]]></search>
+      <add><![CDATA[   
+
+     <?php if (!empty(reference::product($product_id)->options) && (reference::product($product_id)->quantity > 0 || reference::product($product_id)->sold_out_status['orderable'])) { ?>
+       <div class="buy-now-wrapper">
+
+      <?php if (!empty(reference::product($product_id)->options) && (!empty($campaign_price))) { ?>
+      <a class="add-cart-item btn btn-default btn-block" style="background-image:url('/images/customize/Red.jpg');" href="<?php echo document::href_ilink('product', array('product_id' => $product_id)); ?>">
+	  <b><i><span style="color: #fff;"><?php echo functions::draw_fonticon('fa-list-ul'); ?> <?php echo language::translate('title_view_options', 'View Options'); ?></i></b></a> 
+
+      <?php } else { ?>
+      <a class="add-cart-item btn btn-default btn-block" style="background-image:url('/images/customize/Blue.jpg');" href="<?php echo document::href_ilink('product', array('product_id' => $product_id)); ?>">
+	  <b><i><span style="color: #fff;"><?php echo functions::draw_fonticon('fa-list-ul'); ?> <?php echo language::translate('title_view_options', 'View Options'); ?></i></b></a>  
+    <?php } ?>
+    </div>
+    <?php } ?>
+      ]]></add>
+    </operation>      
+      
+    <operation error="log">
+      <search position="after" offset="7"><![CDATA[
+          <div class="price-wrapper">
+      ]]></search>
+      <add><![CDATA[
+    <?php if (reference::product($product_id)->date_valid_from > date('Y-m-d H:i:s') && reference::product($product_id)->backorder) { ?>
+	
+    <div class="buy-now-wrapper">
+      <?php if (!empty(reference::product($product_id)->options)) { ?>
+
+	  <?php } else if (!empty($campaign_price && ($quantity > 0 || !empty($product->sold_out_status['orderable'])))) { ?>
+      <button class="btn btn-success btn-block" name="add_cart_product" style="display: none;" value="true" type="submit">
+	  <span style="color: #fff;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_insane_deal_!!', 'Insane Deal !!'); ?></i></b></button> 	  
+
+	  <?php } else if (reference::product($product_id)->quantity <= 0 || reference::product($product_id)->sold_out_status['orderable']) { ?>
+      <button class="sold_out" disabled="disabled" name="add_cart_product" style="background-image:url('/images/customize/Dark Red.jpg');" value="true" type="submit">
+	  <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i> <?php echo language::translate('title_sold_out', 'Sold Out'); ?></i></b></button>
+	  
+      <?php } else if (empty(customer::$data['id']) && ((!empty(reference::product($product_id)->sign_in_dates) && (!empty(reference::product($product_id)->sign_in_date_price_prices)))) ) { ?> 
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>      
+      <button class="btn btn-default btn-block" disabled="disabled"  name="add_cart_product" style="background-image:url('/images/customize/Orange.jpg');" value="true" type="submit">
+	  <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_backorder', 'Backorder'); ?></i></b></button>
+      <?php echo functions::form_draw_form_end('buy_now_form'); ?>		  
+	  
+      <?php } else { ?>
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>
+      <button class="btn btn-success btn-block" type="submit" name="add_cart_product" style="background-image:url('/images/customize/Orange.jpg');" value="true">
+	  <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?> 
+	  <b><i><?php echo language::translate('title_backorder', 'Backorder'); ?></i></b></button>
+      <?php echo functions::form_draw_form_end('buy_now_form'); ?>
+    <?php } ?>
+    </div>
+    <?php } ?>
+      ]]></add>
+    </operation>
+    
+     <operation error="log">
+      <search position="after" offset="7"><![CDATA[
+          <div class="price-wrapper">
+      ]]></search>
+      <add><![CDATA[
+	<?php if (reference::product($product_id)->date_valid_from < date('Y-m-d H:i:s') && reference::product($product_id)->backorder) { ?>
+	
+    <div class="buy-now-wrapper">
+      <?php if (!empty(reference::product($product_id)->options)) { ?>
+
+	  <?php } else if (!empty($campaign_price && ($quantity > 0 || !empty($product->sold_out_status['orderable'])))) { ?>
+      <button class="btn btn-success btn-block" name="add_cart_product" style="display: none;" value="true" type="submit">
+	  <span style="color: #fff;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_insane_deal_!!', 'Insane Deal !!'); ?></i></b></button>
+	   
+      <?php } else if (!empty($campaign_price && ($quantity <= 0 || !empty($product->sold_out_status['orderable'])))) { ?>
+      <button class="sold_out" disabled="disabled" name="add_cart_product" style="background-image:url('/images/customize/Dark Red.jpg');" value="true" type="submit">
+	  <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i> <?php echo language::translate('title_sold_out', 'Sold Out'); ?></i></b></button>	   
+
+	  <?php } else if (reference::product($product_id)->quantity <= 0 || reference::product($product_id)->sold_out_status['orderable']) { ?>
+      <button class="btn btn-success btn-block" name="add_cart_product" style="display: none;" value="true" type="submit">
+	  <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i> <?php echo language::translate('title_sold_out', 'Sold Out'); ?></i></b></button>
+	  
+      <?php } else if (empty(customer::$data['id']) && (!empty(reference::product($product_id)->sign_in_date_price_prices)) ) { ?> 
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>      
+      <button class="btn btn-default btn-block" disabled="disabled"  name="add_cart_product" style="background-image:url('/images/customize/Orange.jpg');" value="true" type="submit">
+	  <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_backorder', 'Backorder'); ?></i></b></button>
+      <?php echo functions::form_draw_form_end('buy_now_form'); ?>	  
+	  
+      <?php } else { ?>
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>
+      <button class="btn btn-success btn-block" disabled="disabled" name="add_cart_product" style="background-image:url('/images/customize/Gray.jpg');" value="true">
+	  <b><i><span style="color: #fcbd35;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <?php echo language::translate('title_order_closed', 'Order Closed'); ?></i></b></button>
+      <?php echo functions::form_draw_form_end('buy_now_form'); ?>
+     <?php } ?>
+     </div>
+     <?php } ?>
+      ]]></add>
+    </operation>  
+
+    <operation error="log">
+      <search position="after" offset="7"><![CDATA[
+          <div class="price-wrapper">
+      ]]></search>
+      <add><![CDATA[
+	<?php if (reference::product($product_id)->date_valid_from > date('Y-m-d H:i:s') && reference::product($product_id)->preorderable) { ?>
+	
+    <div class="buy-now-wrapper">
+      <?php if (!empty(reference::product($product_id)->options)) { ?>
+      
+  
+ 	  
+
+	  <?php } else if ((reference::product($product_id)->quantity <= 0|| reference::product($product_id)->sold_out_status['orderable']) 
+	  || (!empty(customer::$data['enable_wholesale_price']) && (!empty(reference::product($product_id)->wholesale_soldout)))
+	  || (!empty(reference::product($product_id)->fake_sold_out) && (!empty(reference::product($product_id)->fake_sold_out_date_price_prices)) && (reference::product($product_id)->quantity > 0 || reference::product($product_id)->sold_out_status['orderable']))
+	  ){ ?>
+      <button class="sold_out" disabled="disabled" name="add_cart_product" style="background-image:url('/images/customize/Dark Red.jpg');" value="true" type="submit">
+	  <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i> <?php echo language::translate('title_sold_out', 'Sold Out'); ?></i></b></button>
+	  
+      <?php } else if ((reference::product($product_id)->date_valid_to > date('Y-m-d H:i:s') && (empty(customer::$data['id']) && (!empty(reference::product($product_id)->pending_guest)))) 
+      || (reference::product($product_id)->date_valid_to > date('Y-m-d H:i:s') && (!empty(customer::$data['id']) && (!empty(customer::$data['code']) && (!empty(reference::product($product_id)->pending_guest)))))
+      ) { ?>
+      <button class="btn btn-default btn-block" disabled="disabled" name="add_cart_product" style="background-image:url('/images/customize/Lightblue.jpg');" value="true">
+	  <span style="color: #0000c7;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i> <?php echo language::translate('title_pending', 'Pending'); ?></i></b></button> 
+	  
+	  <?php } else if (!empty($campaign_price) && (!empty(reference::product($product_id)->no_customer_group_prices))) { ?>
+      <!-- NONE -->
+
+      <?php } else if ((!empty(reference::product($product_id)->preorderable)  && (!empty(reference::product($product_id)->guest_insaneprice) && (!empty(reference::product($product_id)->specialprice) && (!empty(reference::product($product_id)->guest_price_prices && ($quantity > 0 || !empty($product->sold_out_status['orderable']))))))) 
+      || (!empty(customer::$data['id']) && (empty(customer::$data['code']) && (empty(customer::$data['enable_wholesale_price']) && (!empty(reference::product($product_id)->preorderable)  && (!empty(reference::product($product_id)->customer_insaneprice) && (!empty(reference::product($product_id)->customer_specialprice) && (!empty(reference::product($product_id)->default_price_price && ($quantity > 0 || !empty($product->sold_out_status['orderable']))))))))))
+      ) { ?>
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>      
+      <button class="btn btn-success btn-block" name="add_cart_product" style="background-image:url('/images/customize/Blue Red.jpg');" value="true" type="submit">
+	  <span style="color:  #fff;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_insane_preorder', 'Insane Pre-Order !!'); ?></i></b></button>
+	  <?php echo functions::form_draw_form_end('buy_now_form'); ?> 
+
+	  <?php } else if (empty(customer::$data['id']) && (!empty(reference::product($product_id)->insaneprice) && (!empty($campaign_price)) && (!empty(reference::product($product_id)->sign_in_deal) && (reference::product($product_id)->date_valid_from > date('Y-m-d H:i:s')) ))) { ?> 
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>      
+      <button class="btn btn-default btn-block" disabled="disabled"  name="add_cart_product" style="background-image:url('/images/customize/Blue Red.jpg');" value="true" type="submit">
+	  <span style="color:  #fff;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_insane_preorder', 'Insane Pre-Order !!'); ?></i></b></button>
+	  <?php echo functions::form_draw_form_end('buy_now_form'); ?> 
+
+	  <?php } else if (!empty($campaign_price) && (!empty(reference::product($product_id)->insaneprice) && (!empty(reference::product($product_id)->preorderable)))) { ?>
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>	  
+      <button class="btn btn-success btn-block" name="add_cart_product" style="background-image:url('/images/customize/Blue Red.jpg');" value="true" type="submit">
+	  <span style="color:  #fff;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_insane_preorder', 'Insane Pre-Order !!'); ?></i></b></button>
+	  <?php echo functions::form_draw_form_end('buy_now_form'); ?> 
+
+      <?php } else if (empty(customer::$data['id']) && (reference::product($product_id)->date_valid_to <= date('Y-m-d H:i:s') && reference::product($product_id)->prebackorder) && (!empty(reference::product($product_id)->sign_in_date_price_prices)) ) { ?> 
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>      
+      <button class="btn btn-default btn-block" disabled="disabled"  name="add_cart_product" style="background-image:url('/images/customize/Purple Blue.jpg');" value="true" type="submit">
+	  <span style="color: #ffffff;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_pre_-_backorder', 'Pre-Backorder'); ?></i></b></button>
+      <?php echo functions::form_draw_form_end('buy_now_form'); ?>		  
+
+	  <?php } else if (reference::product($product_id)->date_valid_to <= date('Y-m-d H:i:s') && reference::product($product_id)->prebackorder) { ?>
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>	  
+	  <button class="btn btn-success btn-block" name="add_cart_product" style="background-image:url('/images/customize/Purple Blue.jpg');" value="true" type="submit">
+	  <span style="color: #ffffff;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+      <b><i><?php echo language::translate('title_pre_-_backorder', 'Pre-Backorder'); ?></i></b></button>
+      <?php echo functions::form_draw_form_end('buy_now_form'); ?>
+
+	  <?php } else if (!empty(customer::$data['vip']) && (!empty(reference::product($product_id)->vip) && (empty(reference::product($product_id)->no_customer_group_prices) && (!empty(reference::product($product_id)->preorderable) && (!empty(reference::product($product_id)->fake_sold_out_date_price_prices)) && (reference::product($product_id)->quantity > 0 || reference::product($product_id)->sold_out_status['orderable']))))) {
+	  if(isset($vip_purchased) && !empty($vip_purchased)) { ?>
+	  <button class="btn btn-success btn-block" name="add_cart_product" style="background-image:url('/images/customize/Pure White.jpg');opacity: 0.5;" value="true" type="submit" disabled="disabled">
+	  <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_vip_order', 'V.I.P Order'); ?></i></b></button>
+	  <?php } else { ?>
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>      
+      <button class="btn btn-success btn-block" name="add_cart_product" style="background-image:url('/images/customize/Pure White.jpg');" value="true" type="submit">
+	  <span style="color:  #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_vip_order', 'V.I.P Order'); ?></i></b></button>
+	  <?php echo functions::form_draw_form_end('buy_now_form'); } ?>
+
+      <?php } else if (empty(customer::$data['id']) && (!empty(reference::product($product_id)->preorderable)  
+	  && (!empty(reference::product($product_id)->specialprice) && (!empty(reference::product($product_id)->guest_price_prices)) && (!empty(reference::product($product_id)->sign_in)) ) )) { ?> 
+      <button class="btn btn-default btn-block" disabled="disabled" name="add_cart_product" style="background-image:url('/images/customize/Blue.jpg');" value="true" type="submit">
+      <span style="color: #cc0000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+      <b><i><?php echo language::translate('title_preorder', 'Pre-Order'); ?></i></b></button>	  
+ 
+      <?php } else if (!empty(reference::product($product_id)->preorderable) && (!empty(reference::product($product_id)->specialprice) && (!empty(reference::product($product_id)->guest_price_prices && ($quantity > 0 || !empty($product->sold_out_status['orderable'])))))) { ?>
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>
+      <button class="btn btn-success btn-block" name="add_cart_product" style="background-image:url('/images/customize/Blue.jpg');" value="true" type="submit">
+      <span style="color: #fff;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+      <b><i><?php echo language::translate('title_preorder', 'Pre-Order'); ?></i></b></button>	  	  
+	  <?php echo functions::form_draw_form_end('buy_now_form'); ?> 
+      
+      <?php } else if (empty(customer::$data['id']) && (reference::product($product_id)->date_valid_from > date('Y-m-d H:i:s') && reference::product($product_id)->preorderable) && (!empty(reference::product($product_id)->sign_in_date_price_prices)) ) { ?> 
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>      
+      <button class="btn btn-default btn-block" disabled="disabled"  name="add_cart_product" style="background-image:url('/images/customize/Blue.jpg');" value="true" type="submit">
+	  <span style="color: #fff;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_preorder', 'Pre-Order'); ?></i></b></button>
+      <?php echo functions::form_draw_form_end('buy_now_form'); ?>	  
+    
+      <?php } else { ?>
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>
+      <button class="btn btn-success btn-block" name="add_cart_product" style="background-image:url('/images/customize/Blue.jpg');" value="true" type="submit"
+	  <span style="color: #fff;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_preorder', 'Pre-Order'); ?></i></b></button>
+      <?php echo functions::form_draw_form_end('buy_now_form'); ?>
+    <?php } ?>
+    </div>
+    <?php } ?>
+      ]]></add>
+    </operation>
+    
+     <operation error="log">
+      <search position="after" offset="7"><![CDATA[
+          <div class="price-wrapper">
+      ]]></search>
+      <add><![CDATA[
+    
+	<?php if (reference::product($product_id)->date_valid_from <= date('Y-m-d H:i:s') && reference::product($product_id)->preorderable) { ?>
+	
+    <div class="buy-now-wrapper">
+      <?php if (!empty(reference::product($product_id)->options)) { ?>
+      
+	  <?php } else if (reference::product($product_id)->quantity <= 0 || reference::product($product_id)->sold_out_status['orderable']) { ?>
+      <button class="btn btn-success btn-block" name="add_cart_product" style="display: none;" value="true" type="submit">
+	  <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i> <?php echo language::translate('title_sold_out', 'Sold Out'); ?></i></b></button>
+
+      <?php } else if (!empty(reference::product($product_id)->preorderable) && (reference::product($product_id)->quantity <= 0|| reference::product($product_id)->sold_out_status['orderable'])){ ?>
+      <button class="sold_out" disabled="disabled" name="add_cart_product" style="background-image:url('/images/customize/Dark Red.jpg');" value="true" type="submit">
+	  <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i> <?php echo language::translate('title_sold_out', 'Sold Out'); ?></i></b></button>
+
+      <?php } else { ?>
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>
+		
+      <button class="btn btn-default btn-block" disabled="disabled" name="add_cart_product" style="background-image:url('/images/customize/Gray.jpg');" value="true">
+	  <b><i><span style="color: #fcbd35;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <?php echo language::translate('title_order_closed', 'Order Closed'); ?></i></b></button>
+      <?php echo functions::form_draw_form_end('buy_now_form'); ?>
+      
+    <?php } ?>
+    </div>
+    <?php } ?>
+      ]]></add>
+    </operation>    
+    
+    <operation error="log">
+      <search position="after" offset="7"><![CDATA[
+          <div class="price-wrapper">
+      ]]></search>
+      <add><![CDATA[
+    <?php if (reference::product($product_id)->date_valid_from <= date('Y-m-d H:i:s') && reference::product($product_id)->addtocart) { ?>
+	
+    <div class="buy-now-wrapper">
+      <?php if (!empty(reference::product($product_id)->options)) { ?>
+
+      <?php } else if (!empty($campaign_price && ($quantity <= 0 || !empty($product->sold_out_status['orderable'])))) { ?>
+      <button class="sold_out" disabled="disabled" name="add_cart_product" style="background-image:url('/images/customize/Dark Red.jpg');" value="true" type="submit">
+	  <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i> <?php echo language::translate('title_sold_out', 'Sold Out'); ?></i></b></button>	  
+
+	  <?php } else if (!empty($campaign_price && ($quantity > 0 || !empty($product->sold_out_status['orderable'])))) { ?>
+      <button class="btn btn-success btn-block" name="add_cart_product" style="display: none;" value="true" type="submit">
+	  <span style="color: #fff;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_insane_deal_!!', 'Insane Deal !!'); ?></i></b></button>
+
+	  <?php } else if (!empty(customer::$data['vip']) && (!empty(reference::product($product_id)->vip) && (empty(reference::product($product_id)->no_customer_group_prices) && (!empty(reference::product($product_id)->fake_sold_out_date_price_prices)) && (reference::product($product_id)->quantity > 0 || reference::product($product_id)->sold_out_status['orderable'])))) { 
+	  if(isset($vip_purchased) && !empty($vip_purchased)) { ?>
+	  <button class="btn btn-success btn-block" name="add_cart_product" style="background-image:url('/images/customize/Black.jpg');opacity: 0.5;" value="true" type="submit" disabled="disabled">
+	  <span style="color: #fff;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_vip_price', 'V.I.P Price');?></i></b></button>
+	  <?php } else { ?>
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>      
+      <button class="btn btn-success btn-block" name="add_cart_product" style="background-image:url('/images/customize/Black.jpg');" value="true" type="submit">
+	  <span style="color:  #fff;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_vip_price', 'V.I.P Price');?></i></b></button>
+	  <?php echo functions::form_draw_form_end('buy_now_form'); } ?>
+	   
+	   
+	  
+      <?php } else if ((!empty(reference::product($product_id)->fake_sold_out) && (!empty(reference::product($product_id)->fake_sold_out_date_price_prices)) && ($quantity > 0 || !empty($product->sold_out_status['orderable'])))
+      || (!empty(customer::$data['enable_wholesale_price']) && (empty(reference::product($product_id)->no_customer_group_prices) && (!empty(reference::product($product_id)->wholesale_soldout || ($quantity <= 0)))))
+      || (!empty(customer::$data['enable_wholesale_price']) && (!empty(reference::product($product_id)->no_customer_group_prices) && (!empty(reference::product($product_id)->wholesale_soldout || ($quantity <= 0)))))
+      || (!empty(reference::product($product_id)->fake_sold_out) && (!empty(reference::product($product_id)->fake_sold_out_date_price_prices) && (!empty(reference::product($product_id)->stock_quantity_prices && ($quantity > 0 || !empty($product->sold_out_status['orderable']))))))
+      ) { ?> 
+      <button class="sold_out" disabled="disabled" name="add_cart_product" style="background-image:url('/images/customize/Dark Red.jpg');" value="true" type="submit">
+	  <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i> <?php echo language::translate('title_sold_out', 'Sold Out'); ?></i></b></button> 
+	  
+      <?php } else if (empty(customer::$data['id']) && (!empty(reference::product($product_id)->sign_in_date_price_prices)) ) { ?>  
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>      
+      <button class="btn btn-default btn-block" disabled="disabled"  name="add_cart_product" style="background-image:url('/images/customize/Green.jpg');" value="true" type="submit">
+	  <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_add_to_cart', 'Add To Cart'); ?></i></b></button>
+      <?php echo functions::form_draw_form_end('buy_now_form'); ?>
+      
+	  <?php } else if (!empty(customer::$data['vip']) && (!empty(reference::product($product_id)->vip) && (empty(reference::product($product_id)->no_customer_group_prices) && (!empty(reference::product($product_id)->fake_sold_out_date_price_prices)) && (reference::product($product_id)->quantity > 0 || reference::product($product_id)->sold_out_status['orderable'])))) { 
+	  if(isset($vip_purchased) && !empty($vip_purchased)) { ?>
+	  <button class="btn btn-success btn-block" name="add_cart_product" style="background-image:url('/images/customize/Black.jpg');opacity: 0.5;" value="true" type="submit" disabled="disabled">
+	  <span style="color: #fff;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_vip_price', 'V.I.P Price');?></i></b></button>
+	  <?php } else { ?>
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>      
+      <button class="btn btn-success btn-block" name="add_cart_product" style="background-image:url('/images/customize/Black.jpg');" value="true" type="submit">
+	  <span style="color:  #fff;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_vip_price', 'V.I.P Price');?></i></b></button>
+	  <?php echo functions::form_draw_form_end('buy_now_form'); } ?>      
+      
+      <?php } else if ((!empty(reference::product($product_id)->fake_sold_out) && (!empty(reference::product($product_id)->fake_sold_out_date_price_prices)))
+      || (!empty($campaign_price && ($quantity <= 0 || !empty($product->sold_out_status['orderable']))))
+      || (reference::product($product_id)->quantity <= 0 || reference::product($product_id)->sold_out_status['orderable'])
+      ) { ?> 
+      <!-- NONE -->
+	  
+	  <?php } else if (!empty(reference::product($product_id)->no_customer_group_prices)) { ?>
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>
+      <button class="btn btn-success btn-block" name="add_cart_product" style="background-image:url('/images/customize/Green.jpg');" value="true" type="submit">
+	  <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_add_to_cart', 'Add To Cart'); ?></i></b></button>
+      <?php echo functions::form_draw_form_end('buy_now_form'); ?>	
+
+      <?php } else if ((empty(customer::$data['id']) && ($quantity > 0 || !empty($product->sold_out_status['orderable'])) && (!empty(reference::product($product_id)->specialprice) && (!empty(reference::product($product_id)->guest_price_prices)) && (!empty(reference::product($product_id)->sign_in)))) 
+      ||(empty(customer::$data['id']) &&  ((!empty($campaign_price)) && (!empty(reference::product($product_id)->sign_in_deal))) && (!empty(reference::product($product_id)->specialprice) && (!empty(reference::product($product_id)->guest_price_prices)) && (!empty(reference::product($product_id)->sign_in))))
+      ) { ?>
+      <button class="btn btn-default btn-block" disabled="disabled" name="add_cart_product" style="background-image:url('/images/customize/Goldleaf.jpg');" value="true" type="submit">
+      <span style="color: #cc0000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+      <b><i><?php echo language::translate('title_special_offer', 'Special Offer'); ?></i></b></button>	 	  
+
+      <?php } else if ((!empty(customer::$data['id']) && (empty(customer::$data['code']) && (empty(customer::$data['enable_wholesale_price']) && (!empty(reference::product($product_id)->customer_insaneprice) && (!empty(reference::product($product_id)->customer_specialprice) && (!empty(reference::product($product_id)->default_price_price && ($quantity > 0 || !empty($product->sold_out_status['orderable']))))))))) 
+      || (!empty(reference::product($product_id)->specialprice) && (!empty(reference::product($product_id)->guest_insaneprice) && (!empty(reference::product($product_id)->guest_price_prices && ($quantity > 0 || !empty($product->sold_out_status['orderable']))))))
+      ) { ?>
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>      
+      <button class="btn btn-success btn-block" name="add_cart_product" style="background-image:url('/images/customize/Red.jpg');" value="true" type="submit">
+	  <span style="color: #fff;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_insane_deal_!!', 'Insane Deal !!'); ?></i></b></button>
+      <?php echo functions::form_draw_form_end('buy_now_form'); ?>
+      
+      <?php } else if ((!empty(customer::$data['id']) && ((!empty(reference::product($product_id)->customer_specialprice || disable_master_customer_special_price) && (!empty(reference::product($product_id)->master_customer_special_price) && (!empty(reference::product($product_id)->default_price_price)))))) 
+      || (!empty(customer::$data['id']) && (empty(customer::$data['code']) && (!empty(reference::product($product_id)->customer_group_prices && ($quantity > 0 || !empty($product->sold_out_status['orderable']))))))
+      || (!empty(reference::product($product_id)->specialprice) && (!empty(reference::product($product_id)->guest_price_prices && ($quantity > 0 || !empty($product->sold_out_status['orderable'])))))
+      || (!empty(customer::$data['id']) && (!empty(reference::product($product_id)->customer_specialprice) && (!empty(reference::product($product_id)->default_price_price && ($quantity > 0 || !empty($product->sold_out_status['orderable']))))))
+      || (!empty(customer::$data['id']) && (empty(customer::$data['code']) && (!empty(reference::product($product_id)->customer_group_prices && ($quantity > 0 || !empty($product->sold_out_status['orderable']))))))
+      ) { ?> 
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>
+      <button class="btn btn-success btn-block" name="add_cart_product" style="background-image:url('/images/customize/Goldleaf.jpg');" value="true" type="submit">
+      <span style="color: #cc0000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+      <b><i><?php echo language::translate('title_special_offer', 'Special Offer'); ?></i></b></button>	  	  
+	  <?php echo functions::form_draw_form_end('buy_now_form'); ?>
+
+      <?php } else { ?>
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>
+      <button class="btn btn-success btn-block" type="submit" name="add_cart_product" style="background-image:url('/images/customize/Green.jpg');" value="true">
+	  <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?> 
+	  <b><i><?php echo language::translate('title_add_to_cart', 'Add To Cart'); ?></i></b></button>
+      <?php echo functions::form_draw_form_end('buy_now_form'); ?>
+      <?php } ?>
+    </div>
+    <?php } ?>
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+      <search position="after" offset="7"><![CDATA[
+          <div class="price-wrapper">
+      ]]></search>
+      <add><![CDATA[
+	<?php if (!empty(reference::product($product_id)->date_valid_from >= date('Y-m-d H:i:s') && reference::product($product_id)->addtocart)) { ?>
+	
+    <div class="buy-now-wrapper">
+      <?php if (!empty(reference::product($product_id)->options)) { ?>
+      
+	  <?php } else if (!empty(customer::$data['vip']) && (!empty(reference::product($product_id)->vip) && (empty(reference::product($product_id)->no_customer_group_prices) && (!empty(reference::product($product_id)->fake_sold_out_date_price_prices)) && (reference::product($product_id)->quantity > 0 || reference::product($product_id)->sold_out_status['orderable'])))) { 
+	  if(isset($vip_purchased) && !empty($vip_purchased)) { ?>
+	  <button class="btn btn-success btn-block" name="add_cart_product" style="background-image:url('/images/customize/Black.jpg');opacity: 0.5;" value="true" type="submit" disabled="disabled">
+	  <span style="color: #fff;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_vip_price', 'V.I.P Price');?></i></b></button>
+	  <?php } else { ?>
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>      
+      <button class="btn btn-success btn-block" name="add_cart_product" style="background-image:url('/images/customize/Black.jpg');" value="true" type="submit">
+	  <span style="color:  #fff;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_vip_price', 'V.I.P Price');?></i></b></button>
+	  <?php echo functions::form_draw_form_end('buy_now_form'); } ?>      
+
+	  <?php } else if ((reference::product($product_id)->quantity <= 0 || reference::product($product_id)->sold_out_status['orderable']) 
+	  || (!empty(reference::product($product_id)->fake_sold_out) && (!empty(reference::product($product_id)->fake_sold_out_date_price_prices)) && (reference::product($product_id)->quantity > 0 || reference::product($product_id)->sold_out_status['orderable']))
+	  ) { ?>
+      <button class="sold_out" disabled="disabled" name="add_cart_product" style="background-image:url('/images/customize/Dark Red.jpg');" value="true" type="submit">
+	  <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i> <?php echo language::translate('title_sold_out', 'Sold Out'); ?></i></b></button>
+	  
+	  <?php } else if (!empty($campaign_price && ($quantity > 0 || !empty($product->sold_out_status['orderable'])))) { ?>
+      <button class="btn btn-success btn-block" name="add_cart_product" style="display: none;" value="true" type="submit">
+	  <span style="color: #fff;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_insane_deal_!!', 'Insane Deal !!'); ?></i></b></button>
+	  
+	  <?php } else if (!empty(customer::$data['vip']) && (!empty(reference::product($product_id)->vip) && (empty(reference::product($product_id)->no_customer_group_prices) && (!empty(reference::product($product_id)->fake_sold_out_date_price_prices)) && (reference::product($product_id)->quantity > 0 || reference::product($product_id)->sold_out_status['orderable'])))) { 
+	  if(isset($vip_purchased) && !empty($vip_purchased)) { ?>
+	  <button class="btn btn-success btn-block" name="add_cart_product" style="background-image:url('/images/customize/Black.jpg');opacity: 0.5;" value="true" type="submit" disabled="disabled">
+	  <span style="color: #fff;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_vip_price', 'V.I.P Price');?></i></b></button>
+	  <?php } else { ?>
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>      
+      <button class="btn btn-success btn-block" name="add_cart_product" style="background-image:url('/images/customize/Black.jpg');" value="true" type="submit">
+	  <span style="color:  #fff;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_vip_price', 'V.I.P Price');?></i></b></button>
+	  <?php echo functions::form_draw_form_end('buy_now_form'); } ?>	  
+
+      <?php } else if (!empty(reference::product($product_id)->fake_sold_out) && (!empty(reference::product($product_id)->fake_sold_out_date_price_prices)) && (!empty(reference::product($product_id)->stock_quantity_prices && ($quantity > 0 || !empty($product->sold_out_status['orderable']))))) { ?> 
+      <button class="sold_out" disabled="disabled" name="add_cart_product" style="background-image:url('/images/customize/Dark Red.jpg');" value="true" type="submit">
+	  <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i> <?php echo language::translate('title_sold_out', 'Sold Out'); ?></i></b></button>
+
+      <?php } else if (!empty(reference::product($product_id)->specialprice) && (!empty(reference::product($product_id)->guest_insaneprice) && (!empty(reference::product($product_id)->guest_price_prices && ($quantity > 0 || !empty($product->sold_out_status['orderable'])))))) { ?>      
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>      
+      <button class="btn btn-success btn-block" name="add_cart_product" style="background-image:url('/images/customize/Red.jpg');" value="true" type="submit">
+	  <span style="color: #fff;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_insane_deal_!!', 'Insane Deal !!'); ?></i></b></button>
+      <?php echo functions::form_draw_form_end('buy_now_form'); ?>  	  
+
+      <?php } else if (empty(customer::$data['id']) && (!empty(reference::product($product_id)->restock)) && ((!empty(reference::product($product_id)->sign_in_dates) && (!empty(reference::product($product_id)->sign_in_date_price_prices)))) ) { ?>  
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>      
+      <button class="btn btn-default btn-block" disabled="disabled"  name="add_cart_product" style="background-image:url('/images/customize/Pink.jpg');" value="true" type="submit">
+	  <span style="color:  #A5FFFF;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_restock', 'Restocked'); ?></i></b></button>
+	  <?php echo functions::form_draw_form_end('buy_now_form'); ?>
+
+	  <?php } else if (reference::product($product_id)->date_valid_from >= date('Y-m-d H:i:s') && reference::product($product_id)->restock) { ?>
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>	  
+      <button class="btn btn-success btn-block" name="add_cart_product" style="background-image:url('/images/customize/Pink.jpg');" value="true" type="submit">
+	  <span style="color:  #A5FFFF;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_restock', 'Restocked'); ?></i></b></button>
+	  <?php echo functions::form_draw_form_end('buy_now_form'); ?>
+	  
+      <?php } else if ((empty(customer::$data['id']) && (!empty(reference::product($product_id)->guest_price_prices)) && (!empty(reference::product($product_id)->sign_in))) 
+      || (!empty(reference::product($product_id)->newarrival) && ((!empty(reference::product($product_id)->sign_in_dates) && (!empty(reference::product($product_id)->sign_in_date_price_prices)))))
+      ) { ?>
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>      
+      <button class="btn btn-default btn-block" disabled="disabled" name="add_cart_product" style="background-image:url('/images/customize/Purple.jpg');" value="true" type="submit">
+	  <span style="color:  #f6cd0f;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_new_arrivals', 'New Arrivals'); ?></i></b></button>
+      <?php echo functions::form_draw_form_end('buy_now_form'); ?>
+
+      <?php } else { ?>
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>
+      <button class="btn btn-success btn-block" name="add_cart_product" style="background-image:url('/images/customize/Purple.jpg');" value="true" type="submit">
+	  <span style="color:  #f6cd0f;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_new_arrivals', 'New Arrivals'); ?></i></b></button>
+      <?php echo functions::form_draw_form_end('buy_now_form'); ?>
+     <?php } ?>
+      </div>
+     <?php } ?>
+      ]]></add>
+    </operation>
+
+     <operation error="log">
+      <search position="after" offset="7"><![CDATA[
+          <div class="price-wrapper">
+      ]]></search>
+      <add><![CDATA[
+    
+	<?php if  ($campaign_price && ($quantity > 0 || (!empty($product->sold_out_status['orderable'])) && (!empty(reference::product($product_id)->addtocart)))) { ?>
+	
+    <div class="buy-now-wrapper">
+      <?php if (!empty(reference::product($product_id)->options)) { ?>
+
+	  <?php } else if ((reference::product($product_id)->quantity <= 0 || reference::product($product_id)->sold_out_status['orderable']) 
+	  || (!empty(customer::$data['enable_wholesale_price']) && (!empty(reference::product($product_id)->wholesale_soldout)))
+	  || (!empty(reference::product($product_id)->fake_sold_out) && (!empty(reference::product($product_id)->fake_sold_out_date_price_prices)) && (!empty($campaign_price) && (reference::product($product_id)->quantity > 0 || reference::product($product_id)->sold_out_status['orderable'])))
+	  ) { ?>
+      <button class="sold_out" disabled="disabled" name="add_cart_product" style="background-image:url('/images/customize/Dark Red.jpg');" value="true" type="submit">
+	  <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i> <?php echo language::translate('title_sold_out', 'Sold Out'); ?></i></b></button>
+
+	  <?php } else if (!empty($campaign_price) && (!empty(reference::product($product_id)->no_customer_group_prices))) { ?>
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>	  
+      <button class="btn btn-success btn-block" type="submit" name="add_cart_product" style="background-image:url('/images/customize/Green.jpg');" value="true">
+	  <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?> 
+	  <b><i><?php echo language::translate('title_add_to_cart', 'Add To Cart'); ?></i></b></button>
+	  <?php echo functions::form_draw_form_end('buy_now_form'); ?>	  
+
+	  <?php } else if (!empty($campaign_price) && (!empty(reference::product($product_id)->insaneprice) && (!empty(reference::product($product_id)->backorder)))) { ?>
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>	  
+      <button class="btn btn-success btn-block" name="add_cart_product" style="background-image:url('/images/customize/Orange Red.jpg');" value="true" type="submit">
+	  <span style="color: #b6ff9c;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_insane_backorder', 'Insane Backorder'); ?></i></b></button>
+	  <?php echo functions::form_draw_form_end('buy_now_form'); ?> 
+	  
+      <?php } else if ((empty(customer::$data['id']) && (!empty($campaign_price) && (!empty(reference::product($product_id)->insaneprice) && (!empty(reference::product($product_id)->sign_in_date_price_prices))))) 
+      || (empty(customer::$data['id']) && (!empty($campaign_price) && (!empty(reference::product($product_id)->insaneprice) && (!empty(reference::product($product_id)->sign_in_date_price_prices)))))
+      || (empty(customer::$data['id']) && (!empty(reference::product($product_id)->insaneprice) && (!empty($campaign_price))) && (!empty(reference::product($product_id)->sign_in_deal) && (!empty(reference::product($product_id)->addtocart))))
+      || (empty(customer::$data['id']) && (!empty(reference::product($product_id)->insaneprice) && (!empty($campaign_price))) && (!empty(reference::product($product_id)->sign_in_deal) && (reference::product($product_id)->date_valid_from > date('Y-m-d H:i:s')) && (!empty(reference::product($product_id)->addtocart))))
+      ) { ?> 
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>      
+      <button class="btn btn-default btn-block" disabled="disabled"  name="add_cart_product" style="background-image:url('/images/customize/Red.jpg');" value="true" type="submit">
+	  <span style="color: #fff;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_insane_deal_!!', 'Insane Deal !!'); ?></i></b></button>
+      <?php echo functions::form_draw_form_end('buy_now_form'); ?>		  
+
+      <?php } else if  (!empty($campaign_price) && (!empty(reference::product($product_id)->preorderable) )) { ?> 
+      <button class="btn btn-success btn-block" name="add_cart_product" style="display: none;" value="true" type="submit">
+	  <span style="color: #fff;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_insane_deal_!!', 'Insane Deal !!'); ?></i></b></button> 
+
+      <?php } else if ((!empty(reference::product($product_id)->disable_master_insane_deal_price) && (!empty($campaign_price))) 
+      || (!empty(reference::product($product_id)->master_insane_deal_price) && (!empty(reference::product($product_id)->insaneprice) && (!empty($campaign_price))))
+      || (!empty(reference::product($product_id)->disable_master_insane_deal_price) && (!empty(reference::product($product_id)->insaneprice) && (!empty($campaign_price))))
+      || (!empty(reference::product($product_id)->specialprice) && (!empty(reference::product($product_id)->guest_insaneprice) && (!empty(reference::product($product_id)->guest_price_prices && ($quantity > 0 || !empty($product->sold_out_status['orderable']))))))
+      ) { ?> 
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>	  
+      <button class="btn btn-success btn-block" name="add_cart_product" style="background-image:url('/images/customize/Red.jpg');" value="true" type="submit">
+	  <span style="color: #fff;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_insane_deal_!!', 'Insane Deal !!'); ?></i></b></button>
+	  <?php echo functions::form_draw_form_end('buy_now_form'); ?> 
+
+      <?php } else if ((reference::product($product_id)->date_valid_from > date('Y-m-d H:i:s') && (!empty(reference::product($product_id)->newarrival))) && (!empty(reference::product($product_id)->specialprice) && (!empty(reference::product($product_id)->guest_price_prices && ($quantity > 0 || !empty($product->sold_out_status['orderable'])))))) { ?>
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>      
+      <button class="btn btn-success btn-block" name="add_cart_product" style="background-image:url('/images/customize/Purple.jpg');" value="true" type="submit">
+	  <span style="color:  #f6cd0f;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_new_arrivals', 'New Arrivals'); ?></i></b></button>
+      <?php echo functions::form_draw_form_end('buy_now_form'); ?>
+
+      <?php } else if (((!empty(reference::product($product_id)->specialprice || disable_master_guest_special_price) && (!empty(reference::product($product_id)->master_guest_special_price) && (!empty(reference::product($product_id)->guest_price_prices)))) || (!empty(customer::$data['id']) && (!empty(reference::product($product_id)->master_customer_special_price) && (!empty(reference::product($product_id)->customer_specialprice) && (!empty(reference::product($product_id)->default_price_price)))))) 
+      || (empty(customer::$data['id']) && (!empty(reference::product($product_id)->disable_master_guest_special_price)))
+      ) { ?>
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>	  
+      <button class="btn btn-success btn-block" name="add_cart_product" style="background-image:url('/images/customize/Goldleaf.jpg');" value="true" type="submit">
+	  <span style="color: #cc0000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_special_offer', 'Special Offer'); ?></i></b></button>	 
+	  <?php echo functions::form_draw_form_end('buy_now_form'); ?>  
+
+
+
+      <?php } else { ?>
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>
+      <button class="btn btn-success btn-block" type="submit" name="add_cart_product" style="background-image:url('/images/customize/Green.jpg');" value="true">
+	  <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?> 
+	  <b><i><?php echo language::translate('title_add_to_cart', 'Add To Cart'); ?></i></b></button>
+      <?php echo functions::form_draw_form_end('buy_now_form'); ?>
+      <?php } ?>
+    </div>
+    <?php } ?>
+      ]]></add>
+    </operation>      
+
+
+
+     <operation error="log">
+      <search position="after" offset="7"><![CDATA[
+          <div class="price-wrapper">
+      ]]></search>
+      <add><![CDATA[
+    
+	<?php if (reference::product($product_id)->date_valid_from <= date('Y-m-d H:i:s') && reference::product($product_id)->preowned) { ?>
+	
+    <div class="buy-now-wrapper">
+      <?php if (!empty(reference::product($product_id)->options)) { ?>
+
+	  <?php } else if (!empty($campaign_price && ($quantity > 0 || !empty($product->sold_out_status['orderable'])))) { ?>
+      <button class="btn btn-success btn-block" name="add_cart_product" style="display: none;" value="true" type="submit">
+	  <span style="color: #fff;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_insane_deal_!!', 'Insane Deal !!'); ?></i></b></button>
+	  
+      <?php } else if (!empty($campaign_price && ($quantity <= 0 || !empty($product->sold_out_status['orderable'])))) { ?>
+      <button class="sold_out" disabled="disabled" name="add_cart_product" style="background-image:url('/images/customize/Dark Red.jpg');" value="true" type="submit">
+	  <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i> <?php echo language::translate('title_sold_out', 'Sold Out'); ?></i></b></button>
+	  
+      <?php } else if (empty(customer::$data['id']) && (!empty(reference::product($product_id)->sign_in_date_price_prices)) ) { ?> 
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>      
+      <button class="btn btn-default btn-block" disabled="disabled"  name="add_cart_product" style="background-image:url('/images/customize/Yellow.jpg');" value="true" type="submit">
+	  <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_pre_-_owned', 'Pre-owned'); ?></i></b></button>
+      <?php echo functions::form_draw_form_end('buy_now_form'); ?>		  
+
+	  <?php } else if (reference::product($product_id)->quantity <= 0 || reference::product($product_id)->sold_out_status['orderable']) { ?>
+      <button class="btn btn-success btn-block" name="add_cart_product" style="display: none;" value="true" type="submit">
+	  <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i> <?php echo language::translate('title_sold_out', 'Sold Out'); ?></i></b></button>
+	  
+      <?php } else { ?>
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>
+      <button class="btn btn-success btn-block" name="add_cart_product" style="background-image:url('/images/customize/Yellow.jpg');" value="true" type="submit">
+	  <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_pre_-_owned', 'Pre-owned'); ?></i></b></button>
+      <?php echo functions::form_draw_form_end('buy_now_form'); ?>
+    <?php } ?>
+      </div>
+    <?php } ?>
+      ]]></add>
+    </operation>
+
+     <operation error="log">
+      <search position="after" offset="7"><![CDATA[
+          <div class="price-wrapper">
+      ]]></search>
+      <add><![CDATA[
+    
+	<?php if (reference::product($product_id)->date_valid_from < date('Y-m-d H:i:s') && reference::product($product_id)->pending) { ?>
+    <div class="buy-now-wrapper">
+      <?php if (!empty(reference::product($product_id)->options)) { ?>
+
+	  <?php } else if (reference::product($product_id)->quantity <= 0 || reference::product($product_id)->sold_out_status['orderable']) { ?>
+      <button class="btn btn-success btn-block" name="add_cart_product" style="display: none;" value="true" type="submit">
+	  <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i> <?php echo language::translate('title_sold_out', 'Sold Out'); ?></i></b></button>  
+	  
+      <?php } else if ((empty(customer::$data['id']) && (!empty(reference::product($product_id)->sign_in_date_price_prices))) 
+      || (!empty(reference::product($product_id)->pending) && (!empty(reference::product($product_id)->no_customer_group_prices)))
+      ) { ?> 
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>      
+      <button class="btn btn-default btn-block" disabled="disabled"  name="add_cart_product" style="background-image:url('/images/customize/Lightblue.jpg');" value="true" type="submit">
+	  <span style="color: #0000c7;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_pending', 'Pending'); ?></i></b></button>
+      <?php echo functions::form_draw_form_end('buy_now_form'); ?>	
+      
+      <?php } else { ?>
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+        <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>
+         <button class="btn btn-success btn-block" disabled="disabled" name="add_cart_product" style="background-image:url('/images/customize/Lightblue.jpg');" value="true">
+		<span style="color: #0000c7;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+		<b><i><?php echo language::translate('title_pending', 'Pending'); ?></i></b></button>
+        <?php echo functions::form_draw_form_end('buy_now_form'); ?>
+        <?php } ?>
+    </div>
+    <?php } ?>
+      ]]></add>
+    </operation> 
+
+   
+    <operation error="log">
+      <search position="after" offset="7"><![CDATA[
+          <div class="price-wrapper">
+      ]]></search>
+      <add><![CDATA[
+    
+	<?php if (reference::product($product_id)->date_valid_from <= date('Y-m-d H:i:s') && (empty($campaign_price))) { ?>
+	
+    <div class="buy-now-wrapper">
+      <?php if (!empty(reference::product($product_id)->options)) { ?>
+
+	  <?php } else if ((empty(customer::$data['enable_wholesale_price']) && (reference::product($product_id)->quantity <= 0 || reference::product($product_id)->sold_out_status['orderable'])) 
+	  || (!empty($campaign_price && ($quantity <= 0 || !empty($product->sold_out_status['orderable']))))
+	  ) { ?>
+      <button class="sold_out" disabled="disabled" name="add_cart_product" style="background-image:url('/images/customize/Dark Red.jpg');" value="true" type="submit">
+	  <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i> <?php echo language::translate('title_sold_out', 'Sold Out'); ?></i></b></button>
+
+      <?php } else { ?>
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>
+      <button class="btn btn-success btn-block" type="submit" name="add_cart_product" style="display: none;" value="true">
+	  <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?> 
+	  <b><i><?php echo language::translate('title_add_to_cart', 'Add To Cart'); ?></i></b></button>
+      <?php echo functions::form_draw_form_end('buy_now_form'); ?>
+      <?php } ?>
+    </div>
+    <?php } ?>
+      ]]></add>
+    </operation>
+    
+
+     <operation error="log">
+      <search position="after" offset="7"><![CDATA[
+          <div class="price-wrapper">
+      ]]></search>
+      <add><![CDATA[
+    
+	<?php if ((reference::product($product_id)->date_valid_from <= date('Y-m-d H:i:s') 
+	&& (!empty(reference::product($product_id)->newarrival) 
+	&& (empty(reference::product($product_id)->addtocart) 
+	&& (empty(reference::product($product_id)->specialoffer) 
+	&& (empty(reference::product($product_id)->backorder))))))) { ?>
+	
+    <div class="buy-now-wrapper">
+      <?php if (!empty(reference::product($product_id)->options)) { ?>
+
+	   <?php } else if (!empty($campaign_price && ($quantity > 0 || !empty($product->sold_out_status['orderable'])))) { ?>
+       <button class="btn btn-success btn-block" name="add_cart_product" style="display: none;" value="true" type="submit">
+	   <span style="color: #fff;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	   <b><i><?php echo language::translate('title_insane_deal_!!', 'Insane Deal !!'); ?></i></b></button> 
+	   
+       <?php } else if ((!empty($campaign_price && ($quantity <= 0 || !empty($product->sold_out_status['orderable'])))) 
+       || (reference::product($product_id)->quantity <= 0 || reference::product($product_id)->sold_out_status['orderable'])
+       ) { ?>
+       <button class="sold_out" disabled="disabled" name="add_cart_product" style="background-image:url('/images/customize/Dark Red.jpg');" value="true" type="submit">
+	   <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	   <b><i> <?php echo language::translate('title_sold_out', 'Sold Out'); ?></i></b></button>	   
+
+       <?php } else { ?>
+       <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+       <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>
+       <<button class="btn btn-success btn-block" name="add_cart_product" style="background-image:url('/images/customize/Green.jpg');" value="true">
+	   <b><i><span style="color: #7a0000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	   <?php echo language::translate('title_add_to_cart', 'Add To Cart'); ?></i></b></button>
+       <?php echo functions::form_draw_form_end('buy_now_form'); ?>
+       <?php } ?>
+    </div>
+    <?php } ?>
+      ]]></add>
+    </operation>
+    
+    <operation error="log">
+      <search position="replace"><![CDATA[
+      <a class="link" href="<?php echo htmlspecialchars($link) ?>" title="<?php echo htmlspecialchars($name); ?>" data-id="<?php echo $product_id; ?>" data-sku="<?php echo htmlspecialchars($sku); ?>" data-name="<?php echo htmlspecialchars($name); ?>" data-price="<?php echo currency::format_raw($campaign_price ? $campaign_price : $regular_price); ?>">
+      ]]></search>
+      <add><![CDATA[
+      <a class="link" href="<?php echo htmlspecialchars($link) ?>" title="<?php echo htmlspecialchars($name); ?>" data-id="<?php echo $product_id; ?>" data-sku="<?php echo htmlspecialchars($sku); ?>" data-name="<?php echo htmlspecialchars($name); ?>" data-price="<?php echo currency::format_raw($campaign_price ? $campaign_price : $regular_price); ?>" target="_blank">
+      ]]></add>
+    </operation>
+ 
+  </file>
+ 
+</modification>
+
+
+<!--
+
+insane deal : #f6cd0f
+
+308
+      <?php } else if (!empty(reference::product($product_id)->stock_quantity_prices && ($quantity > 0 || !empty($product->sold_out_status['orderable'])))) { ?>
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>
+      <button class="btn btn-success btn-block" name="add_cart_product" style="background-image:url('/images/customize/Yellow Red.jpg');" value="true" type="submit">
+      <span style="color: #fe0301;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+      <b><i><?php echo language::translate('title_hot_item', 'Hot Item !!'); ?></i></b></button>	  	  
+	  <?php echo functions::form_draw_form_end('buy_now_form'); ?>
+
+316
+      <?php } else if (!empty(customer::$data['enable_wholesale_price']) && (empty(reference::product($product_id)->no_customer_group_prices) && (!empty(reference::product($product_id)->wholesale_soldout || ($quantity <= 2))))) { ?>
+      <button class="sold_out" disabled="disabled" name="add_cart_product" style="background-image:url('/images/customize/Dark Red.jpg');" value="true" type="submit">
+	  <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i> <?php echo language::translate('title_sold_out', 'Sold Out'); ?></i></b></button>
+
+
+529
+	  <?php } else if (!empty(customer::$data['id'] == 4785) || (customer::$data['id'] == 4640) || (customer::$data['id'] == 4653) && (!empty(reference::product($product_id)->fake_sold_out_date_price_prices))) { ?>
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>	  
+      <button class="btn btn-success btn-block" type="submit" name="add_cart_product" style="background-image:url('/images/customize/Green.jpg');" value="true">
+	  <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i> <?php echo language::translate('title_shopee', 'Shopee'); ?></i></b></button> 
+	  <?php echo functions::form_draw_form_end('buy_now_form'); ?>
+
+373
+      <?php } else if (!empty(customer::$data['id']) && (empty(customer::$data['code']) && (!empty(reference::product($product_id)->customer_group_prices && ($quantity > 0 || !empty($product->sold_out_status['orderable'])))))) { ?>
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>
+      <button class="btn btn-success btn-block" name="add_cart_product" style="background-image:url('/images/customize/Gold Red.jpg');" value="true" type="submit">
+      <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+      <b><i><?php echo language::translate('title_member_price', 'Member Price'); ?></i></b></button>	  	  
+	  <?php echo functions::form_draw_form_end('buy_now_form'); ?>   
+
+384
+      <?php } else if (!empty(reference::product($product_id)->stock_quantity_prices && ($quantity > 0 || !empty($product->sold_out_status['orderable'])))) { ?>
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>
+      <button class="btn btn-success btn-block" name="add_cart_product" style="background-image:url('/images/customize/Yellow Red.jpg');" value="true" type="submit">
+      <span style="color: #fe0301;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+      <b><i><?php echo language::translate('title_hot_item', 'Hot Item !!'); ?></i></b></button>	  	  
+	  <?php echo functions::form_draw_form_end('buy_now_form'); ?>	
+
+391
+      <?php } else if (!empty(customer::$data['id']) && (empty(customer::$data['code']) && (!empty(reference::product($product_id)->customer_group_prices && ($quantity > 0 || !empty($product->sold_out_status['orderable'])))))) { ?>
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>
+      <button class="btn btn-success btn-block" name="add_cart_product" style="background-image:url('/images/customize/Gold Red.jpg');" value="true" type="submit">
+      <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+      <b><i><?php echo language::translate('title_member_price', 'Member Price'); ?></i></b></button>	  	  
+	  <?php echo functions::form_draw_form_end('buy_now_form'); ?>  
+
+623
+      <?php } else if (!empty(customer::$data['id']) && (empty(customer::$data['code']) && (!empty(reference::product($product_id)->customer_group_prices && ($quantity > 0 || !empty($product->sold_out_status['orderable'])))))) { ?>
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>
+      <button class="btn btn-success btn-block" name="add_cart_product" style="background-image:url('/images/customize/Gold Red.jpg');" value="true" type="submit">
+      <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+      <b><i><?php echo language::translate('title_member_price', 'Member Price'); ?></i></b></button>	  	  
+	  <?php echo functions::form_draw_form_end('buy_now_form'); ?> 
+
+
+
+old
+
+324 
+
+     <operation error="log">
+      <search position="after" offset="7"><![CDATA[
+          <div class="price-wrapper">
+      ]]></search>
+      <add><![CDATA[
+    
+	<?php if (reference::product($product_id)->date_valid_from <= date('Y-m-d H:i:s') && reference::product($product_id)->specialoffer) { ?>
+	
+    <div class="buy-now-wrapper">
+      <?php if (!empty(reference::product($product_id)->options)) { ?>
+      <a class="add-cart-item btn btn-default btn-block" style="background-image:url('/images/customize/Goldleaf.jpg');" href="<?php echo document::href_ilink('product', array('product_id' => $product_id)); ?>">
+	  <b><i><?php echo functions::draw_fonticon('fa-shopping-cart'); ?> <?php echo language::translate('title_special_offer', 'Special Offer'); ?></i></b></a>
+	  
+	  <?php } else if (!empty($campaign_price && ($quantity > 0 || !empty($product->sold_out_status['orderable'])))) { ?>
+      <button class="btn btn-success btn-block" name="add_cart_product" style="display: none;" value="true" type="submit">
+	  <span style="color: #f6cd0f;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_insane_deal_!!', 'Insane Deal !!'); ?></i></b></button>
+	  
+      <?php } else if (!empty($campaign_price && ($quantity <= 0 || !empty($product->sold_out_status['orderable'])))) { ?>
+      <button class="sold_out" disabled="disabled" name="add_cart_product" style="background-image:url('/images/customize/Dark Red.jpg');" value="true" type="submit">
+	  <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i> <?php echo language::translate('title_sold_out', 'Sold Out'); ?></i></b></button>	  
+
+	  <?php } else if (reference::product($product_id)->quantity <= 0 || reference::product($product_id)->sold_out_status['orderable']) { ?>
+      <button class="btn btn-success btn-block" name="add_cart_product" style="display: none;" value="true" type="submit">
+	  <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i> <?php echo language::translate('title_sold_out', 'Sold Out'); ?></i></b></button>
+	  
+      <?php } else { ?>
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>
+      <button class="btn btn-success btn-block" name="add_cart_product" style="background-image:url('/images/customize/Goldleaf.jpg');" value="true" type="submit">
+	  <span style="color: #cc0000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+      <b><i><?php echo language::translate('title_special_offer', 'Special Offer'); ?></i></b></button>
+      <?php echo functions::form_draw_form_end('buy_now_form'); ?>
+    <?php } ?>
+      </div>
+    <?php } ?>
+      ]]></add>
+    </operation> 
+    
+     <operation error="log">
+      <search position="after" offset="7"><![CDATA[
+          <div class="price-wrapper">
+      ]]></search>
+      <add><![CDATA[
+    
+	<?php if (reference::product($product_id)->date_valid_from >= date('Y-m-d H:i:s') && reference::product($product_id)->specialoffer) { ?>
+	
+    <div class="buy-now-wrapper">
+      <?php if (!empty(reference::product($product_id)->options)) { ?>
+      <a class="add-cart-item btn btn-default btn-block" style="background-image:url('/images/customize/Orange.jpg');" href="<?php echo document::href_ilink('product', array('product_id' => $product_id)); ?>">
+	  <b><i><?php echo functions::draw_fonticon('fa-shopping-cart'); ?> <?php echo language::translate('title_view_options', 'View Options'); ?></i></b></a>
+	  
+	  <?php } else if (!empty($campaign_price && ($quantity > 0 || !empty($product->sold_out_status['orderable'])))) { ?>
+      <button class="btn btn-success btn-block" name="add_cart_product" style="display: none;" value="true" type="submit">
+	  <span style="color: #f6cd0f;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_insane_deal_!!', 'Insane Deal !!'); ?></i></b></button>
+	  
+      <?php } else if (!empty($campaign_price && ($quantity <= 0 || !empty($product->sold_out_status['orderable'])))) { ?>
+      <button class="sold_out" disabled="disabled" name="add_cart_product" style="background-image:url('/images/customize/Dark Red.jpg');" value="true" type="submit">
+	  <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i> <?php echo language::translate('title_sold_out', 'Sold Out'); ?></i></b></button>	  
+
+	  <?php } else if (reference::product($product_id)->quantity <= 0 || reference::product($product_id)->sold_out_status['orderable']) { ?>
+      <button class="sold_out" disabled="disabled" name="add_cart_product" style="background-image:url('/images/customize/Dark Red.jpg');" value="true" type="submit">
+	  <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i> <?php echo language::translate('title_sold_out', 'Sold Out'); ?></i></b></button>
+	  
+	  <?php } else if (reference::product($product_id)->date_valid_from >= date('Y-m-d H:i:s') && reference::product($product_id)->restock) { ?>
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>	  
+      <button class="btn btn-success btn-block" name="add_cart_product" style="background-image:url('/images/customize/Pink.jpg');" value="true" type="submit">
+	  <span style="color:  #A5FFFF;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_restock', 'Restock'); ?></i></b></button>
+	  <?php echo functions::form_draw_form_end('buy_now_form'); ?>	  
+	  
+      <?php } else { ?>
+      <?php echo functions::form_draw_form_begin('buy_now_form', 'post', document::href_ilink('checkout')); ?>
+      <?php echo functions::form_draw_hidden_field('product_id', $product_id); ?>
+      <button class="btn btn-success btn-block" name="add_cart_product" style="background-image:url('/images/customize/Purple.jpg');" value="true" type="submit">
+	  <span style="color:  #f6cd0f;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	  <b><i><?php echo language::translate('title_new_arrivals', 'New Arrivals'); ?></i></b></button>
+      <?php echo functions::form_draw_form_end('buy_now_form'); ?>
+     <?php } ?>
+      </div>
+     <?php } ?>
+      ]]></add>
+    </operation>   
+    
+    -->

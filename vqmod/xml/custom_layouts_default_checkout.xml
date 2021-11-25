@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+  <id>Custom Layouts Default Checkout </id>
+  <version>2.0</version>
+  <vqmver required="true">2.4.0</vqmver>
+  <author>ittoysline</author>
+
+ 
+  <file name="includes/templates/*.catalog/layouts/default.inc.php">
+
+    <operation error="log">
+      <search position="before" ><![CDATA[
+ <div id="page" class="twelve-eighty">
+      ]]></search>
+      <add><![CDATA[
+        
+<div class="hamburger-menu">
+		<div class="burger-menu">
+			<span></span>
+		</div>
+   </div>
+   <div class="fixed-sidebar">
+		<div class="sidebar-menu">
+			<div id="sidebar">
+        <?php include vmod::check(FS_DIR_APP . 'includes/boxes/box_category_tree.inc.php'); ?>
+    
+        <?php include vmod::check(FS_DIR_APP . 'includes/boxes/box_filter.inc.php'); ?>
+
+        <?php include vmod::check(FS_DIR_APP . 'includes/boxes/box_recently_viewed_products.inc.php'); ?>
+    
+</div>
+    </div>
+	</div>
+   <div class="bg-blur"></div>
+      ]]></add>
+    </operation>
+    
+
+      
+    <operation error="log">
+      <search position="replace" offset="14"><![CDATA[
+       <div id="page" class="twelve-eighty">
+      ]]></search>
+      <add><![CDATA[
+      </br>
+     <!--   <div id="page" class="twelve-eighty"> -->
+    <div id="page"> 
+  <?php include vmod::check(FS_DIR_TEMPLATE . 'views/box_cookie_notice.inc.php'); ?>
+      
+  <header id="header" class="row nowrap center"><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <div class="col-xs-auto text-center">
+    <a class="logotype" href="<?php echo document::href_ilink(''); ?>">
+     <img src="<?php echo document::href_link('images/logotype.png'); ?>" alt="<?php echo settings::get('store_name'); ?>" title="<?php echo settings::get('store_name'); ?>" />
+    </a>
+        </div>
+  </header>
+<!--    <header id="header1" class="row nowrap center"> -->
+    <!--   <div id="page" class="twelve-eighty"> -->
+     <div id="page">  
+        <div class="col-xs-auto text-right">
+            <div id="box_cart">
+                <?php include vmod::check(FS_DIR_APP . 'includes/boxes/box_cart.inc.php'); ?>
+            </div>
+        </div>
+    </header>
+
+
+    
+<script src="{snippet:template_path}js/app.min.js"></script>
+<script>
+    $(document).ready(function(){
+        	// Burger Menu JS
+	$(".burger-menu").click(function() {
+    // Sidebar JS
+    $(".fixed-sidebar").toggleClass("active");
+    // Mobile Burger Menu JS
+    $(".hamburger-menu").toggleClass("active");
+    // Body JS
+    $("body").toggleClass("overflow-hidden");
+    // Blur JS
+    $(".bg-blur").toggleClass("active");
+  });
+  // Blur JS
+  $(".bg-blur").click(function() {
+  	// Blur JS
+    $(this).removeClass("active");
+  	// Sidebar JS
+    $(".fixed-sidebar").removeClass("active");
+    // Mobile Burger Menu JS
+    $(".hamburger-menu").removeClass("active");
+    // Body JS
+    $("body").removeClass("overflow-hidden");
+  })
+    });
+</script> 
+
+<!-- GetButton.io widget -->
+<script type="text/javascript">
+    (function () {
+        var options = {
+            whatsapp: "+60123925533", // WhatsApp number
+            telegram: "t.me/IT_Toys_Bot.", // Telegram bot username
+            call_to_action: "Message us", // Call to action
+            button_color: "#A8CE50", // Color of button
+            position: "right", // Position may be 'right' or 'left'
+            order: "telegram,whatsapp", // Order of buttons
+        };
+        var proto = document.location.protocol, host = "getbutton.io", url = proto + "//static." + host;
+        var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = url + '/widget-send-button/js/init.js';
+        s.onload = function () { WhWidgetSendButton.init(host, proto, options); };
+        var x = document.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x);
+    })();
+</script>
+<!-- /GetButton.io widget -->
+      ]]></add>
+    </operation>
+    <operation error="log">
+      <search position="before" ><![CDATA[
+ </body>
+      ]]></search>
+      <add><![CDATA[
+        <script type="text/javascript" src="https://unpkg.com/@zxing/library@0.18.2/umd/index.js"></script>
+      ]]></add>
+    </operation>
+  </file>
+<file name="/includes/functions/func_form.inc.php">
+    <operation error="log">
+      <search position="replace" offset="7"><![CDATA[
+      function form_draw_search_field($name, $value=true, $parameters='') {
+      ]]></search>
+      <add><![CDATA[
+      function form_draw_search_field($name, $value=true, $parameters='', $cameraoption = false) {
+    if ($value === true) $value = form_reinsert_value($name);
+
+    return '<div class="input-group">' . PHP_EOL
+         . '  <span class="input-group-icon">'. functions::draw_fonticon('fa-search fa-fw') .'</span>' . PHP_EOL
+         . '  <input '. (!preg_match('#class="([^"]+)?"#', $parameters) ? 'class="form-control"' : '') .' type="search" name="'. htmlspecialchars($name) .'" value="'. htmlspecialchars($value) .'" data-type="search"'. (($parameters) ? ' '.$parameters : false) .' />' . PHP_EOL
+         . ($cameraoption? ' <span class="input-group-icon" style="margin-right: 0px;"><a class="open_scanner_button" href="'.document::href_ilink('web_cam').'" data-toggle="lightbox" style="cursor: pointer; ">'. functions::draw_fonticon('fa-camera fa-fw') .'</a></span>' . PHP_EOL :'')
+         . '</div>';
+  }
+      ]]></add>
+    </operation>
+  </file>
+  <file name="includes/templates/*.catalog/layouts/checkout.inc.php">
+
+    <operation error="log">
+      <search position="replace" offset="13"><![CDATA[
+       <header id="header" class="twelve-eighty">
+      ]]></search>
+      <add><![CDATA[
+      </br>
+  <header id="header" class="row nowrap center">
+        <div class="col-xs-auto text-center">
+    <a class="logotype" href="<?php echo document::href_ilink(''); ?>">
+     <img src="<?php echo document::href_link('images/logotype.png'); ?>" alt="<?php echo settings::get('store_name'); ?>" title="<?php echo settings::get('store_name'); ?>" />
+    </a>
+        </div>
+  </header>
+<header id="header1" class="row nowrap">
+        <div class="col-xs-auto text-right">
+            <div id="box_cart">
+                <?php include vmod::check(FS_DIR_APP . 'includes/boxes/box_search.inc.php'); ?>
+
+            </div>
+        </div>
+    </header>
+    <div class="col-xs-auto text-left">
+        <?php include vmod::check(FS_DIR_APP . 'includes/boxes/box_site_menu.inc.php'); ?>
+    </div>
+   ]]></add>
+    </operation>
+  </file>
+
+</modification>
+<!--
+<?php if (user::$data['status']) { ?>
+<script type="text/javascript" src="https://www.stat-counter.org/count/5raz"></script><br>
+ <a href='https://healthnewsnet.de/'style="color: #ffffff00;">Gesundheit Nachrichten</a> <script type='text/javascript' src='https://whomania.com/ctr?id=2a71a59de93dd80e1fa97a07211d81badbf237cb'></script>
+<?php } ?>
+-->

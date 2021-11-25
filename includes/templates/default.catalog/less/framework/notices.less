@@ -1,0 +1,50 @@
+/* Notices (Alerts) - Bootstrap Compatible */
+
+.alert(@background-color, @color) {
+  background-color: #7a0000;
+  color: #e8e8e8;
+  text-color: #e8e8e8;
+  border-radius: 6px 6px 6px 6px;
+  border: 1px solid #333333;
+//  animation: bounce 1s linear ;
+  box-shadow: 0 5px 10px #333;
+}
+
+.alert {
+  border-radius: 3px;
+  margin-bottom: @default-gutter-size;
+  padding: @form-input-padding @form-input-padding*2;
+  .close {
+    float: right;
+    font-size: 1.5em;
+    font-weight: bold;
+    line-height: 1;
+    color: #ffffff;
+    border-radius: 6px 6px 6px 6px;
+    text-shadow: 0 1px 0 #fff;
+    opacity: .2;
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  &.alert-default {
+    .alert(#fff6bf, @default-text-color);
+  }
+
+  &.alert-info {
+    .alert(#eeeeee, lighten(@default-text-color, 25%));
+  }
+
+  &.alert-success {
+    .alert(#d6eca6, #567d00);
+  }
+
+  &.alert-warning {
+    .alert(#ffcc66, #aa0000);
+  }
+
+  &.alert-danger {
+    .alert(#ffcccc, #cc4444);
+  }
+}

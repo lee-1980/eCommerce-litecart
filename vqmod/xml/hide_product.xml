@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Hide Product</id>
+	<version>2.0</version>
+	<vqmver required="true">2.4.0</vqmver>
+	<author>tim-international.net</author>
+
+
+
+  <file name="includes/templates/*.catalog/views/listing_product_column.inc.php">
+ 
+		<operation error="log">
+			<search position="before" ><![CDATA[
+      <article class="product-column">
+      ]]></search>
+			<add><![CDATA[
+      <?php if (empty(customer::$data['enable_hide_product']) || (empty(reference::product($product_id)->hide_product))) { ?>
+      ]]></add>
+		</operation>
+		
+		<operation error="log">
+			<search position="after" ><![CDATA[
+      </article>
+      ]]></search>
+			<add><![CDATA[
+          <?php } ?>
+          
+      ]]></add>
+		</operation> 
+ 
+ 
+ 
+   		<operation error="log">
+			<search position="before" ><![CDATA[
+      <article class="product-column">
+      ]]></search>
+			<add><![CDATA[
+      <?php if (!empty(customer::$data['id']) || (empty(reference::product($product_id)->hide_product))) { ?>
+      ]]></add>
+		</operation>
+		
+		<operation error="log">
+			<search position="after" ><![CDATA[
+      </article>
+      ]]></search>
+			<add><![CDATA[
+          <?php } ?>
+          
+      ]]></add>
+		</operation>   
+      
+		
+		
+	</file>
+
+
+
+  <file name="includes/templates/*.catalog/views/box_product.inc.php">
+
+		<operation error="log">
+			<search position="before"><![CDATA[
+      <div class="images row">
+      ]]></search>
+			<add><![CDATA[
+      
+      <?php if (!empty(customer::$data['id']) || (empty(reference::product($product_id)->hide_product))) { ?>	
+      ]]></add>
+		</operation>
+
+		<operation error="log">
+			<search position="after"><![CDATA[
+       <?php echo functions::form_draw_form_end(); ?>
+      ]]></search>
+			<add><![CDATA[
+			
+        <?php } else { ?>
+          <div style="text-align: center;">
+          
+          <p><a href="<?php echo document::href_link('login', array('redirect_url' => document::link())); ?>"><?php echo language::translate('text_Kindly_sign_in_to_see_image_/_price_/_order_this_item', 'Kindly sign in to see image / price / order this item'); ?></a></p
+        <?php } ?>
+       
+      ]]></add>
+		</operation>
+
+
+
+		<operation error="log">
+			<search position="before"><![CDATA[
+      <div class="images row">
+      ]]></search>
+			<add><![CDATA[
+      
+      <?php if ((!empty(customer::$data['id']) && (empty(customer::$data['enable_hide_product'])) || (empty(reference::product($product_id)->hide_product)))) { ?>	
+      ]]></add>
+		</operation>
+
+		<operation error="log">
+			<search position="after"><![CDATA[
+       <?php echo functions::form_draw_form_end(); ?>
+      ]]></search>
+			<add><![CDATA[
+			
+        <?php } else { ?>
+          <div style="text-align: center;">
+          
+          <p><?php echo language::translate('text_enable_hide_product', 'Product Not Found'); ?></a></p
+        <?php } ?>
+       
+      ]]></add>
+		</operation>	      
+      
+      
+      
+
+		
+	
+		
+		
+	</file>
+
+</modification>

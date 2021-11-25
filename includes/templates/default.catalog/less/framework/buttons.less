@@ -1,0 +1,184 @@
+/* Buttons & Button Groups - Bootstrap Compatible */
+
+.btn-block_product {
+  background-position: center !important;
+  width: 200px;
+//  animation: slideInRight 1s linear ;
+}
+
+.btn-default_pages {
+  background-image: url('/images/customize/Gold Brush Dropdown Menu.png');
+
+}
+
+.sold_out {
+  width: 100%;
+  display: inline-block;
+  background-position: center !important;
+  padding: @form-input-padding @form-input-padding*2;
+  border: 1px solid @default-border-color;
+  border-radius: @default-border-radius;
+  text-align: center;
+//  animation: slideInRight 1s linear ;
+  &.disabled, &[disabled] { opacity: 0.5; cursor: not-allowed; }
+  [data-type="toggle"] { display: none; }
+}
+
+.sold_out_2 {
+  width: 200px;
+  display: inline-block;
+  background-position: center !important;
+  padding: @form-input-padding @form-input-padding*2;
+  border: 1px solid @default-border-color;
+  border-radius: @default-border-radius;
+  text-align: center;
+//  animation: slideInRight 1s linear ;
+  &.disabled, &[disabled] { opacity: 0.5; cursor: not-allowed; }
+  [data-type="toggle"] { display: none; }
+}
+
+.btn(@background-color: #f8f8f8, @color: #555) {
+  background-image: url('/images/customize/Gold Brush Table.png');
+  color: @color;
+  text-decoration: none;
+  background-position: center !important;
+//  border: 0.5px solid #000000;
+//  box-shadow: 0 5px 10px #333;
+
+  &:hover:not(.active):not(.disabled):not([disabled]) {
+    background: darken(@background-color, 0%);
+    background-image: url('/images/customize/Gold Brush Table.png');
+    background-position: center;
+    border-radius: 6px 6px 6px 6px;
+  }
+  &.active {
+    background: darken(@background-color, -60%);
+    border-color: transparent;
+    background-image: url('/images/customize/Gold Brush Table.png');
+    background-position: center;
+    animation: flasher_blue 2s linear infinite;
+    border: 0.5px solid #000000;
+    border-radius: 6px 6px 6px 6px;
+  }
+}
+
+.btn {
+  cursor: pointer;
+  display: inline-block;
+  background-position: center !important;
+  padding: @form-input-padding @form-input-padding*2;
+  text-decoration:  none;
+  font-weight: normal;
+  border: 1px solid @default-border-color;
+  border-radius: @default-border-radius;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+  text-align: center;
+//  animation: slideInRight 1s linear ;
+//  border: 0.5px solid #000000;
+
+  &.btn-default { .btn(@default-color, #7a0000); 
+//  background-image: url('/images/customize/Gold Brush Dropdown Menu.png');
+  
+}
+  &.btn-default_save {
+  background-image: url('/images/customize/Green Save.jpg');
+  color: #000000;
+  box-shadow: 0 5px 10px #333;
+  border: 0.5px solid #000000;
+}
+  &.btn-primary { .btn(@primary-color, #fff); }
+  //&.btn-info { .btn(@info-color, #fff); }
+  &.btn-success { .btn(@success-color, #fff); background-position: center !important; }
+  &.btn-success_confirm {
+  background-image: url('/images/customize/Green Save.jpg');
+  color: #000000;
+  box-shadow: 0 5px 10px #333;
+  border: 0.5px solid #000000;
+}  
+  //&.btn-warning { .btn(@warning-color, #fff); }
+  &.btn-danger { .btn(@danger-color, #7a0000); }
+  &.btn-sm { font-size: 0.8em; }
+  &.btn-lg { font-size: 1.25em; }
+  &.active, &:active { box-shadow: inset 1px 1px 1px rgba(0,0,0,0.25) !important; animation: flasher_blue 2s linear infinite; }
+  &.disabled, &[disabled] { opacity: 1.0; cursor: not-allowed; }
+  [data-type="toggle"] { display: none; }
+}
+
+.btn-block {
+  width: 100%;
+}
+
+
+.btn-group_signin {
+  display: flex;
+  border-radius: 6px 6px 6px 6px;
+  box-shadow: 0 5px 10px #333;
+  .btn {
+    flex: 1 0 auto;
+    border-radius: 0;
+    font-size: inherit;
+    margin-left: -1px;
+    color: #333333; 
+    text-align: center;
+    
+    &:first-child {
+      background-image: url('/images/customize/Green Save.jpg');
+      border-radius: 6px 6px 6px 6px;
+      text-align: center;
+    }
+    &:last-child {
+      background-image: url('/images/customize/Green Save.jpg');
+      border-radius: 6px 6px 6px 6px;
+      text-align: center;
+    }
+  }
+}
+
+.btn-group {
+  display: inline-flex;
+  border-radius: @default-border-radius;
+  .btn {
+    flex: 1 0 auto;
+    border-radius: 0;
+    font-size: inherit;
+    margin-left: -1px;
+    &:first-child {
+      border-top-left-radius: @default-border-radius;
+      border-bottom-left-radius: @default-border-radius;
+    }
+    &:last-child {
+      border-top-right-radius: @default-border-radius;
+      border-bottom-right-radius: @default-border-radius;
+    }
+  }
+}
+
+
+
+.btn-group-vertical {
+  .btn {
+    display: block;
+    border-radius: 0;
+    font-size: inherit;
+    margin-top: -1px;
+    background-position: center;
+    
+    &:first-child {
+      border-top-left-radius: @default-border-radius;
+      border-top-right-radius: @default-border-radius;
+      background-image: url('/images/customize/Gold Brush Table.png');
+      background-position: center; 
+      border-radius: 6px 6px 6px 6px;
+      
+    }
+    &:last-child {
+      border-bottom-left-radius: @default-border-radius;
+      border-bottom-right-radius: @default-border-radius;
+      background-image: url('/images/customize/Gold Brush Table.png');
+      background-position: center;
+      border-radius: 6px 6px 6px 6px;
+    }
+  }
+}
+
+

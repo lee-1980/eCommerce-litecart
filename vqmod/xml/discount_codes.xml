@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Discount Codes</id>
+	<version>1.1</version>
+	<vqmver required="true">2.4.0</vqmver>
+	<author>tim-international.net</author>
+
+	<file name="includes/templates/*.catalog/pages/checkout.inc.php">
+		<operation error="log">
+			<search position="before"><![CDATA[
+// Customer Form: Toggles
+			]]></search>
+			<add><![CDATA[
+  var discount_ajax_in_progress = false;
+  $('#box-checkout').on('click', '.discount.wrapper button[name="set_discount_code"]', function(e){
+    e.preventDefault();
+    if (discount_ajax_in_progress) return false;
+    discount_ajax_in_progress = true;
+     var data = 'token=' + $(':input[name="token"]').val()
+              + '&' + $(this).closest('.form-group').find(':input').serialize()
+              + '&set_discount_code=' + $(this).val();
+    $.ajax({
+      url: '<?php echo document::ilink('ajax/checkout_discount_code.html'); ?>',
+      data: data,
+      type: 'post',
+      cache: false,
+      context: $('#box-checkout .discount.wrapper'),
+      async: true,
+      dataType: 'html',
+      beforeSend: function(jqXHR) {
+        console.log('Processing discount code');
+        jqXHR.overrideMimeType('text/html;charset=<?php echo language::$selected["charset"]; ?>');
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        $('#box-checkout .discount.wrapper').html(textStatus + ': ' + errorThrown);
+        discount_ajax_in_progress = false;
+      },
+      success: function(data) {
+        $('#box-checkout .discount.wrapper').html(data);
+        queueUpdateTask('payment', null, true);
+        queueUpdateTask('summary', null, true);
+        discount_ajax_in_progress = false;
+      },
+    });
+  });
+      ]]></add>
+		</operation>
+	</file>
+
+	<file name="includes/templates/*.catalog/views/box_checkout_cart.inc.php">
+		<operation error="log">
+			<search position="bottom"><![CDATA[
+			]]></search>
+
+			<add><![CDATA[
+    <div class="discount wrapper">
+      <?php include_once vmod::check(FS_DIR_HTTP_ROOT . WS_DIR_PAGES . 'ajax/checkout_discount_code.html.inc.php'); ?>
+    </div>
+      ]]></add>
+		</operation>
+  </file>
+
+</modification>

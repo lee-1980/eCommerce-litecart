@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Hide sold Out</id>
+	<version>2.0</version>
+	<vqmver required="true">2.4.0</vqmver>
+	<author>ittoysline</author>
+
+	<file name="includes/functions/func_catalog.inc.php">
+    <operation error="log">
+	   <search position="replace"><![CDATA[
+        and (p.quantity > 0 or ss.hidden != 1)
+      ]]></search>
+			<add><![CDATA[
+        and (p.quantity > 0)
+      ]]></add>
+		</operation>
+	</file>
+
+</modification>

@@ -1,0 +1,206 @@
+## [2021-11-12 00:31:30] Request #######################################
+
+GET /feeds/discussions.rss HTTP/1.1
+Host: www.litecart.net
+User-Agent: LiteCart/2.2.2
+Content-Length: 0
+Connection: Close
+
+
+
+## [2021-11-12 00:31:32] Response — 9285 bytes transferred in 1.996 s ##
+
+HTTP/1.1 200 OK
+Date: Thu, 11 Nov 2021 16:31:32 GMT
+Content-Type: application/rss+xml; charset=utf-8
+Transfer-Encoding: chunked
+Connection: close
+set-cookie: LCSESSID=c5b2ba31b4337e22f08d9b20c38bddc3; path=/; HttpOnly; SameSite=Lax; secure
+expires: Thu, 19 Nov 1981 08:52:00 GMT
+cache-control: no-store, no-cache, must-revalidate
+pragma: no-cache
+x-frame-options: SAMEORIGIN
+content-security-policy: frame-ancestors 'self';
+x-powered-by: LiteCart.net
+content-language: en
+vary: Accept-Encoding
+x-turbo-charged-by: LiteSpeed
+CF-Cache-Status: DYNAMIC
+Expect-CT: max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+Report-To: {"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=fY%2FxpF1Z527UcDnm7bgFEMv26Fmg%2BlQTApUDPEnQ1caMQjsFlcPhN%2BzCrhW%2BKZgO4AHNJMuqerlXNd4v3EibFNgYCPwkVJ7P7W2GLM144Q3JtpoOtUgKRMwN9X2FGyxXzSyq"}],"group":"cf-nel","max_age":604800}
+NEL: {"success_fraction":0,"report_to":"cf-nel","max_age":604800}
+Server: cloudflare
+CF-RAY: 6ac8e9504813363c-LAX
+alt-svc: h3=":443"; ma=86400, h3-29=":443"; ma=86400, h3-28=":443"; ma=86400, h3-27=":443"; ma=86400
+
+<?xml version="1.0" encoding="utf-8" ?>
+<rss version="2.0">
+  <channel>
+    <title>LiteCart Forum Discussions</title>
+    <link>https://www.litecart.net/forums/index</link>
+    <description>The most recent forum activity.</description>
+    <language>en</language>
+    <item>
+      <category><![CDATA[General Discussions]]></category>
+      <title><![CDATA[How to integrate trustpilot on my site]]></title>
+      <link>https://www.litecart.net/en/forums/2/general-discussions/15744/how-to-integrate-trustpilot-on-my-site</link>
+      <description></description>
+      <author><![CDATA[natwood]]></author>
+      <pubDate>Thu, 11 Nov 2021 12:24:45 +0000</pubDate>
+    </item>
+    <item>
+      <category><![CDATA[Feature Requests and New Ideas]]></category>
+      <title><![CDATA[How to change box_filter requests]]></title>
+      <link>https://www.litecart.net/en/forums/5/feature-requests-and-new-ideas/15762/how-to-change-box-filter-requests</link>
+      <description></description>
+      <author><![CDATA[abdumalik]]></author>
+      <pubDate>Thu, 11 Nov 2021 11:33:03 +0000</pubDate>
+    </item>
+    <item>
+      <category><![CDATA[Errors and Troubleshooting]]></category>
+      <title><![CDATA[User register fatal error]]></title>
+      <link>https://www.litecart.net/en/forums/15/errors-and-troubleshooting/15761/user-register-fatal-error</link>
+      <description></description>
+      <author><![CDATA[jamie]]></author>
+      <pubDate>Thu, 11 Nov 2021 08:20:08 +0000</pubDate>
+    </item>
+    <item>
+      <category><![CDATA[Add-ons]]></category>
+      <title><![CDATA[Product reviews do not work]]></title>
+      <link>https://www.litecart.net/en/forums/7/add-ons/15758/product-reviews-do-not-work</link>
+      <description></description>
+      <author><![CDATA[jamie]]></author>
+      <pubDate>Thu, 11 Nov 2021 08:14:14 +0000</pubDate>
+    </item>
+    <item>
+      <category><![CDATA[Feature Requests and New Ideas]]></category>
+      <title><![CDATA[Clone the categories]]></title>
+      <link>https://www.litecart.net/en/forums/5/feature-requests-and-new-ideas/15754/clone-the-categories</link>
+      <description></description>
+      <author><![CDATA[abdumalik]]></author>
+      <pubDate>Wed, 10 Nov 2021 17:41:14 +0000</pubDate>
+    </item>
+    <item>
+      <category><![CDATA[Feature Requests and New Ideas]]></category>
+      <title><![CDATA[Add the query as parameter]]></title>
+      <link>https://www.litecart.net/en/forums/5/feature-requests-and-new-ideas/15694/add-the-query-as-parameter</link>
+      <description></description>
+      <author><![CDATA[abdumalik]]></author>
+      <pubDate>Tue, 09 Nov 2021 23:19:29 +0000</pubDate>
+    </item>
+    <item>
+      <category><![CDATA[Add-ons]]></category>
+      <title><![CDATA[Fatal error when adding featured product]]></title>
+      <link>https://www.litecart.net/en/forums/7/add-ons/15749/fatal-error-when-adding-featured-product</link>
+      <description></description>
+      <author><![CDATA[prz3m0]]></author>
+      <pubDate>Tue, 09 Nov 2021 21:08:44 +0000</pubDate>
+    </item>
+    <item>
+      <category><![CDATA[Add-ons]]></category>
+      <title><![CDATA[Warnings in LC 2.3.1]]></title>
+      <link>https://www.litecart.net/en/forums/7/add-ons/15750/warnings-in-lc-2-3-1</link>
+      <description></description>
+      <author><![CDATA[prz3m0]]></author>
+      <pubDate>Tue, 09 Nov 2021 20:55:11 +0000</pubDate>
+    </item>
+    <item>
+      <category><![CDATA[Errors and Troubleshooting]]></category>
+      <title><![CDATA[Failed decoding csv]]></title>
+      <link>https://www.litecart.net/en/forums/15/errors-and-troubleshooting/15721/failed-decoding-csv</link>
+      <description></description>
+      <author><![CDATA[ljarbeau]]></author>
+      <pubDate>Mon, 08 Nov 2021 21:19:00 +0000</pubDate>
+    </item>
+    <item>
+      <category><![CDATA[Add-ons]]></category>
+      <title><![CDATA[Display same review for multiple products]]></title>
+      <link>https://www.litecart.net/en/forums/7/add-ons/15736/display-same-review-for-multiple-products</link>
+      <description></description>
+      <author><![CDATA[jonas32]]></author>
+      <pubDate>Mon, 08 Nov 2021 14:54:36 +0000</pubDate>
+    </item>
+    <item>
+      <category><![CDATA[Templates and CSS]]></category>
+      <title><![CDATA[Where can i change the rocket picture at Front Page ?]]></title>
+      <link>https://www.litecart.net/en/forums/12/templates-and-css/15731/where-can-i-change-the-rocket-picture-at-front-page</link>
+      <description></description>
+      <author><![CDATA[mfcm]]></author>
+      <pubDate>Sat, 06 Nov 2021 23:39:01 +0000</pubDate>
+    </item>
+    <item>
+      <category><![CDATA[Feature Requests and New Ideas]]></category>
+      <title><![CDATA[Monthly subscription / recurring payment]]></title>
+      <link>https://www.litecart.net/en/forums/5/feature-requests-and-new-ideas/14451/monthly-subscription-recurring-payment</link>
+      <description></description>
+      <author><![CDATA[vilaiporn]]></author>
+      <pubDate>Sat, 06 Nov 2021 22:22:34 +0000</pubDate>
+    </item>
+    <item>
+      <category><![CDATA[General Discussions]]></category>
+      <title><![CDATA[How to display listing categories on front page?]]></title>
+      <link>https://www.litecart.net/en/forums/2/general-discussions/15712/how-to-display-listing-categories-on-front-page</link>
+      <description></description>
+      <author><![CDATA[abdumalik]]></author>
+      <pubDate>Fri, 05 Nov 2021 20:13:58 +0000</pubDate>
+    </item>
+    <item>
+      <category><![CDATA[Add-ons]]></category>
+      <title><![CDATA[Delivery option]]></title>
+      <link>https://www.litecart.net/en/forums/7/add-ons/15704/delivery-option</link>
+      <description></description>
+      <author><![CDATA[jamie]]></author>
+      <pubDate>Fri, 05 Nov 2021 09:05:54 +0000</pubDate>
+    </item>
+    <item>
+      <category><![CDATA[Add-ons]]></category>
+      <title><![CDATA[Support for 2.3.1]]></title>
+      <link>https://www.litecart.net/en/forums/7/add-ons/15669/support-for-2-3-1</link>
+      <description></description>
+      <author><![CDATA[geobabu]]></author>
+      <pubDate>Fri, 05 Nov 2021 08:25:13 +0000</pubDate>
+    </item>
+    <item>
+      <category><![CDATA[This Website]]></category>
+      <title><![CDATA[Demo store does not reset]]></title>
+      <link>https://www.litecart.net/en/forums/1/this-website/15692/demo-store-does-not-reset</link>
+      <description></description>
+      <author><![CDATA[nivil]]></author>
+      <pubDate>Thu, 04 Nov 2021 12:41:34 +0000</pubDate>
+    </item>
+    <item>
+      <category><![CDATA[Feature Requests and New Ideas]]></category>
+      <title><![CDATA[Product filters seperate and use]]></title>
+      <link>https://www.litecart.net/en/forums/5/feature-requests-and-new-ideas/15688/product-filters-seperate-and-use</link>
+      <description></description>
+      <author><![CDATA[abdumalik]]></author>
+      <pubDate>Thu, 04 Nov 2021 10:30:46 +0000</pubDate>
+    </item>
+    <item>
+      <category><![CDATA[Errors and Troubleshooting]]></category>
+      <title><![CDATA[How to solve trumbowyg bug]]></title>
+      <link>https://www.litecart.net/en/forums/15/errors-and-troubleshooting/15666/how-to-solve-trumbowyg-bug</link>
+      <description></description>
+      <author><![CDATA[jsl]]></author>
+      <pubDate>Wed, 03 Nov 2021 20:41:02 +0000</pubDate>
+    </item>
+    <item>
+      <category><![CDATA[General Discussions]]></category>
+      <title><![CDATA[Open Graph tags in HEAD]]></title>
+      <link>https://www.litecart.net/en/forums/2/general-discussions/15682/open-graph-tags-in-head</link>
+      <description></description>
+      <author><![CDATA[prz3m0]]></author>
+      <pubDate>Wed, 03 Nov 2021 19:37:36 +0000</pubDate>
+    </item>
+    <item>
+      <category><![CDATA[Errors and Troubleshooting]]></category>
+      <title><![CDATA[Language url path prefix problem]]></title>
+      <link>https://www.litecart.net/en/forums/15/errors-and-troubleshooting/15623/language-url-path-prefix-problem</link>
+      <description></description>
+      <author><![CDATA[alins]]></author>
+      <pubDate>Tue, 02 Nov 2021 23:04:41 +0000</pubDate>
+    </item>
+  </channel>
+</rss>
+
+

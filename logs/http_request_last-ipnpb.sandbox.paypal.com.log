@@ -1,0 +1,29 @@
+## [2020-05-18 00:04:06] Request #######################################
+
+POST /cgi-bin/webscr HTTP/1.1
+Host: ipnpb.sandbox.paypal.com
+User-Agent: LiteCart/2.2.2
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 1376
+Connection: Close
+
+mc_gross=189.00&protection_eligibility=Eligible&address_status=confirmed&item_number1=3598&tax=0.00&item_number2=ot_shipping_fee&payer_id=9C3TJB2ZZF3KJ&item_number3=ot_payment_fee&address_street=Level+01%2C+No+1%2C+First+Avenue+Bandar+Utama&payment_date=09%3A03%3A57+May+17%2C+2020+PDT&payment_status=Completed&charset=windows-1252&address_zip=47800&first_name=test&mc_fee=8.43&address_country_code=MY&address_name=test+buyer&notify_version=3.9&custom=4104&payer_status=verified&business=ittoys116%40gmail.com&address_country=Malaysia&num_cart_items=3&address_city=Petaling+Jaya&verify_sign=AN1wyDwKOBVIB02cP.b41BmjxgBnAOa7p286wRswnULZCwshl1st.zET&payer_email=ittoys116-buyer%40gmail.com&tax1=0.00&tax2=0.00&tax3=0.00&txn_id=716203618L398254L&payment_type=instant&last_name=buyer&address_state=Selangor&item_name1=S.H.MonsterArts%0D%0AAlien%0D%0AAlien+Big+Chap&receiver_email=ittoys116%40gmail.com&item_name2=%3Cstrong%3ENormal+Pos%3C/strong%3E+%28Malaysia%29&payment_fee=&item_name3=%3Cstrong%3EPayPal%3C/strong%3E+%28Card+Payment%29&shipping_discount=0.00&quantity1=1&insurance_amount=0.00&quantity2=1&receiver_id=HBHG65TZNB87U&quantity3=1&txn_type=cart&discount=0.00&mc_gross_1=169.00&mc_currency=MYR&mc_gross_2=8.00&mc_gross_3=12.00&residence_country=MY&test_ipn=1&shipping_method=Default&transaction_subject=&payment_gross=&ipn_track_id=580614ef97539&cmd=_notify-validate
+
+## [2020-05-18 00:04:09] Response — 1163 bytes transferred in 2.819 s ##
+
+HTTP/1.1 200 OK
+Date: Sun, 17 May 2020 16:04:07 GMT
+Server: Apache
+X-Frame-Options: SAMEORIGIN
+Set-Cookie: c9MWDuvPtT9GIMyPc3jwol1VSlO=Yr3IpGV9yhn1EjoagEcwA23feZZTenflNn9kd2nsvqRWREONblg9lnRF1jUcv4m__dz9RhSxbUYyk8wGasSYYXJurtlQvs8J8z8SOOml5t5axv19ao0yvLMQcbCRqsC0Q5gEJB696eQ-j27_yBvNsV7uNOmbWmL8utHBG6C7AYZFP_e5iHxHMYVjCyC9IMWNKY0nz9_0dZEmWnM-7xWg0vfsSycR7sk0ipR4yPX3AF04v-3RH7lGDgO47Kps2cbIljPn8y9HD7Q2hhE548tO7frBPYBE7D6YE53PlbOigSdrQZK_Njg6YHeq4E52WusztejY5scE5ZEAS4dr31X4a9XX6jmaXt8SraTi02RHkpBCIqYpz2J_kowpAGfqlTbaQ1LRu_vW4jJJAig7w0uil69uQljWiQ2YYXHWF7Fj91gMV13sHECj0D8Yfm4; domain=.paypal.com; path=/; Secure; HttpOnly
+Set-Cookie: cookie_check=yes; expires=Wed, 15-May-2030 16:04:08 GMT; domain=.paypal.com; path=/; Secure; HttpOnly
+Set-Cookie: navcmd=_notify-validate; domain=.paypal.com; path=/; Secure; HttpOnly
+Set-Cookie: navlns=0.0; expires=Tue, 17-May-2022 16:04:08 GMT; domain=.paypal.com; path=/; Secure; HttpOnly
+Set-Cookie: Apache=10.72.108.11.1589731447860121; path=/; expires=Tue, 10-May-50 16:04:07 GMT
+Vary: Accept-Encoding,User-Agent
+Connection: close
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+
+VERIFIED
+

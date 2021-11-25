@@ -1,0 +1,855 @@
+html {
+  background: #ffffff00;
+}
+body {
+  background-image: url("/images/customize/Back Ground.jpg");
+  background-repeat: repeat;
+  background-attachment: fixed;
+  min-height: 500px;
+  background-size: cover;
+}
+body h1 {
+  color: #333333;
+  margin: 1em 0 0.5em 0;
+  letter-spacing: 0px;
+}
+body p {
+  color: #333333;
+}
+body a {
+  color: #333333;
+}
+#google_translate_element {
+  position: inline;
+  display: inline-block;
+  bottom: ;
+  right: 0px !important;
+  line-height: 1.0;
+}
+.goog-te-gadget {
+  font-family: Roboto, 'Open Sans', sans-serif !important;
+  text-transform: normal;
+  font-weight: bold;
+}
+.goog-te-gadget-simple {
+  background-image: url("/images/Google Translate.png");
+  background-size: 34px 34px;
+  background-color: rgba(255, 255, 255, 0) !important;
+  background-repeat: no-repeat;
+  top: 7px !important;
+  left: 8px !important;
+  bottom: 3px !important;
+  border: rgba(255, 255, 255, 0) !important;
+  padding: 1px !important;
+  border-radius: 4px !important;
+  font-size: 0.95rem !important;
+  line-height: 2.2rem !important;
+  margin: 3.5px 0px 0px 0px;
+  display: inline-block;
+  cursor: pointer;
+  zoom: 1;
+}
+.goog-te-menu2 {
+  max-width: 10%;
+  vertical-align: 10px;
+}
+.goog-te-menu-value {
+  color: #333333 !important;
+}
+.goog-te-menu-value:before {
+  font-family: 'Material Icons';
+  content: url("/images/transparent.png");
+  display: inline-block;
+  font-size: 0.95rem;
+  vertical-align: -10px;
+}
+.goog-te-menu-value span:nth-child(5) {
+  display: none;
+}
+.goog-te-menu-value span:nth-child(3) {
+  border: none !important;
+  font-family: 'Material Icons';
+}
+.goog-te-menu-value span:nth-child(3):after {
+  font-family: 'Material Icons';
+  content: ;
+  margin-right: 16px;
+  font-size: 1.5rem;
+  vertical-align: 0px;
+}
+.goog-te-gadget-icon {
+  background-image: url(https://placehold.it/32) !important;
+  background-position: 0px 0px;
+  height: 32px !important;
+  width: 32px !important;
+  margin-right: 0px !important;
+  display: none;
+}
+.box_content-form-data {
+  clear: both;
+  float: left;
+}
+.my-email:after {
+  content: "*";
+  color: red;
+}
+font + .box_content-form-data {
+  display: none;
+}
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+}
+body {
+  top: 0px !important;
+}
+/* ================================== *\
+    Mediaqueries
+\* ================================== */
+@media (max-width: 667px) {
+  #google_translate_element {
+    background-color: #ffffff00 !important;
+    border: #ffffff00 !important;
+    background-size: 25px 25px;
+    top: 1px !important;
+    left: 8px !important;
+    bottom: 8px !important;
+    width: 40% !important;
+    font-size: 2rem !important;
+    line-height: 0.08rem !important;
+    position: absolute;
+    margin: 0px 2px 6px 0px;
+  }
+  #google_translate_element goog-te-gadget {
+    width: 100% !important;
+  }
+  #google_translate_element .skiptranslate {
+    width: 100% !important;
+  }
+  #google_translate_element .goog-te-gadget-simple {
+    width: 100%t;
+    text-align: center;
+  }
+}
+#google {
+  position: inline-block;
+  margin: 0px 0px 0px 5px;
+  text-size: bold;
+}
+.goog-tooltip {
+  display: none !important;
+}
+.goog-tooltip:hover {
+  display: none !important;
+}
+.goog-text-highlight {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+#page #header {
+  position: relative;
+  background: #ffffff00;
+  background-image: url("/images/customize/Sunset.jpg");
+  background-attachment: initial;
+  min-height: auto;
+  min-width: auto;
+  background-size: cover;
+  background-position: bottom;
+  margin-bottom: 20px;
+  border-radius: 6px 6px 6px 6px;
+  animation: pulse_orange 2s linear;
+}
+@media (min-width: 768px) {
+  #page #header {
+    padding: 20px;
+  }
+}
+@media (min-width: 992px) {
+  #page #header {
+    grid-template-columns: 250px auto 250px;
+  }
+}
+#page #header .logotype img {
+  max-width: 200px;
+}
+@media (min-width: 400px) {
+  #page #header .logotype img {
+    max-width: 45%;
+  }
+}
+#region {
+  background-size: 0px;
+  box-size: 0px;
+  background: #ffffff00;
+  border-bottom: 1px solid #ffffff00;
+  border-collapse: collapse;
+  border-radius: 6px 6px 6px 6px;
+  border-right: 1px solid #ffffff00;
+  box-shadow: inset 0 1px 2px #ffffff00;
+  color: #000000;
+  display: inline-block;
+  font-size: 1em;
+  padding: 0px 0px;
+  margin: 11px 0px 0px 0px;
+  font-weight: bold;
+}
+#region .currency {
+  cursor: default;
+  padding: 0;
+}
+#region .currency span {
+  background: #ffffff00;
+  border-bottom: 1px solid ffffff00;
+  border-left: 1px solid ffffff00;
+  border-right: 1px solid ffffff00;
+  border-top: 1px solid ffffff00;
+  padding: 1px 5px;
+}
+#region .country {
+  cursor: default;
+}
+#region .change {
+  text-color: #7c0606;
+  font-color: #7c0606;
+  padding-left: 0;
+}
+#region > div {
+  display: inline-block;
+  padding: 5px 5px;
+  vertical-align: middle;
+}
+#cart {
+  display: inline-block;
+}
+#cart > a {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  border: 1px transparent solid;
+  border-radius: 4px;
+  color: inherit;
+  white-space: nowrap;
+}
+#cart > a:hover {
+  border-color: rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+}
+#cart img {
+  max-width: 50px;
+  max-height: 50px;
+}
+#cart .badge {
+  background: red;
+  border-radius: 1.25rem;
+  padding: .25rem;
+  display: inline-block;
+  text-align: center;
+  color: #fff;
+  font-size: 0.75em;
+  position: absolute;
+  right: 0;
+  top: 1em;
+  width: 2em;
+  animation: pulsating 1.5s linear infinite;
+}
+#cart .badge:empty {
+  display: none;
+}
+@media (max-width: 767px) {
+  #cart .details {
+    display: none;
+  }
+}
+#site-menu {
+  margin: 0 10px 20px 10px;
+}
+@media (min-width: 768px) {
+  #site-menu {
+    margin: 0 20px 20px 20px;
+  }
+}
+#cookies-acceptance {
+  /*position: sticky;*/
+  top: 0;
+  z-index: 999;
+  margin: 0 10px 0 10px;
+  background-image: url('/images/customize/Gold Brush Nav Bar.png');
+  animation: flasher_blue 2s linear infinite;
+  border: 1px rgba(0, 0, 0, 0.1) solid;
+  border-top: none;
+  border-radius: 6px 6px 6px 6px;
+  padding: 10px;
+  text-align: center;
+}
+@media (min-width: 768px) {
+  #cookies-acceptance {
+    margin: 0 20px 0 20px;
+    padding: 10px 20px;
+  }
+}
+#main {
+  padding: 0 10px 20px 10px;
+}
+@media (min-width: 768px) {
+  #main {
+    padding: 0 20px 20px 20px;
+    display: grid;
+    grid-template-columns: max-content;
+    grid-template-areas: 'sidebar content';
+    grid-template-rows: 1fr;
+  }
+}
+#sidebar {
+  position: relative;
+}
+@media (min-width: 768px) {
+  #sidebar {
+    width: 250px;
+  }
+  #sidebar > *:first-child {
+    margin-top: 0;
+  }
+  #sidebar + #content {
+    margin-left: 20px;
+  }
+}
+#content {
+  grid-area: content;
+  grid-gap: 10px;
+}
+@media (min-width: 768px) {
+  #content {
+    grid-gap: 20px;
+  }
+}
+#footer {
+  padding: 0 10px 20px 10px;
+}
+@media (min-width: 768px) {
+  #footer {
+    padding: 0 20px 20px 20px;
+  }
+}
+#footer .columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-gap: 15px;
+}
+@media (min-width: 768px) {
+  #footer .columns {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+@media (min-width: 992px) {
+  #footer .columns {
+    grid-template-columns: repeat(auto-fit, 1fr);
+  }
+}
+#footer * {
+  color: #333333;
+}
+#footer a:hover {
+  color: #2e9cd4;
+}
+#footer .title {
+  font-size: 1.5em;
+  margin: 0 0 0.75em 0;
+}
+#footer ul.list-vertical li {
+  padding: 0;
+}
+#copyright .notice {
+  color: #333333;
+  padding: 20px;
+  text-align: center;
+}
+#scroll-up {
+  bottom: 210px;
+  display: none;
+  height: 48px;
+  opacity: 0.3;
+  position: fixed;
+  right: 17px;
+  width: 48px;
+}
+/* Boxes */
+.box {
+  margin: 20px 0;
+}
+.box.white {
+  margin: 20px;
+  padding: 20px;
+  border-radius: 4px;
+  background: #fff;
+}
+.box.border {
+  margin: 20px;
+  padding: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+.box > .title {
+  margin-top: 0;
+}
+.box .box-wishlist {
+  font-size: 18px;
+  vertical-align: bottom;
+}
+.box .box-wishlist .wish {
+  box-shadow: none;
+  padding: 0.0em 0.0em;
+  color: Black;
+  background-image: none;
+  background-color: #ffffff00;
+  border-radius: 0;
+  cursor: pointer;
+  display: inline-block;
+}
+.box .box-wishlist .wish .wished {
+  color: #7a0000;
+}
+.box .box-wishlist .wish .fa-spin {
+  display: none;
+}
+.box .box-wishlist .wish.loading .fa-heart {
+  display: none;
+}
+.box .box-wishlist .wish.loading .fa-spin {
+  display: inline-block;
+}
+.box .box-wishlist:hover .wish {
+  display: inline-block;
+}
+@media (min-width: 992px) {
+  #box-also-purchased-products {
+    position: sticky;
+    top: 0;
+  }
+}
+#box-information li a {
+  color: inherit;
+  line-height: 175%;
+}
+#box-information li a.active {
+  color: #2e9cd4;
+}
+#box-information li a:hover {
+  color: #2e9cd4;
+}
+#box-filter .manufacturers ul {
+  max-height: 200px;
+  overflow-y: auto;
+}
+#box-recently-viewed-products .listing {
+  grid-template-columns: repeat(auto-fit, minmax(48px, 0.5fr));
+}
+.listing {
+  display: grid;
+}
+.listing.products {
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-gap: 10px;
+}
+@media (min-width: 480px) {
+  .listing.products {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-gap: 20px;
+  }
+}
+.listing.categories {
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-gap: 10px;
+}
+@media (min-width: 768px) {
+  .listing.categories {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-gap: 20px;
+  }
+}
+.listing h1,
+.listing h2,
+.listing h3 {
+  padding-bottom: 0;
+  border: none;
+}
+.listing a {
+  color: inherit;
+  text-decoration: none;
+}
+.listing .category,
+.listing .manufacturer,
+.listing .product-column,
+.listing .product-row {
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 5px 10px #333;
+  border-radius: 6px 6px 6px 6px;
+  background-position: bottom;
+  border-radius: 4px;
+  transform: scale(1);
+  transition: all 100ms linear;
+  color: inherit;
+  text-decoration: none;
+  background-image: url("/images/customize/Gold Brush.png");
+}
+@media (min-width: 768px) {
+  .listing .category:hover,
+  .listing .manufacturer:hover,
+  .listing .product-column:hover,
+  .listing .product-row:hover {
+    box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.15);
+    transform: scale(1.01);
+  }
+}
+.listing .category .caption {
+  background: #f2f2f2;
+  padding: 10px 20px;
+  color: #333333;
+  text-align: center;
+}
+.listing .category .caption * {
+  color: inherit;
+  margin: 0;
+}
+.listing .manufacturer img {
+  width: 100%;
+  height: auto;
+  padding: 10px;
+}
+.listing .manufacturer .caption {
+  margin: 0;
+  padding: 10px;
+  color: #333333;
+  text-align: center;
+}
+.listing .product-column,
+.listing .product-row {
+  position: relative;
+}
+.listing .product-column .link,
+.listing .product-row .link {
+  text-decoration: none;
+}
+.listing .product-column .image-wrapper,
+.listing .product-row .image-wrapper {
+  background: #ffffff00;
+}
+.listing .product-column .image-wrapper .sticker,
+.listing .product-row .image-wrapper .sticker {
+  position: absolute;
+  top: 20px;
+  left: -32px;
+  width: 125px;
+  padding: 5px 10px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+  transform: rotate(-45deg);
+}
+.listing .product-column .image-wrapper .sticker.new,
+.listing .product-row .image-wrapper .sticker.new {
+  background: rgba(251, 184, 41, 0.85);
+}
+.listing .product-column .image-wrapper .sticker.sale,
+.listing .product-row .image-wrapper .sticker.sale {
+  background: rgba(237, 60, 50, 0.85);
+}
+.listing .product-column .name,
+.listing .product-row .name {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-direction: column;
+  height: 40px;
+  color: #000000;
+}
+.listing .product-column .manufacturer-name,
+.listing .product-row .manufacturer-name {
+  color: #737373;
+  font-size: 0.9em;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  line-height: 200%;
+  color: #000000;
+}
+.listing .product-column .price-wrapper,
+.listing .product-row .price-wrapper {
+  font-size: 1.25em;
+}
+.listing .product-column .price-wrapper .price,
+.listing .product-row .price-wrapper .price {
+  font-weight: bold;
+  color: #333;
+  white-space: nowrap;
+}
+.listing .product-column .price-wrapper .regular-price,
+.listing .product-row .price-wrapper .regular-price {
+  color: #333333;
+  font-size: 0.75em;
+  font-weight: normal;
+  white-space: nowrap;
+}
+.listing .product-column .price-wrapper .campaign-price,
+.listing .product-row .price-wrapper .campaign-price {
+  font-weight: bold;
+  color: red;
+  white-space: nowrap;
+}
+.listing .product-column .preview,
+.listing .product-row .preview {
+  margin: 0 -1px -1px -1px;
+  display: none;
+  position: absolute;
+  top: 7.5px;
+  right: 7.5px;
+  box-shadow: none;
+}
+.listing .product-column:hover .preview,
+.listing .product-row:hover .preview {
+  display: inline-block;
+}
+.listing .product-column .wish,
+.listing .product-row .wish {
+  font-size: 14px;
+  margin: 0 -1px -1px -1px;
+  position: absolute;
+  top: 38px;
+  right: 7.5px;
+  box-shadow: none;
+  padding: 0.25em 0.5em;
+  color: Black;
+  background-image: url('/images/customize/Gold Brush Table.png');
+  border-radius: 6px 6px 6px 6px;
+  cursor: pointer;
+  display: none;
+}
+.listing .product-column .wish .wished,
+.listing .product-row .wish .wished {
+  color: #7a0000;
+}
+.listing .product-column .wish .fa-spin,
+.listing .product-row .wish .fa-spin {
+  display: none;
+}
+.listing .product-column .wish:hover,
+.listing .product-row .wish:hover {
+  border: 0px solid white;
+}
+.listing .product-column .wish.loading .fa-heart,
+.listing .product-row .wish.loading .fa-heart {
+  display: none;
+}
+.listing .product-column .wish.loading .fa-spin,
+.listing .product-row .wish.loading .fa-spin {
+  display: inline-block;
+}
+.listing .product-column:hover .wish,
+.listing .product-row:hover .wish {
+  display: inline-block;
+}
+.listing .shopee {
+  font-size: 14px;
+  margin: 0 -1px -1px -1px;
+  position: absolute;
+  top: 5px;
+  left: 1px;
+  box-shadow: none;
+  padding: 0.25em 0.5em;
+  background: #ffffff00;
+  cursor: pointer;
+  display: none;
+}
+.listing .shopee:hover {
+  border: 0px solid white;
+}
+.listing:hover .shopee {
+  display: inline-block;
+}
+.listing .shopee_backend {
+  font-size: 14px;
+  margin: 0 -1px -1px -1px;
+  position: absolute;
+  top: 85px;
+  left: 1px;
+  box-shadow: none;
+  padding: 0.25em 0.5em;
+  background: #ffffff00;
+  cursor: pointer;
+  display: none;
+}
+.listing:hover .shopee_backend {
+  display: inline-block;
+}
+.listing .lazada {
+  font-size: 14px;
+  margin: 0 -1px -1px -1px;
+  position: absolute;
+  top: 45px;
+  left: 1px;
+  box-shadow: none;
+  padding: 0.25em 0.5em;
+  background: #ffffff00;
+  cursor: pointer;
+  display: none;
+}
+.listing:hover .lazada {
+  display: inline-block;
+}
+.listing .lazada_backend {
+  font-size: 14px;
+  margin: 0 -1px -1px -1px;
+  position: absolute;
+  top: 125px;
+  left: 1px;
+  box-shadow: none;
+  padding: 0.25em 0.5em;
+  background: #ffffff00;
+  cursor: pointer;
+  display: none;
+}
+.listing:hover .lazada_backend {
+  display: inline-block;
+}
+.listing .product-column .image {
+  background: #ffffff00;
+  width: 100%;
+  height: auto;
+}
+.listing .product-column .info {
+  padding: 10px;
+  text-align: center;
+}
+.listing .product-column .price-wrapper {
+  position: initial;
+}
+.listing .product-row {
+  grid-column: span 4;
+  height: 175px;
+}
+.listing .product-row .info {
+  position: absolute;
+  top: 0;
+  left: 120px;
+  padding: 10px;
+}
+@media (min-width: 768px) {
+  .listing .product-row .info {
+    left: 180px;
+  }
+}
+.listing .product-row .image-wrapper {
+  display: inline-block;
+}
+.listing .product-row .image {
+  max-width: 100px;
+}
+@media (min-width: 768px) {
+  .listing .product-row .image {
+    max-width: 160px;
+  }
+}
+.listing .product-row .price-wrapper {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  font-size: 1.25em;
+  padding: 10px;
+  padding-left: 40px;
+}
+@media (min-width: 768px) {
+  .listing .product-row {
+    height: auto;
+  }
+  .listing .product-row .description {
+    margin-top: 20px;
+  }
+}
+#view-full-page {
+  float: right;
+  display: inline-block;
+  padding: 10px 20px;
+}
+#box-product .images {
+  margin-bottom: 40px;
+}
+#box-product .main-image {
+  background: #ffffff00;
+  background-image: url("/images/customize/Gold Brush.png");
+  background-position: center;
+  position: relative;
+  overflow: hidden;
+}
+#box-product .main-image .sticker {
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+  top: 17px;
+  left: -34px;
+  padding: 5px 10px;
+  position: absolute;
+  text-align: center;
+  text-transform: uppercase;
+  transform: rotate(-45deg);
+  width: 140px;
+}
+#box-product .main-image .sticker.new {
+  background: rgba(251, 184, 41, 0.85);
+}
+#box-product .main-image .sticker.sale {
+  background: rgba(237, 60, 50, 0.85);
+}
+#box-product .price-wrapper {
+  font-size: 10.75em;
+}
+#box-product .price-wrapper2 {
+  font-size: 2em;
+}
+#box-product .price-wrapper2 .campaign-price2 {
+  color: red;
+}
+#box-product .regular-price {
+  font-size: 10.75em;
+}
+#box-product .campaign-price {
+  color: red;
+}
+#box-product .tax {
+  color: #999999;
+}
+#box-product .stock-available .value {
+  color: #009900;
+}
+#box-product .stock-partly-available .value {
+  color: #ff9900;
+}
+#box-product .stock-unavailable .value {
+  color: #cc0000;
+}
+#box-product .social-bookmarks {
+  font-size: 1.75em;
+  margin: 20px 0;
+}
+#box-product .description p:first-child {
+  margin-top: 0;
+}
+#box-product .description p:last-child {
+  margin-bottom: 0;
+}
+#box-product .technical-data table {
+  -webkit-column-break-inside: avoid;
+  -moz-column-break-inside: avoid;
+  break-inside: avoid-column;
+}
+#box-product .technical-data table td:first-child {
+  width: 50%;
+}
+@media (min-width: 768px) {
+  #box-product .technical-data {
+    columns: auto 2;
+  }
+}
+/*# sourceMappingURL=app.css.map */

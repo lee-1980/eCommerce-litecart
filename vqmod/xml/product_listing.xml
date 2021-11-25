@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+<id>product_listing</id>
+<version>0.1</version>
+<vqmver required="true">2.6.1</vqmver>
+<author>ITProstor</author>
+<file name="admin/catalog.app/config.inc.php">
+    <operation error="log">
+        <search position="after" offset="3"><![CDATA['title' => language::translate('title_catalog', 'Catalog'),]]></search>
+        <add><![CDATA[array(
+        'title' => language::translate('title_products', 'Products'),
+        'doc' => 'product_listing',
+        'params' => array(),
+      ),]]></add>
+    </operation>
+</file>
+<file name="admin/catalog.app/config.inc.php">
+    <operation error="log">
+        <search position="after"><![CDATA['catalog' => 'catalog.inc.php',]]></search>
+        <add><![CDATA['product_listing' => 'product_listing.inc.php',]]></add>
+    </operation>
+</file>
+</modification>

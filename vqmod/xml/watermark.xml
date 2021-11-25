@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Watermark</id>
+	<version>1.0</version>
+	<vqmver required="true">2.4.0</vqmver>
+	<author>tim-international.net</author>
+	
+	<file name="includes/entities/ent_product.inc.php">
+		<operation error="log">
+			<search position="before" regex="false"><![CDATA[
+      if (!$image->write(FS_DIR_APP . 'images/' . $filename, '', 90)) return false;
+      ]]></search>
+			<add>
+      <![CDATA[
+    // BOF: Watermark
+      $image->watermark(FS_DIR_HTTP_ROOT . WS_DIR_IMAGES . 'watermark.png', 'RIGHT', 'BOTTOM');
+    // EOF: Watermark
+      
+      ]]></add>
+		</operation>
+	</file>
+</modification>

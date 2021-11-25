@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+  <id>Custom Box Etc</id>
+  <version>2.0</version>
+  <vqmver required="true">2.4.0</vqmver>
+  <author>ittoysline</author>
+
+
+  <file name="includes/boxes/box_campaign_products.inc.php">
+	    <operation error="log">
+      <search position="replace"><![CDATA[     
+         'campaign' => true,
+      ]]></search>
+      <add><![CDATA[     
+         'sql_where' => "p.master_insane_deal_price = 1  and p.insaneprice = 1 or p.disable_master_insane_deal_price = 1   ",
+      ]]></add>
+    </operation>
+
+  </file>
+ 
+</modification>
+

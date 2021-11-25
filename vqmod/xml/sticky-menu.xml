@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+    <id>DigitCart - Sticky Menu</id>
+    <version>1.0</version>
+    <vqmver>2.6.0</vqmver>
+    <author>digitcart.ir</author>
+
+    <file name="includes/templates/*/views/box_cart.inc.php" error="skip">
+	    <operation error="skip">
+            <search position="before"><![CDATA[</footer>]]></search>
+            <add><![CDATA[
+				<script>
+				$('cart').append('<style>.sticky {position:fixed;z-index:2;right:0;top:0px;}</style>');
+				var div = '#sticky';
+				var windowScrollTop = $(window).scrollTop();
+				var divOffsetTop = $(div).offset().top;
+				if(windowScrollTop > divOffsetTop){
+					$(div).addClass('sticky');
+				} else {
+					$(div).removeClass('sticky');
+				}
+
+				$(window).on('scroll', function(){
+					var windowScrollTop = $(window).scrollTop();
+					if(windowScrollTop > divOffsetTop){
+						$(div).addClass('sticky');
+					} else {
+						$(div).removeClass('sticky');
+					}
+				});
+			
+				</script>
+			]]></add>
+        </operation>
+    </file>
+</modification>

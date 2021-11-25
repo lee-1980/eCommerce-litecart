@@ -1,0 +1,25 @@
+## [2021-10-19 03:52:48] Request #######################################
+
+POST /bot1411154634:AAHsHXOOe9AhWAVui5mdzENJ45OHFWIHm-I/sendMessage HTTP/1.1
+Host: api.telegram.org
+Content-Type: application/json; charset=en
+User-Agent: LiteCart/2.2.2
+Content-Length: 108
+Connection: Close
+
+{"chat_id":"@ittoys","text":"Incoming new order 11394 from %firsname test with a total amount of RM 41.60."}
+
+## [2021-10-19 03:52:50] Response — 440 bytes transferred in 1.811 s ###
+
+HTTP/1.1 403 Forbidden
+Server: nginx/1.18.0
+Date: Mon, 18 Oct 2021 19:52:50 GMT
+Content-Type: application/json
+Content-Length: 96
+Connection: close
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+Access-Control-Allow-Origin: *
+Access-Control-Expose-Headers: Content-Length,Content-Type,Date,Server,Connection
+
+{"ok":false,"error_code":403,"description":"Forbidden: bot is not a member of the channel chat"}
+

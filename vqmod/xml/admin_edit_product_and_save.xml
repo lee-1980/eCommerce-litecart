@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Stay on the product admin page after making changes</id>
+	<version>2.0</version>
+	<vqmver required="true">2.4.0</vqmver>
+	<author>s22_tech</author>
+
+	<file name="admin/catalog.app/edit_product.inc.php">
+
+		<operation error="log">
+			<search position="replace"><![CDATA[
+	if (isset($_POST['save'])) {
+		]]></search>
+
+			<add><![CDATA[
+	if (isset($_POST['save']) || isset($_POST['save_stay'])) {
+		]]></add>
+		</operation>
+
+
+		<operation error="log">
+			<search position="replace" offset="3"><![CDATA[
+      $product->save();
+		]]></search>
+
+			<add><![CDATA[
+      $product->save();
+
+      notices::add('success', language::translate('success_changes_saved', 'Changes saved'));
+	if (isset($_POST['save'])) {
+		header('Location: '. document::link(WS_DIR_ADMIN, array('app' => $_GET['app'], 'doc' => 'catalog', 'category_id' => $_POST['categories'][0])));
+	}
+	
+	if (isset($_POST['save_stay'])) {
+		header('Location: '. document::link(WS_DIR_ADMIN, array('product_id' => $product->data['id']), true));
+	}	
+		]]></add>
+		</operation>
+
+
+		<operation error="log">
+			<search position="replace"><![CDATA[
+	<?php echo functions::form_draw_button('save', language::translate('title_save', 'Save'), 'submit', '', 'save'); ?>
+		]]></search>
+
+			<add><![CDATA[
+	<?php
+		echo functions::form_draw_button('save_stay', language::translate('title_save_stay', 'Save & Stay'), 'submit', '', 'save');
+		echo PHP_EOL;
+
+		echo functions::form_draw_button('save', language::translate('title_save_exit', 'Save & Exit'), 'submit', '', 'save');
+		echo PHP_EOL;
+	?>
+		]]></add>
+		</operation>
+
+	</file>
+
+</modification>

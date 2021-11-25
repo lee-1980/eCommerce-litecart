@@ -1,0 +1,105 @@
+## [2021-08-30 01:54:20] Request #######################################
+
+POST /cgi-bin/webscr HTTP/1.1
+Host: www.paypal.com
+User-Agent: LiteCart/2.2.2
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 101
+Connection: Close
+
+cmd=_notify-synch&tx=2LK5828824632290J&at=6myTPRTjYGEsa4j-xqoVLqbfSjRDmBNXx3GhBVXXmWsSFM2HF36VdQJbWdK
+
+## [2021-08-30 01:54:22] Response — 3666 bytes transferred in 2.062 s ##
+
+HTTP/1.1 200 OK
+Cache-Control: max-age=0, no-cache, no-store, must-revalidate
+Content-Type: text/html; charset=UTF-8
+Paypal-Debug-Id: ae072dade3e4e
+X-Frame-Options: SAMEORIGIN
+DC: phx-origin-www-1.paypal.com
+X-Akamai-Transformed: 9 - 0 pmb=mRUM,1
+Date: Sun, 29 Aug 2021 17:54:28 GMT
+Content-Length: 1426
+Connection: close
+Set-Cookie: cwrClyrK4LoCV1fydGbAxiNL6iG=VrOf8xbVIwQiYP1F1Z3S1qz-5kXSxQF7fK6_04dF0piykVdm7Khr6gT0Cp0CcxVdz05OWSH0WlQx-aqBhGlaG2f4K90OfaWLD7hCVaGE1o7gY7gbYemtIAeuSqoFA7L4voAI_LJ1cgrDZqob7T2LOiG6KcT4Tl0O5JFn_HUzJFEa6A0A5rLhsh5FI-UQnm3TYI58NNV4EZvLZxwGgWfFt2683ORMI6hVU1lI8ye4y7qIZfG9cTmr3CQo0mMoQhKkizZkH9ZgSfzGmp-t9XaerX_sN2CArRLyJk0G1EVIN_VTJ1cU2UhdaxgFkcj_chZfaG0DKUlzS4EmnprLTwlJ19nJqseOnJ2fBE2udrdSnCPY4wchmaB8Jsy_kRp8cNKaT0xFZW_LFmKCpE-Ym4N-Faggqz-X9BIJHy2D6aF5H5sQ_iwWUxPidCEc3t8; domain=.paypal.com; path=/; Secure; HttpOnly
+Set-Cookie: KHcl0EuY7AKSMgfvHl7J5E7hPtK=ZFTNSk6t69byt1oSU073KipPu0RiKhZ0m35g1yk50moZFlb2E4km5CcL8I-S_MvJQzhwdTudsyINZRUA; expires=Wed, 31-Dec-1969 23:59:59 GMT; domain=.paypal.com; path=/; Secure; HttpOnly
+Set-Cookie: cookie_check=yes; expires=Wed, 27-Aug-2031 17:54:28 GMT; domain=.paypal.com; path=/; Secure; HttpOnly
+Set-Cookie: navcmd=_notify-synch; domain=.paypal.com; path=/; Secure; HttpOnly
+Set-Cookie: navlns=0.0; expires=Tue, 29-Aug-2023 17:54:28 GMT; domain=.paypal.com; path=/; Secure; HttpOnly
+Set-Cookie: l7_az=dcg01.phx; Path=/; Domain=paypal.com; Expires=Sun, 29 Aug 2021 18:24:28 GMT; HttpOnly; Secure
+Set-Cookie: ts=vreXpYrS%3D1724954067%26vteXpYrS%3D1630261467%26vr%3D930c60fb17b0a1d7e03b70a0feb79f15%26vt%3D930c60fb17b0a1d7e03b70a0feb79f14%26vtyp%3Dnew; Path=/; Domain=paypal.com; Expires=Wed, 28 Aug 2024 17:54:28 GMT; HttpOnly; Secure
+Set-Cookie: ts_c=vr%3D930c60fb17b0a1d7e03b70a0feb79f15%26vt%3D930c60fb17b0a1d7e03b70a0feb79f14; Path=/; Domain=paypal.com; Expires=Wed, 28 Aug 2024 17:54:28 GMT; Secure
+Set-Cookie: x-cdn=akamai; path=/; domain=.paypal.com; secure
+Server-Timing: edge; dur=2
+Server-Timing: origin; dur=1994
+Server-Timing: cdn-cache; desc=MISS
+Set-Cookie: akavpau_ppsd=1630260268~id=a102e059291404500a2585b529cb43d0; Domain=www.paypal.com; Path=/; HttpOnly; Secure; SameSite=None
+Strict-Transport-Security: max-age=63072000
+
+SUCCESS
+first_name=Joshah
+discount=0.00
+mc_shipping=0.00
+mc_currency=SGD
+payer_status=unverified
+shipping_discount=0.00
+payment_fee=
+address_status=confirmed
+payment_gross=
+address_zip=148957
+txn_type=cart
+num_cart_items=3
+address_country_code=SG
+mc_handling=0.00
+payer_id=ZW95JWWZPY7Z4
+charset=windows-1252
+tax1=0.00
+receiver_id=LZRLCR9BD8MK2
+tax2=0.00
+tax3=0.00
+mc_handling1=0.00
+mc_handling2=0.00
+mc_handling3=0.00
+item_name1=PG+1/60+Scale+%0D%0AMobile+Suit+Gundam+%0D%0ARX-78-2+Unleashed
+tax=0.00
+item_name2=Normal+Pos+%28Air%29+%28Singapore%29
+item_name3=Paypal+%28Card+Payment%29
+payment_type=instant
+mc_shipping1=0.00
+address_street=16+STIRLING+ROAD%2C+%2324-17%0D%0AQUEENS+CONDOMINIUM
+mc_shipping2=0.00
+ebay_txn_id1=
+mc_shipping3=0.00
+ebay_txn_id2=
+txn_id=2LK5828824632290J
+ebay_txn_id3=
+mc_gross_1=283.77
+quantity1=1
+mc_gross_2=24.42
+quantity2=1
+item_number1=7654
+protection_eligibility=Ineligible
+mc_gross_3=17.69
+quantity3=1
+item_number2=ot_shipping_fee
+item_number3=ot_payment_fee
+custom=11202
+business=ittoys116%40gmail.com
+residence_country=SG
+last_name=Addan
+address_state=
+payer_email=joshah.addan%40gmail.com
+address_city=
+payment_status=Completed
+payment_date=10%3A54%3A19+Aug+29%2C+2021+PDT
+transaction_subject=
+receiver_email=ittoys116%40gmail.com
+mc_fee=15.73
+shipping_method=Default
+address_country=Singapore
+receipt_id=4805-9122-9184-0366
+mc_gross=325.88
+insurance_amount=0.00
+address_name=Joshah+Addan
+
+

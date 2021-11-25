@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>reCAPTCHA</id>
+	<version>2.0</version>
+	<vqmver required="true">2.4.0</vqmver>
+	<author>tim-international.net</author>
+
+	<file name="includes/boxes/box_contact_us.inc.php">
+		<operation error="log">
+			<search position="replace" offset="1"><![CDATA[
+      $captcha = functions::captcha_get('contact_us');
+      ]]></search>
+			<add><![CDATA[
+      if (empty($_POST['g-recaptcha-response']) || !functions::recaptcha_validate($_POST['g-recaptcha-response'])) {
+        throw new Exception(language::translate('error_invalid_captcha', 'Invalid CAPTCHA'));
+      }
+      ]]></add>
+		</operation>
+	</file>
+
+	<file name="includes/templates/*.catalog/views/box_contact_us.inc.php">
+		<operation error="log">
+			<search position="replace"><![CDATA[
+            <?php echo functions::form_draw_captcha_field('captcha', 'contact_us', 'required="required"'); ?>
+      ]]></search>
+			<add><![CDATA[
+            <?php echo functions::recaptcha_draw(); ?>
+      ]]></add>
+		</operation>
+  </file>
+
+	<file name="pages/create_account.inc.php">
+		<operation error="log">
+			<search position="replace" offset="1"><![CDATA[
+      $captcha = functions::captcha_get('create_account');
+      ]]></search>
+			<add><![CDATA[
+      if (empty($_POST['g-recaptcha-response']) || !functions::recaptcha_validate($_POST['g-recaptcha-response'])) {
+        throw new Exception(language::translate('error_invalid_captcha', 'Invalid CAPTCHA'));
+      }
+      ]]></add>
+		</operation>
+  </file>
+
+  <file name="pages/reset_password.inc.php">
+		<operation error="log">
+			<search position="replace" offset="1"><![CDATA[
+      $captcha = functions::captcha_get('reset_password');
+      ]]></search>
+			<add><![CDATA[
+      if (empty($_POST['g-recaptcha-response']) || !functions::recaptcha_validate($_POST['g-recaptcha-response'])) {
+        throw new Exception(language::translate('error_invalid_captcha', 'Invalid CAPTCHA'));
+      }
+      ]]></add>
+		</operation>
+  </file>
+
+	<file name="includes/templates/*.catalog/pages/create_account.inc.php">
+		<operation error="log">
+			<search position="replace"><![CDATA[
+          <?php echo functions::form_draw_captcha_field('captcha', 'create_account', 'required="required"'); ?>
+      ]]></search>
+			<add><![CDATA[
+          <?php echo functions::recaptcha_draw(); ?>
+      ]]></add>
+		</operation>
+  </file>
+
+  <file name="includes/templates/*.catalog/pages/reset_password.inc.php">
+		<operation error="log">
+			<search position="replace"><![CDATA[
+          <?php echo functions::form_draw_captcha_field('captcha', 'reset_password', 'required="required"'); ?>
+      ]]></search>
+			<add><![CDATA[
+          <?php echo functions::recaptcha_draw(); ?>
+      ]]></add>
+		</operation>
+  </file>
+</modification>

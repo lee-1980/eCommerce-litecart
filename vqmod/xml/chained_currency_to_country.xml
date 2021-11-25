@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Chained Currency To Country</id>
+	<version>1.0</version>
+	<vqmver required="true">2.4.0</vqmver>
+	<author>tim-international.net</author>
+
+	<file name="includes/templates/*.catalog/views/box_regional_settings.inc.php">
+		<operation error="abort">
+			<search position="replace" offset="1"><![CDATA[
+          <td><?php echo language::translate('title_currency', 'Currency'); ?><br />
+      ]]></search>
+			<add></add>
+		</operation>
+	</file>
+  
+	<file path="includes/library/" name="lib_customer.inc.php">
+		<operation error="abort">
+			<search position="after"><![CDATA[
+      self::identify();
+      ]]></search>
+			<add><![CDATA[
+	if (!empty(customer::$data['id'])) {		
+     if (empty(customer::$data['international']) && (!empty(self::$data['country_code']))) {
+       
+        $country_query = database::query(
+          "select * from ". DB_TABLE_COUNTRIES ."
+          where iso_code_2 = '". database::input(self::$data['country_code']) ."'
+          limit 1;"
+        );
+        $country = database::fetch($country_query);
+        if (!empty($country['currency_code']) && !empty(currency::$currencies[$country['currency_code']])) {
+          currency::set($country['currency_code']);
+        }
+      }
+     } 
+     
+		
+     if (empty(customer::$data['id']) && (!empty(self::$data['country_code']))) {
+       
+        $country_query = database::query(
+          "select * from ". DB_TABLE_COUNTRIES ."
+          where iso_code_2 = '". database::input(self::$data['country_code']) ."'
+          limit 1;"
+        );
+        $country = database::fetch($country_query);
+        if (empty($country['currency_code']) && empty(currency::$currencies[$country['currency_code']])) {
+          currency::set($country['currency_code']);
+        }
+      }
+           
+     
+      ]]></add>
+		</operation>
+	</file>
+
+</modification>
+
+<!--
+
+if (empty(customer::$data['id']) || (empty(customer::$data['international']) && (!empty(self::$data['country_code'])))) {
+
+-->

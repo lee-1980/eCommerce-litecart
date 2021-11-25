@@ -1,0 +1,12 @@
+POST /ext/paypal/callback.php?order_id=4331 HTTP/1.1
+Host: ittoysline.com
+Accept: */*
+Content-Type: application/x-www-form-urlencoded
+User-Agent: PayPal IPN ( https://www.paypal.com/ipn )
+correlation-id: d508654a10578
+CAL_POOLSTACK: queueserv-http-retry-qtoc:DaemonChild*CalThreadId=0*TopLevelTxnStartTime=1728c56773c*Host=slcnotify105a
+CLIENT_PID: 3503797
+Content-Length: 1326
+X-HTTPS: 1
+
+mc_gross=33.00&protection_eligibility=Eligible&address_status=confirmed&item_number1=2641&tax=0.00&item_number2=ot_shipping_fee&payer_id=Q9A4SX6D8JDP4&item_number3=ot_payment_fee&address_street=1575+West+Horizon+Ridge+PKWY%0D%0AUnit+530866&payment_date=20%3A13%3A42+Jun+02%2C+2020+PDT&payment_status=Completed&charset=windows-1252&address_zip=89012&mc_shipping=0.00&first_name=Jessica&mc_fee=1.75&address_country_code=US&address_name=Jessica+Marsh&notify_version=3.9&custom=4331&payer_status=verified&business=ittoys116%40gmail.com&address_country=United+States&num_cart_items=3&address_city=Henderson&verify_sign=ACTsxCZNSUjH-wQEvl7e.sVQ.iwwA56U4rTwE5Fi7Ak98Ep9r2Fg0Y6U&payer_email=sonicblue23%40hotmail.com&tax1=0.00&tax2=0.00&tax3=0.00&txn_id=49D70400VA824742N&payment_type=instant&last_name=Marsh&address_state=NV&item_name1=HaroPla+%5BLimited%5D+Pig+Pig+Haro+%28CNY+Ver%29&receiver_email=ittoys116%40gmail.com&item_name2=Small+Packet+%28United+States%29&payment_fee=1.75&item_name3=Paypal+%28Card+Payment%29&shipping_discount=0.00&quantity1=1&insurance_amount=0.00&quantity2=1&receiver_id=LZRLCR9BD8MK2&quantity3=1&txn_type=cart&discount=0.00&mc_gross_1=14.00&mc_currency=USD&mc_gross_2=18.00&mc_gross_3=1.00&residence_country=US&shipping_method=Default&transaction_subject=&payment_gross=33.00&ipn_track_id=d508654a10578

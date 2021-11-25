@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+    <id>Custom Entities</id>
+    <version>2.0</version>
+    <vqmver required="true">2.4.0</vqmver>
+    <author>ittoysline</author>
+
+
+
+    <file name="includes/entities/ent_order.inc.php">
+        <operation error="log">
+            <search position="replace"><![CDATA[
+                $subject = '['. language::translate('title_order', 'Order', $language_code) .' #'. $this->data['id'] .'] '. language::translate('title_order_confirmation', 'Order Confirmation', $language_code);
+                ]]></search>
+            <add><![CDATA[
+                $subject = '['. language::translate('title_order', 'Order', $language_code) .' No: '. $this->data['id'] .'] '. language::translate('title_order_confirmation', 'Order Confirmation', $language_code);
+                $aliases['%order_subject'] = $subject;
+                ]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="after" index="2"><![CDATA[
+                '%lastname' => $this->data['customer']['lastname'],
+                ]]></search>
+            <add><![CDATA[
+                '%shipping_company' => ($this->data['customer']['shipping_address']['company']),
+                '%shipping_address1' => ($this->data['customer']['shipping_address']['address1']),
+                '%shipping_address2' => ($this->data['customer']['shipping_address']['address2']),
+                '%shipping_postcode' => ($this->data['customer']['shipping_address']['postcode']),
+                '%shipping_city' => ($this->data['customer']['shipping_address']['city']),
+                '%shipping_phone' => $this->data['customer']['shipping_address']['phone'],
+                '%shipping_zone_code' => ($this->data['customer']['shipping_address']['zone_code']),
+                '%shipping_country_code' => ($this->data['customer']['shipping_address']['country_code']),
+                '%shipping_country_name' => reference::country($this->data['customer']['shipping_address']['country_code'])->name,
+
+                '%deposit' => currency::format($this->data['payment_due']* 0.5, true, $this->data['currency_code'], $this->data['currency_value']),
+                '%subtotal' => currency::format($this->data['subtotal']['amount'] += $item['price'] * $item['quantity'], true, $this->data['currency_code'], $this->data['currency_value']),
+                '%shipping_fee' => currency::format($this->data['order_shipping_fee'], true, $this->data['currency_code'], $this->data['currency_value']),
+                '%grand_total' => currency::format($this->data['order_original_grandtotal'], true, $this->data['currency_code'], $this->data['currency_value']),
+                
+                
+                '%payment_received' => currency::format($this->data['payment_received'], true, $this->data['currency_code'], $this->data['currency_value']),
+
+                '%order_discount_code' => currency::format($this->data['order_discount_code'], true, $this->data['currency_code'], $this->data['currency_value']),
+                '%order_customer_discount' => currency::format($this->data['order_customer_discount'], true, $this->data['currency_code'], $this->data['currency_value']),
+
+                ]]></add>
+        </operation>
+        
+// EMAIL        
+        <operation error="log">
+            <search position="after"><![CDATA[
+                $subject = strtr($order_status->email_subject, $aliases);
+                ]]></search>
+            <add><![CDATA[
+                $aliases['%order_subject'] = $subject;
+                ]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="replace" offset="3"><![CDATA[
+                $email->add_recipient($recipient)
+                ]]></search>
+            <add><![CDATA[
+                $email->add_recipient($recipient)
+                ->set_subject($subject)
+                ->add_body($message, true)
+                ->send();
+                ]]></add>
+        </operation>
+
+
+        <operation error="log">
+            <search position="after" offset="2"><![CDATA[
+                '%store_url' => document::ilink('', array(), false, array(), $language_code),
+                ]]></search>
+            <add><![CDATA[
+                list($product_image_width, $product_image_height) = functions::image_scale_by_width(180, settings::get('product_image_ratio'));
+                $aliases['%order_items'] = '<table border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100.0%; background-color: #e8c48675;">
+                    <thead>
+                    <tr style="background-image: url(https://ittoysline.com/images/customize/Gold%20Brush%20Table.png);" >
+                        <th style="color:black; padding: 10px 12px; border-left: 1px solid; border-right: 1px solid; border-top: 1px solid; border-bottom: 1px solid #000000;">Product Image</th>
+                        <th style="color:black; padding: 10px 12px; border-left: 0px solid; border-right: 1px solid; border-top: 1px solid; border-bottom: 1px solid #000000;">Description / Information</th>
+                    </tr>
+                    </thead><tbody>';
+                ]]></add>
+        </operation>
+        
+        <operation error="log">
+            <search position="after" offset="2"><![CDATA[
+                '%store_url' => document::ilink('', array(), false, array(), $this->data['language_code']),
+                ]]></search>
+            <add><![CDATA[
+                list($product_image_width, $product_image_height) = functions::image_scale_by_width(180, settings::get('product_image_ratio'));
+                $aliases['%order_items'] = '<table border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100.0%; text-align:center; background-color: #e8c48675;">
+                    <thead>
+                    <tr style="background-image: url(https://ittoysline.com/images/customize/Gold%20Brush%20Table.png);" >
+                        <th style="color:black; padding: 10px 12px; border-left: 1px solid; border-right: 1px solid; border-top: 1px solid; border-bottom: 1px solid #000000;">Product Image</th>
+                        <th style="color:black; padding: 10px 12px; border-left: 0px solid; border-right: 1px solid; border-top: 1px solid; border-bottom: 1px solid #000000;">Description / Information</th>
+                    </tr>
+                    </thead><tbody>';
+                ]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="after"><![CDATA[
+                $aliases['%order_items'] = trim($aliases['%order_items']);
+                ]]></search>
+            <add><![CDATA[
+                $aliases['%order_items'] .= '
+                </tbody>
+                </table>
+                <table style="width:100%; border-left: 1px solid; border-right: 1px solid; border-top: 0px solid; border-bottom: 1px solid; background-image: url(https://ittoysline.com/images/customize/Gold%20Brush%20Table.png); text-align:left">
+                <tbody>
+                <tr align="left">
+                  <td width="100px">
+                     <div class="separator" style="clear: both; text-align: left; ">
+                     <span style="color: black; font-size:11pt">Subtotal</span>
+                  </td>
+                  <td max-width="1px">
+                     <span style="color: black; font-size:11pt">:</span>
+                  </td>
+                  <td valign="top"; text-align: left; max-width="80px">
+                     <span style="color: black; text-align: left; font-size:11pt"> ' . currency::format($this->data['subtotal']['amount'], true, $this->data['currency_code'], $this->data['currency_value']) . ' </span>
+                  </td>     
+                </tr>
+                <tr align="left">
+                  <td valign="top"; width="100px">
+                  <span style="color: black; font-size:11pt">Shipping</span>
+                  </td>
+                  <td valign="top"; max-width="1px">
+                     <span style="color: black; font-size:11pt">:</span>
+                  </td>
+                  <td valign="top" max-width="80px"; style="color: black; text-align: left; font-size:11pt"> ' . currency::format($this->data['payment_due'] - ($this->data['subtotal']['amount']), true, $this->data['currency_code'], $this->data['currency_value']) . ' 
+                  </td>
+                </tr>                
+
+                <tr align="left">
+                  <td valign="top"; width="100px">
+                    <span style="color: black; font-size:11pt">Discount</span></td>
+                  <td valign="top"; max-width="1px">
+                    <span style="color: black; font-size:11pt">:</span></td>
+                  <td valign="top" max-width="80px"; style="color: black; text-align: left; font-size:11pt"> ' . currency::format($this->data['order_discount_code'], true, $this->data['currency_code'], $this->data['currency_value']) . ' 
+                  </td>
+                </tr>    
+
+                <tr align="left">
+                   <td valign="top"; width="100px">
+                     <span style="color: black; font-size:11pt">Grand Total</span></td>
+                   <td valign="top"; max-width="1px">
+                     <span style="color: black; font-size:11pt">:</span></td>
+                   <td valign="top" max-width="80px"; style="color: black; text-align: left; font-size:11pt"> ' . currency::format($this->data['payment_due'], true, $this->data['currency_code'], $this->data['currency_value']) . ' </td>
+                </tr>
+                </tbody>
+                </table>
+                ';
+                
+                ]]></add>
+        </operation>
+
+ <!-- ELSA IS WRONG ¯\_(ツ)_/¯  ¯\_(ツ)_/¯  ¯\_(ツ)_/¯  ¯\_(ツ)_/¯  ¯\_(ツ)_/¯
+        
+        <operation error="log">
+            <search position="before"><![CDATA[
+                $subject = strtr($order_status->email_subject, $aliases);
+                ]]></search>
+            <add><![CDATA[
+                $aliases['%order_items'] .= '<tr>Olaf:here</tr></tbody></table>';
+                ]]></add>
+        </operation>
+
+-->
+
+        <operation error="log">
+            <search position="replace"><![CDATA[
+                $product = reference::product($item['product_id'], $language_code);
+                ]]></search>
+            <add><![CDATA[
+                $product = new ent_product($item['product_id']);
+                ]]></add>
+        </operation>
+        
+        <operation error="log">
+            <search position="replace"><![CDATA[
+                $product = reference::product($item['product_id'], $this->data['language_code']);
+                ]]></search>
+            <add><![CDATA[
+                $product = new ent_product($item['product_id']);
+                ]]></add>
+        </operation>
+        
+        <operation error="log">
+            <search position="replace"><![CDATA[
+                $aliases['%order_items'] .= (float)$item['quantity'] .' x '. $product->name . (!empty($options) ? ' ('. implode(', ', $options) .')' : '') . "\r\n";
+                ]]></search>
+            <add><![CDATA[
+                $image = current($product->data['images']);
+                $image_url = document::href_link(WS_DIR_APP.functions::image_thumbnail(FS_DIR_APP . 'images/' . $image['filename'], $product_image_width, $product_image_height, settings::get('product_image_clipping')));
+                $img = '<img src="'. $image_url .'" />';
+                $aliases['%order_items'] .= '
+                <tr>
+                  <td style="padding: 0px 0px; text-align: center; color: #000000; border-left: 1px solid; border-right: 1px solid; border-top: 0px solid; border-bottom: 1px solid" >'. $img .'</td>
+                  <td style="padding: 1px 0px 26px; border-right: 1px solid; border-top: 0px solid; border-bottom: 1px solid; color:black ">
+                
+                    <table auto="" border="0" cellpadding="1" cellspacing="1" style="background-color: transparent;  text-align: left;">
+                      <tbody>
+                       <tr align="left">
+                         <td width="auto">
+                            <div class="separator" style="clear: both; text-align: left; ">
+                               <span style="color: black; font-size:11pt">&nbsp;Name</span>
+                         </td>
+                        
+                         <td><span style="color: black; font-size:11pt">:&nbsp;</span></td>
+                         <td valign="top">
+                            <span style="color: black; font-size:11pt"> ' . $product->data['short_description'][language::$selected['code']] . ' </span>
+                         </td>    
+                       </tr>
+                       <tr align="left">
+                        <td valign="top">
+                           <span style="color: black; font-size:11pt">&nbsp;Barcode</span>
+                           </td>
+                        <td valign="top">
+                            <span style="color: black; font-size:11pt">:&nbsp;</span>
+                        </td>
+                        <td valign="top" width="max" style="color: black; font-size:11pt"> ' . $item['sku'] . ' 
+                        </td>
+                      </tr>                
+
+                      <tr align="left">
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">&nbsp;Price</span>
+                        </td>
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">:&nbsp;</span>
+                        </td>
+                        <td valign="top" width="max" style="color: black; font-size:11pt"> ' . currency::format($item['price'], true, $this->data['currency_code'], $this->data['currency_value']) . ' 
+                        </td>
+                      </tr>    
+
+                     <tr align="left">
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">&nbsp;Quantity</span>
+                        </td>
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">:&nbsp;</span>
+                        </td>
+                        <td valign="top" width="max" style="color: black; font-size:11pt"> ' . (float)$item['quantity'] . ' pcs 
+                        </td>
+                     </tr>
+                     <br>
+                
+                     <tr align="left">
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">&nbsp;Total</span>
+                        </td>
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">:&nbsp;</span>
+                        </td>
+                        <td valign="top" width="max" style="color: black; font-size:10pt"> ' . currency::format((float)$item['price'] * (float)$item['quantity'], true,  $this->data['currency_code'], $this->data['currency_value']) . ' </td>
+                     </tr>                
+                
+                     <tr align="left">
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">&nbsp;Status</span>
+                        </td>
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">:&nbsp;</span>
+                        </td>
+                        <td valign="top" width="max" style="color: black; font-size:10pt"> ' . $product->data['delivery_status_info'] . ' </td>
+                     </tr>
+                     </tbody>
+                     </table>
+                </td>
+                </tr>';
+                
+                ]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="replace"><![CDATA[
+                $aliases['%order_items'] .= (float)$item['quantity'] .' x '. $item['name'] . (!empty($options) ? ' ('. implode(', ', $options) .')' : '') . "\r\n";
+                ]]></search>
+            <add><![CDATA[
+                $aliases['%order_items'] .= '<tr><td></td><td>'.(float)$item['quantity'] .' x '. $item['name'] . (!empty($options) ? ' ('. implode(', ', $options) .')' : '') . "</td></tr>\r\n";
+                ]]></add>
+        </operation>
+
+
+    </file>
+    <file name="admin/orders.app/edit_order.inc.php">
+        <operation error="log">
+            <search position="before"><![CDATA[
+              <th><?php echo language::translate('title_item', 'Item'); ?></th>
+      ]]></search>
+            <add><![CDATA[
+              <th>
+              <?php echo language::translate('title_sold_out', 'Sold out'); ?>
+              <?php echo functions::form_draw_hidden_field('order_id', $order->data['id']); ?>
+              <?php echo functions::form_draw_hidden_field('order_item_sold_out_notification', 'static'); ?>
+              </th>
+      ]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="after" offset="1"><![CDATA[
+              <?php if (!empty($_POST['items'])) foreach (array_keys($_POST['items']) as $key) { ?>
+      ]]></search>
+            <add><![CDATA[
+              <td class="sold_out">
+              <input type="checkbox" value="<?php echo !empty($_POST['items'][$key]['product_id'])?$_POST['items'][$key]['product_id']:0; ?>">
+              </td>
+      ]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="before"><![CDATA[
+              <a class="btn btn-default add-product" href="<?php echo document::href_link('', array('doc' => 'product_picker'), array('app'), array()); ?>" data-toggle="lightbox" data-width="" data-href="<?php echo document::href_link('', array('doc' => 'product_picker'), array('app'), array()); ?>"><?php echo functions::draw_fonticon('fa-plus', 'style="color: #66cc66;"'); ?> <?php echo language::translate('title_add_product', 'Add Product'); ?></a>
+      ]]></search>
+            <add><![CDATA[
+              <div class="btn btn-default apply_sold_out_change disabled"><?php echo functions::draw_fonticon('fa-check', 'style="color: #66cc66;"'); ?> <?php echo language::translate('title_sold_out_apply', 'Sold Out Apply'); ?></div>
+      ]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="before"><![CDATA[
+              $('select[name="currency_code"]').change(function(e){
+      ]]></search>
+            <add><![CDATA[
+              $(document.body).on('change', 'td.sold_out input', function(e){
+                 var checkedNum = $('td.sold_out input:checked').length;
+                 if (!checkedNum) {
+                     $('.apply_sold_out_change').addClass('disabled');
+                 }
+                 else{
+                     $('.apply_sold_out_change').removeClass('disabled');
+                 }
+              });
+
+              $(document.body).on('click', '.apply_sold_out_change', function (e) {
+            var sold_out_items = [];
+            var order = $('input[name="order_id"]').val();
+            $('td.sold_out input:checked').each(function(){
+                sold_out_items.push($(this).val());
+            });
+
+            if (sold_out_items.length && order) {
+                $('body').css('cursor', 'wait');
+                $.ajax({
+                    type: 'post',
+                    url: '<?php echo document::ilink('ajax/sold_out_function'); ?>',
+                    data: {order_id: order, item_ids: sold_out_items},
+                    dataType: 'json',
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(errorThrown);
+                    },
+                    success: function (data) {
+                        if(data.status == 'success'){
+                            console.log(data.item_list);
+                            for (var i = 0; i < data.item_list; i++){
+                                $('td.sold_out input[value="' + data.item_list[i] +'"]').closest('tr.item').remove();
+                            }
+                            $('input[name="order_item_sold_out_notification"]').val('changed');
+                        }
+                    },
+                    complete: function () {
+                        $('body').css('cursor', 'auto');
+
+                    }
+                });
+            }
+
+        });
+      ]]></add>
+        </operation>
+
+
+        <operation error="log">
+            <search position="replace"><![CDATA[
+              if (!empty($_POST['email_order_copy'])) {
+      ]]></search>
+            <add><![CDATA[
+              if (!empty($_POST['email_order_copy']) || (!empty($_POST['order_item_sold_out_notification']) && $_POST['order_item_sold_out_notification'] == 'changed')) {
+      ]]></add>
+        </operation>
+    </file>
+
+</modification>

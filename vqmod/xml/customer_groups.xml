@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+  <id>Customer Groups</id>
+  <version>2.1.1</version>
+  <vqmver required="true">2.4.0</vqmver>
+  <author>tim-international.net</author>
+
+  <file name="admin/customers.app/config.inc.php">
+    <operation error="log">
+      <search position="before" offset="1"><![CDATA[
+        'title' => language::translate('title_csv_import_export', 'CSV Import/Export'),
+      ]]></search>
+      <add><![CDATA[
+      array(
+        'title' => language::translate('title_customer_groups', 'Customer Groups'),
+        'doc' => 'customer_groups',
+        'params' => array(),
+      ),
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+      <search position="after"><![CDATA[
+      'edit_customer' => 'edit_customer.inc.php',
+      ]]></search>
+      <add><![CDATA[
+      'customer_groups' => 'customer_groups.inc.php',
+      'edit_customer_group' => 'edit_customer_group.inc.php',
+      ]]></add>
+    </operation>
+  </file>
+
+  <file name="admin/customers.app/customers.inc.php">
+    <operation error="log">
+      <search position="replace" offset="6"><![CDATA[
+    $sql_find = array(
+      ]]></search>
+      <add><![CDATA[
+    $sql_find = array(
+      "c.id = '". database::input($_GET['query']) ."'",
+      "c.email like '%". database::input($_GET['query']) ."%'",
+      "c.tax_id like '%". database::input($_GET['query']) ."%'",
+      "c.company like '%". database::input($_GET['query']) ."%'",
+      "c.phone like '%". database::input($_GET['query']) ."%'",
+      "concat(c.firstname, ' ', c.lastname) like '%". database::input($_GET['query']) ."%'",
+      "cg.name like '%". database::input($_GET['query']) ."%'",
+    );
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+      <search position="replace"><![CDATA[
+    "select c.* from ". DB_TABLE_CUSTOMERS ." c
+      ]]></search>
+      <add><![CDATA[
+    "select c.*, oc.total_sales , cg.name as customer_group_name from ". DB_TABLE_CUSTOMERS ." c
+    left join ". DB_TABLE_CUSTOMER_GROUPS ." cg on (c.customer_group_id = cg.id)
+    left join (
+           select o.customer_id , count(o.id) as total_count, sum(oi.total_sales) as total_sales
+           from ". DB_TABLE_ORDERS ." o
+           left join (
+             select order_id, sum(price * quantity) as total_sales from ". DB_TABLE_ORDERS_ITEMS ."
+             group by order_id
+           ) oi on (oi.order_id = o.id)
+           where o.order_status_id in (
+            select id from ". DB_TABLE_ORDER_STATUSES ."
+            where is_sale
+           ) 
+           group by o.customer_id
+    ) oc on (oc.customer_id = c.id)
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+      <search position="before"><![CDATA[
+        <th data-sort="date_created" class="text-center"><?php echo language::translate('title_date_registered', 'Date Registered'); ?></th>
+      ]]></search>
+      <add><![CDATA[
+        <th class="text-center"><?php echo language::translate('title_customer_group', 'Customer Group'); ?></th>
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+      <search position="before"><![CDATA[
+        <td class="text-right"><?php echo language::strftime(language::$selected['format_datetime'], strtotime($customer['date_created'])); ?></td>
+      ]]></search>
+      <add><![CDATA[
+        <th class="text-center"><?php echo $customer['customer_group_name']; ?></td>
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+      <search position="after"><![CDATA[
+            <td colspan="8"><?php echo language::translate('title_customers', 'Customers'); ?>: <?php echo $num_rows; ?></td>
+      ]]></search>
+      <add><![CDATA[
+      <td></td>
+      ]]></add>
+    </operation>
+  </file>
+
+  <file name="admin/customers.app/edit_customer.inc.php">
+    <operation error="log">
+      <search position="after" index="1"><![CDATA[
+        'status',
+      ]]></search>
+      <add><![CDATA[
+        'customer_group_id',
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+      <search position="after" offset="3"><![CDATA[
+            <label><?php echo language::translate('title_code', 'Code'); ?></label>
+      ]]></search>
+      <add><![CDATA[
+        <div class="form-group">
+          <label><?php echo language::translate('title_customer_group', 'Customer Group'); ?></label>
+          <?php echo functions::form_draw_customer_groups_list('customer_group_id', true, false); ?>
+        </div>
+      ]]></add>
+    </operation>
+  </file>
+
+  <file name="admin/customers.app/csv.inc.php">
+    <operation error="log">
+      <search position="after"><![CDATA[
+        'code',
+      ]]></search>
+      <add><![CDATA[
+        'customer_group_id',
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+      <search position="after"><![CDATA[
+          'code' => $customer['code'],
+      ]]></search>
+      <add><![CDATA[
+          'customer_group_id' => $customer['customer_group_id'],
+      ]]></add>
+    </operation>
+  </file>
+
+  <file name="includes/entities/ent_customer.inc.php">
+    <operation error="log">
+      <search position="after"><![CDATA[
+          status = '". (!empty($this->data['status']) ? '1' : '0') ."',
+      ]]></search>
+      <add><![CDATA[
+          customer_group_id = ". (int)$this->data['customer_group_id'] .",
+      ]]></add>
+    </operation>
+  </file>
+  
+  <file name="includes/entities/ent_order.inc.php">
+    <operation error="log">
+      <search position="after"><![CDATA[
+          'option_stock_combination',
+      ]]></search>
+      <add><![CDATA[
+          'vip_price_standing',
+      ]]></add>
+    </operation>
+    <operation error="log">
+      <search position="before"><![CDATA[
+          // Get previous quantity
+      ]]></search>
+      <add><![CDATA[
+          if(!empty(customer::$data['id']) && !empty(customer::$data['vip']) && isset($this->data['items'][$key]['vip_price_standing'])){
+              $previous_vip_order_query = database::query(
+                  "select * from ". DB_TABLE_VIPLIST ."
+                  where product_id = ". (int)$this->data['items'][$key]['product_id'] ." and customer_id = ". (int)customer::$data['id'] .";");
+              if(!(database::num_rows($previous_vip_order_query) > 0)){
+                  database::query(
+                      "insert into ". DB_TABLE_VIPLIST ." (product_id, customer_id) 
+                      values (". (int)$this->data['items'][$key]['product_id'] .", ". (int)customer::$data['id'] .");"
+                  );
+              }
+          }
+      ]]></add>
+    </operation>
+  </file>
+  <file name="pages/product.inc.php">
+    <operation error="log">
+      <search position="before"><![CDATA[
+          // Extra Images
+      ]]></search>
+      <add><![CDATA[
+          if(!empty(customer::$data['id']) && !empty(customer::$data['vip'])){
+                  $previous_vip_order_query = database::query(
+                  "select * from ". DB_TABLE_VIPLIST ."
+                  where product_id = ". (int)$product->id ." and customer_id = ". (int)customer::$data['id'] .";");
+                  
+                  if(database::num_rows($previous_vip_order_query) > 0){
+                     $_page->snippets['vip_purchased'] = true;
+                  }
+                  else{
+                      $_page->snippets['vip_purchased'] = false;
+                  }
+            }
+      ]]></add>
+    </operation>
+  </file>
+  <file name="includes/functions/func_draw.inc.php">
+       <operation error="log">
+        <search position="before"><![CDATA[
+            if (!empty($product['manufacturer_id'])) {
+      ]]></search>
+        <add><![CDATA[
+            if(!empty(customer::$data['id']) && !empty(customer::$data['vip'])){
+                  $previous_vip_order_query = database::query(
+                  "select * from ". DB_TABLE_VIPLIST ."
+                  where product_id = ". (int)$product['id'] ." and customer_id = ". (int)customer::$data['id'] .";");
+                  
+                  if(database::num_rows($previous_vip_order_query) > 0){
+                     $listing_product->snippets['vip_purchased'] = true;
+                  }
+                  else{
+                      $listing_product->snippets['vip_purchased'] = false;
+                  }
+            }
+      ]]></add>
+        </operation>
+  </file>
+  
+  <file name="includes/library/lib_cart.inc.php">
+    <operation error="log">
+      <search position="after"><![CDATA[
+          'dim_class' => $product->dim_class,
+      ]]></search>
+      <add><![CDATA[
+          'vip_price_standing' => reference::product($product_id)->vip_price_standing,
+      ]]></add>
+    </operation>
+  </file>
+
+  <file name="includes/functions/func_form.inc.php">
+    <operation error="log">
+      <search position="after" offset="1"><![CDATA[
+      case 'customers':
+      ]]></search>
+      <add><![CDATA[
+      case 'customer_groups':
+        return functions::form_draw_customer_groups_list($name, $input);
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+      <search position="before"><![CDATA[
+  function form_draw_delivery_statuses_list($name, $input=true, $multiple=false, $parameters='') {
+      ]]></search>
+      <add><![CDATA[
+  function form_draw_customer_groups_list($name, $input=true, $multiple=false, $parameters='') {
+
+    if ($input === true) $input = form_reinsert_value($name);
+
+    $options = array(array('-- '. language::translate('title_select').' --', ''));
+
+    $customer_groups_query = database::query(
+      "select * from ". DB_TABLE_CUSTOMER_GROUPS ."
+      order by name asc;"
+    );
+
+    while($customer_group = database::fetch($customer_groups_query)) {
+      $options[] = array($customer_group['name'], $customer_group['id']);
+    }
+
+    if ($multiple) {
+      return form_draw_select_multiple_field($name, $options, $input, $parameters);
+    } else {
+      return form_draw_select_field($name, $options, $input, $parameters);
+    }
+  }
+      ]]></add>
+    </operation>
+  </file>
+
+</modification>

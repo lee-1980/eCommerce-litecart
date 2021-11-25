@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+    <id>Product Cart Option</id>
+    <version>1.1</version>
+    <vqmver required="true">2.4.0</vqmver>
+    <author>ittoysline</author>
+    
+    <file name="includes/references/ref_product.inc.php">
+        <operation error="log">
+            <search position="before"><![CDATA[
+        case 'name':
+      ]]></search>
+            <add><![CDATA[
+        case 'oversize_parcel':
+        
+          $oversize_parcel_query = database::query(
+              "select oversize_parcel from ". DB_TABLE_PRODUCTS_INFO ."
+               where product_id = ". (int)$this->_id."
+               limit 1;"
+          );
+          $oversize_parcel = database::fetch($oversize_parcel_query);
+          if (!empty($oversize_parcel) && $oversize_parcel['oversize_parcel'] == 1) {
+              $this->_data['oversize_parcel'] = true;
+          }
+          else{
+              $this->_data['oversize_parcel'] = false;
+          }
+          break;
+
+      ]]></add>
+        </operation>
+    </file>
+    
+    <file name="includes/library/lib_cart.inc.php">
+        <operation error="log">
+            <search position="after"><![CDATA[
+        'dim_class' => $product->dim_class,
+      ]]></search>
+            <add><![CDATA[
+        'oversize_parcel' => $product->oversize_parcel,
+      ]]></add>
+        </operation>
+    </file>
+    
+</modification>

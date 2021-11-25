@@ -1,0 +1,29 @@
+## [2020-06-06 00:45:41] Request #######################################
+
+GET /v1/email/disposable?key=3HRHI1EE3ULI68KV461U&email=jeeszes%40gmail.com&format=json HTTP/1.1
+Host: api.mailboxvalidator.com
+User-Agent: LiteCart/2.2.2
+Content-Length: 0
+Connection: Close
+
+
+
+## [2020-06-06 00:45:41] Response — 635 bytes transferred in 0.302 s ###
+
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Length: 120
+Connection: close
+Date: Fri, 05 Jun 2020 16:45:41 GMT
+Server: Apache
+X-XSS-Protection: 1; mode=block
+X-Frame-options: SAMEORIGIN
+X-Content-Type-options: nosniff
+Strict-Transport-Security: max-age=63072000; includeSubdomains;
+X-Cache: Miss from cloudfront
+Via: 1.1 998b911809b5181544e60111e0bda762.cloudfront.net (CloudFront)
+X-Amz-Cf-Pop: SIN2-C1
+X-Amz-Cf-Id: _TI25V-1Xz0QZHvtm2dyFwXHaWKWSGX8jJH186xwy78mr9VZLHqGPQ==
+
+{"email_address":"jeeszes@gmail.com","is_disposable":"False","credits_available":277,"error_code":"","error_message":""}
+

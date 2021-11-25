@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Guest Discount</id>
+	<version>2.1</version>
+	<vqmver required="true">2.4.0</vqmver>
+	<author>tim-international.net</author>
+
+	<file name="admin/customers.app/edit_customer.inc.php">
+		<operation error="log">
+			<search position="after" index="1"><![CDATA[
+        'newsletter',
+      ]]></search>
+			<add><![CDATA[
+        'guest_discount',
+      ]]></add>
+		</operation>
+
+		<operation error="log">
+			<search position="after" offset="2"><![CDATA[
+          <?php echo functions::form_draw_password_field('new_password', '', 'autocomplete="off"'); ?>
+      ]]></search>
+			<add><![CDATA[
+        <div class="row">
+          <div class="form-group col-md-6">
+            <label><?php echo language::translate('title_guest_discount', 'Guest Discount'); ?> (%)</label>
+            <?php echo functions::form_draw_decimal_field('discount', true); ?></td>
+          </div>
+        </div>
+      ]]></add>
+		</operation>
+	</file>
+
+	<file name="includes/entities/ent_customer.inc.php">
+		<operation error="log">
+			<search position="after"><![CDATA[
+          newsletter = '". (!empty($this->data['newsletter']) ? '1' : '0') ."',
+      ]]></search>
+			<add><![CDATA[
+          discount = '". (float)$this->data['guest_discount'] == 2 ."',
+      ]]></add>
+		</operation>
+	</file>
+
+</modification>

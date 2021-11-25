@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Custom Default Catalog Pages</id>
+	<version>1.0</version>
+	<vqmver required="true">2.4.0</vqmver>
+	<author>ittoysline</author>
+
+
+  <file name="includes/templates/*.catalog/pages/category.inc.php">      
+      <operation error="log">
+        <search position="replace"><![CDATA[
+         <div class="btn-group pull-right hidden-xs">
+        ]]></search>
+        <add><![CDATA[
+         <div class="btn-group pull-right">
+        ]]></add>
+      </operation>
+      
+      <operation error="log">
+        <search position="replace"><![CDATA[
+         echo '<span class="btn btn-default active">'. $value .'</span>';
+        ]]></search>
+        <add><![CDATA[
+         echo '<span class="btn btn-default_pages active">'. $value .'</span>';
+        ]]></add>
+      </operation>  
+      
+      <operation error="log">
+        <search position="replace"><![CDATA[
+         echo '<a class="btn btn-default" href="'. document::href_ilink(null, array('sort' => $key), true) .'">'. $value .'</a>';
+        ]]></search>
+        <add><![CDATA[
+         echo '<a class="btn btn-default_pages" href="'. document::href_ilink(null, array('sort' => $key), true) .'">'. $value .'</a>';
+        ]]></add>
+      </operation>
+      
+      <operation error="log">
+        <search position="replace" offset="5"><![CDATA[
+         <?php if ($_GET['page'] == 1) { ?>
+        ]]></search>
+        <add><![CDATA[
+        
+        ]]></add>
+      </operation>      
+  </file>  
+
+  <file name="includes/templates/*.catalog/pages/create_account.inc.php">
+      <operation error="log">
+        <search position="replace"><![CDATA[
+         <?php echo functions::form_draw_text_field('address1', true); ?>
+        ]]></search>
+        <add><![CDATA[
+         <?php echo functions::form_draw_text_field('address1', true, 'required="required"'); ?>
+        ]]></add>
+      </operation> 
+      
+      <operation error="log">
+        <search position="replace"><![CDATA[
+         <?php echo functions::form_draw_text_field('postcode', true); ?>
+        ]]></search>
+        <add><![CDATA[
+         <?php echo functions::form_draw_text_field('postcode', true, 'required="required"'); ?>
+        ]]></add>
+      </operation>       
+
+      <operation error="log">
+        <search position="replace"><![CDATA[
+         <?php echo functions::form_draw_text_field('city', true); ?>
+        ]]></search>
+        <add><![CDATA[
+         <?php echo functions::form_draw_text_field('city', true, 'required="required"'); ?>
+        ]]></add>
+      </operation>   
+
+      <operation error="log">
+        <search position="replace"><![CDATA[
+         <div class="btn-group">
+        ]]></search>
+        <add><![CDATA[
+         <div class="btn-group_signin">
+        ]]></add>
+      </operation>  
+      
+      <operation error="log">
+        <search position="before"><![CDATA[
+         <?php if (settings::get('captcha_enabled')) { ?>
+        ]]></search>
+        <add><![CDATA[
+         <div style="margin:0 0 1em 0; color:#fd0000;"><strong><?php echo language::translate('title_account_activation', 'Account activation'); ?></strong>
+         </div>
+         </br>
+        ]]></add>
+      </operation>            
+      
+  </file>  
+  
+  <file name="includes/templates/*.catalog/pages/regional_settings.inc.php">
+      <operation error="log">
+        <search position="replace" offset="1"><![CDATA[
+         <label><?php echo language::translate('title_display_prices_including_tax', 'Display Prices Including Tax'); ?></label>
+        ]]></search>
+        <add><![CDATA[
+         
+        ]]></add>
+      </operation>        
+       
+      <operation error="log">
+        <search position="replace"><![CDATA[
+         <p class="btn-group btn-block">
+        ]]></search>
+        <add><![CDATA[
+         <div class="btn-group_signin">
+        ]]></add>
+      </operation>  
+  </file>   
+
+  <file name="includes/templates/*.catalog/pages/search_results.inc.php">
+      <operation error="log">
+        <search position="replace"><![CDATA[
+         echo '<span class="btn btn-default active">'. $value .'</span>';
+        ]]></search>
+        <add><![CDATA[
+         echo '<span class="btn btn-default_pages active">'. $value .'</span>';
+        ]]></add>
+      </operation>        
+       
+      <operation error="log">
+        <search position="replace"><![CDATA[
+         echo '<a class="btn btn-default" href="'. document::href_ilink(null, array('sort' => $key), true) .'">'. $value .'</a>';
+        ]]></search>
+        <add><![CDATA[
+         echo '<a class="btn btn-default_pages" href="'. document::href_ilink(null, array('sort' => $key), true) .'">'. $value .'</a>';
+        ]]></add>
+      </operation>  
+  </file>  
+
+   <file path="includes/templates/*.catalog/pages/order_success.inc.php">
+    
+    <operation error="skip">
+		<search position="after"><![CDATA[
+      <?php foreach ($order['items'] as $item) { ?>
+      ]]></search>
+			<add><![CDATA[
+        <?php
+            $product = new ent_product($item['product_id']);
+            $image = current($product->data['images']);
+            $image_url = document::href_link(WS_DIR_APP.functions::image_thumbnail(FS_DIR_APP . 'images/' . $image['filename'], $product_image_width, $product_image_height, settings::get('product_image_clipping')));
+        ?>
+      ]]></add>
+	</operation> 
+    
+    <operation error="skip">
+		<search position="before"><![CDATA[
+      <?php echo (float)$item['quantity']; ?> x <?php echo $item['name']; ?>
+      ]]></search>
+			<add><![CDATA[
+      <?php echo '<img src="'. $image_url .'">'; ?>
+      ]]></add>
+	</operation>
+	
+	<operation error="skip">
+		<search position="before"><![CDATA[
+      <?php foreach ($order['items'] as $item) { ?>
+      ]]></search>
+			<add><![CDATA[
+      <?php list($product_image_width, $product_image_height) = functions::image_scale_by_width(120, settings::get('product_image_ratio')); ?>
+      ]]></add>
+	</operation> 
+         
+	<operation error="skip">
+		<search position="replace"><![CDATA[
+      <?php echo (float)$item['quantity']; ?> x <?php echo $item['name']; ?>
+      ]]></search>
+			<add><![CDATA[
+      <span style=" font-size: 18px;"> <?php echo (float)$item['quantity']; ?> pcs x <?php echo $item['name']; ?>
+      ]]></add>
+	</operation>
+	
+	<operation error="skip">
+		<search position="replace"><![CDATA[
+      <li class="item" data-id="<?php echo $item['product_id']; ?>" data-sku="<?php echo $item['sku']; ?>" data-name="<?php echo htmlspecialchars($item['name']); ?>" data-price="<?php echo currency::format_raw($item['price'], $order['currency_code'], $order['currency_value']); ?>" data-quantity="<?php echo (float)$item['quantity']; ?>">
+      ]]></search>
+			<add><![CDATA[
+      <li class="item" style="display: flex; align-items: center; justify-content: center;" data-id="<?php echo $item['product_id']; ?>" data-sku="<?php echo $item['sku']; ?>" data-name="<?php echo htmlspecialchars($item['name']); ?>" data-price="<?php echo currency::format_raw($item['price'], $order['currency_code'], $order['currency_value']); ?>" data-quantity="<?php echo (float)$item['quantity']; ?>">
+      ]]></add>
+	</operation> 
+		
+	<operation error="skip">
+		<search position="replace"><![CDATA[
+      <p><strong><?php echo language::translate('title_order_total', 'Order Total'); ?></strong>: <?php echo currency::format($order['payment_due'], false, $order['currency_code'], $order['currency_value']); ?>
+      ]]></search>
+			<add><![CDATA[
+      <p><strong><span style=" font-size: 18px;"><?php echo language::translate('title_order_total', 'Order Total'); ?>: <?php echo currency::format($order['payment_due'], false, $order['currency_code'], $order['currency_value']); ?></strong><strong><span style=" font-size: 18px;"></strong> 
+      ]]></add>
+	</operation>  		
+
+	<operation error="skip">
+		<search position="replace"><![CDATA[
+      <p><a href="<?php echo htmlspecialchars($printable_link); ?>" target="_blank"><?php echo language::translate('description_click_printable_copy', 'Click here for a printable copy'); ?></a></p>
+      ]]></search>
+			<add><![CDATA[
+      <p><span style=" font-size: 18px;"><a href="<?php echo htmlspecialchars($printable_link); ?>" target="_blank"><?php echo language::translate('description_click_printable_copy', 'Click here for a printable copy'); ?></a></p>
+      ]]></add>
+	</operation>    
+		
+  </file>
+
+
+
+  
+</modification>
+
+<!--      <operation error="log">
+        <search position="replace"><![CDATA[
+         <?php echo functions::form_draw_text_field('city', true); ?>
+        ]]></search>
+        <add><![CDATA[
+         <?php echo functions::form_draw_text_field('postcode', true, 'required="required"'); ?>
+        ]]></add>
+      </operation> 
+      
+      
+      <operation error="log">
+        <search position="replace"><![CDATA[
+         <h1 class="title"><?php echo $h1_title; ?></h1>
+        ]]></search>
+        <add><![CDATA[
+         <h1 class="title hidden-xs"><?php echo $h1_title; ?></h1>
+        ]]></add>
+      </operation>  
+
+
+<file name="includes/templates/*.catalog/pages/create_account.inc.php">      
+      <operation error="log">
+        <search position="before"><![CDATA[
+         <?php if (settings::get('captcha_enabled')) { ?>
+        ]]></search>
+        <add><![CDATA[
+         <div style="margin:0 0 1em 0; color:#FFB92E;"><strong><?php echo language::translate('title_account_activation', 'Account activation'); ?></strong>
+         </div>
+         </br>
+        ]]></add>
+      </operation>      
+      
+      -->

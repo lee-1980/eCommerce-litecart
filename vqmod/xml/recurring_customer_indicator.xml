@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Recurring Customer Indicator</id>
+	<version>1.0</version>
+	<vqmver required="true">2.4.0</vqmver>
+	<author>tim-international.net</author>
+
+	<file name="admin/orders.app/orders.inc.php">
+		<operation error="log">
+			<search position="after"><![CDATA[
+        <th data-sort="id"><?php echo language::translate('title_id', 'ID'); ?></th>
+      ]]></search>
+			<add><![CDATA[
+        <th>&nbsp;</th>
+      ]]></add>
+		</operation>
+
+		<operation error="log">
+			<search position="after"><![CDATA[
+      if (empty($order['order_status_color'])) $order['order_status_color'] = '#cccccc';
+      ]]></search>
+			<add><![CDATA[
+      $has_order_history = database::num_rows(database::query(
+        "select id from ". DB_TABLE_ORDERS ."
+        where order_status_id
+        and customer_email = '". database::input($order['customer_email']) ."'
+        and (id != ". (int)$order['id'] ." and id < ". (int)$order['id'] .")
+        limit 1;"
+      ));
+      ]]></add>
+    </operation>
+
+		<operation error="log">
+			<search position="after"><![CDATA[
+      <td><?php echo $order['id']; ?></td>
+      ]]></search>
+			<add><![CDATA[
+      <td><?php echo !empty($has_order_history) ? functions::draw_fonticon('fa-retweet', 'style="color: #ffaa00;" title="'. language::translate('title_recurred', 'Recurred') .'"') : ''; ?></td>
+      ]]></add>
+		</operation>
+
+		<operation error="log">
+			<search position="after"><![CDATA[
+    <td colspan="12"><?php echo language::translate('title_orders', 'Orders'); ?>: <?php echo $num_rows; ?></td>
+      ]]></search>
+			<add><![CDATA[
+    <td></td>
+      ]]></add>
+		</operation>
+
+	</file>
+
+</modification>

@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Custom Campaigns Prices</id>
+	<version>2.1.1</version>
+	<vqmver required="true">2.4.0</vqmver>
+	<author>ittoysline</author>
+
+	<file name="admin/catalog.app/edit_product.inc.php">
+		 <operation error="skip">
+			<search position="replace"><![CDATA[
+          	<?php echo functions::form_draw_datetime_field('campaigns['.$key.'][end_date]', true); ?>
+      ]]></search>
+			<add><![CDATA[
+            <?php echo functions::form_draw_datetime_field('campaigns['.$key.'][end_date]', true, '','campaigns_price'); ?>
+      ]]></add>
+		</operation>
+
+		 <operation error="skip">
+			<search position="replace" offset="39"><![CDATA[
+          	<h2><?php echo language::translate('title_campaigns', 'Campaigns'); ?></h2>
+      ]]></search>
+			<add><![CDATA[
+
+          <h2><?php echo language::translate('title_campaigns', 'Campaigns'); ?></h2>
+          
+          <div class="table-responsive">
+            <table id="table-campaigns" class="table table-striped data-table">
+              <tbody>
+                <?php if (!empty($_POST['campaigns'])) foreach (array_keys($_POST['campaigns']) as $key) { ?>
+                <tr>
+                  <td><br /><a class="remove" href="#" title="<?php echo language::translate('title_remove', 'Remove'); ?>"><?php echo functions::draw_fonticon('fa-times-circle fa-lg', 'style="color: #ff6e6e;"'); ?></a></td>                
+                  <td><?php echo language::translate('title_start_date', 'Start Date'); ?><br />
+                    <?php echo functions::form_draw_hidden_field('campaigns['.$key.'][id]', true) . functions::form_draw_datetime_field('campaigns['.$key.'][start_date]', true); ?>
+                  </td>
+                  <td><?php echo language::translate('title_end_date', 'End Date'); ?><br />
+                    <?php echo functions::form_draw_datetime_field('campaigns['.$key.'][end_date]', true); ?>
+                  </td>
+
+                  <td><?php echo settings::get('store_currency_code'); ?><br />
+                    <?php echo functions::form_draw_currency_field(settings::get('store_currency_code'), 'campaigns['.$key.']['. settings::get('store_currency_code') .']', true); ?>
+                  </td> 
+                  
+<?php
+  foreach (array_keys(currency::$currencies) as $currency_code) {
+    if ($currency_code == settings::get('store_currency_code')) continue;
+?>
+                  <td><?php echo $currency_code; ?><br />
+                  <?php echo functions::form_draw_currency_field($currency_code, 'campaigns['.$key.']['. $currency_code. ']', isset($_POST['campaigns'][$key][$currency_code]) ? number_format((float)$_POST['campaigns'][$key][$currency_code], 4, '.', '') : ''); ?>
+                  </td>
+<?php
+  }
+?>
+
+                </tr>
+              </tbody>
+              <?php } ?>
+              <tfoot>
+                <tr>
+                  <td colspan="<?php echo 5 + count(currency::$currencies) - 1; ?>"><?php echo functions::draw_fonticon('fa-plus-circle', 'style="color: #66cc66;"'); ?> <a class="add" href="#"><?php echo language::translate('text_add_campaign', 'Add Campaign'); ?></a></td>
+                </tr>
+              </tfoot>
+            </table>
+                
+      ]]></add>
+		</operation>
+
+
+            
+
+
+		 <operation error="skip">
+			<search position="replace"><![CDATA[
+          	<td><?php echo $currency_code; ?><br />
+      ]]></search>
+			<add><![CDATA[
+            <td style="display: none;"><?php echo $currency_code; ?><br />
+      ]]></add>
+		</operation>
+
+		
+		 <operation error="skip">
+			<search position="after"><![CDATA[
+          <table id="table-campaigns" class="table table-striped data-table">
+      ]]></search>
+			<add><![CDATA[
+			<thead>
+            <td colspan="5"><a class="add" href="#" title="<?php echo htmlspecialchars(language::translate('title_add', 'Add')); ?>"><?php echo functions::draw_fonticon('fa-plus-circle', 'style="color: #66cc66;"'); ?></a>
+            <a class="delete" style="margin-left: 20px;" href="#" title="<?php echo htmlspecialchars(language::translate('title_delete', 'Delete')); ?>"><?php echo functions::draw_fonticon('fa-trash-o', 'style="color: #ff6e6e;"'); ?></a>
+            <a class="hide_show" style="margin-left: 20px;" href="#" title="<?php echo htmlspecialchars(language::translate('title_toggle', 'Toggle')); ?>"><?php echo functions::draw_fonticon('fa-eye-slash', 'style="color: #6d6ff7;"'); ?></a>
+
+            </td>
+            </thead>
+            <thead>
+            <tr>
+            <th style="width: 10px;"></th>
+                <th style="width: 320px;"><?php echo language::translate('title_start_date', 'Start Date'); ?></th>
+                <th style="width: 220px;"><?php echo language::translate('title_end_date', 'End Date'); ?></th>
+                <td style="display: none;"><?php echo language::translate('title_percentage', 'Percentage'); ?></th>
+                <th style="width: 320px;"><?php echo settings::get('store_currency_code'); ?></th>
+               
+   <!--             <?php foreach (array_keys(currency::$currencies) as $currency_code) {
+                    if ($currency_code == settings::get('store_currency_code')) continue;
+                    ?>
+                    <th style="width: 320px;"><?php echo $currency_code; ?></th>
+                <?php } ?>
+    -->            
+               <th></th><th></th>
+            </tr>
+            </thead>
+      ]]></add>
+		</operation>		
+		
+
+		 <operation error="skip">
+			<search position="replace"><![CDATA[
+          <td colspan="<?php echo 5 + count(currency::$currencies) - 1; ?>"><?php echo functions::draw_fonticon('fa-plus-circle', 'style="color: #66cc66;"'); ?> <a class="add" href="#"><?php echo language::translate('text_add_campaign', 'Add Campaign'); ?></a></td>
+      ]]></search>
+			<add><![CDATA[
+          <!--  <td colspan="<?php echo 5 + count(currency::$currencies) - 1; ?>"><?php echo functions::draw_fonticon('fa-plus-circle', 'style="color: #66cc66;"'); ?> <a class="add" href="#"><?php echo language::translate('text_add_campaign', 'Add Campaign'); ?></a></td> -->
+            </td>
+      ]]></add>
+		</operation>
+
+		 <operation error="skip">
+			<search position="replace" offset="4"><![CDATA[
+          $('#table-campaigns').on('click', '.remove', function(e) {
+      ]]></search>
+			<add><![CDATA[
+           $('#table-campaigns').on('click', '.remove', function(e) {
+             e.preventDefault();
+             $(this).closest('tr').remove();
+         });
+         $('#table-campaigns').on('click', '.delete', function(e) {
+             e.preventDefault();
+             $('#table-campaigns tbody tr').remove();
+         });
+         
+         $('#table-campaigns').on('click', '.hide_show', function(e) {
+             e.preventDefault();
+             $('#table-campaigns tbody tr').toggle();
+         });
+       <!--  $('#table-campaigns tbody tr').toggle(); -->
+         
+      ]]></add>
+		</operation>
+
+<!-- SIGN IN DEAL -->
+
+		<operation error="log">
+			<search position="after"><![CDATA[
+      <h2><?php echo language::translate('title_campaigns', 'Campaigns'); ?></h2>
+      ]]></search>
+			<add><![CDATA[
+<div class="pull-right">	<?php
+		echo functions::form_draw_button('save_stay', language::translate('title_save_stay', 'Save & Stay'), 'submit', '', 'save');
+		echo PHP_EOL;
+
+		echo functions::form_draw_button('save', language::translate('title_save_exit', 'Save & Exit'), 'submit', '', 'save');
+		echo PHP_EOL;
+	?>
+</div>
+
+          <div class="form-group col-md-2">
+
+           <div class="checkbox">
+              <label><?php echo functions::form_draw_checkbox('sign_in_deal', '1', true); ?> <?php echo language::translate('title_sign_in_deal', 'Sign In'); ?></label>
+            </div>
+            
+            <div class="checkbox">
+              <label><?php echo functions::form_draw_checkbox('insaneprice', '1', true); ?> <?php echo language::translate('title_insaneprice', 'Insane Price'); ?></label>
+            </div>
+            
+            <div class="checkbox">
+              <label><?php echo functions::form_draw_checkbox('free_shipping', '1', true); ?> <?php echo language::translate('free_shipping', 'Free Shipping'); ?></label>
+            </div>             
+
+            <div class="checkbox">
+              <label><?php echo functions::form_draw_checkbox('no_free_shipping', '1', true); ?> <?php echo language::translate('no_free_shipping', 'No Free Shipping'); ?></label>
+            </div>  
+
+            <div class="checkbox" >
+              <label><?php echo functions::form_draw_checkbox('master_insane_deal_price', '1', true); ?> <?php echo language::translate('master_insane_deal_price', 'Master Insane Deal Price'); ?></label>
+            </div>
+
+            <div class="checkbox" >
+              <label><?php echo functions::form_draw_checkbox('disable_master_insane_deal_price', '1', true); ?> <?php echo language::translate('disable_master_insane_deal_price', 'Disable Master Insane Deal Price'); ?></label>
+            </div>
+          </div>
+		</br>	
+     <div class="row">
+      <div class="form-group col-md-3" style="max-width: 320px;">
+      <label><?php echo language::translate('title_reset_insane_deal', 'Reset Insane Deal'); ?></label></br></br>
+        <?php echo functions::form_draw_currency_field(settings::get('store_currency_code'), 'reset_campaigns['. settings::get('store_currency_code') .']', true); ?>
+      </div>			
+       </div>
+      </br>
+      ]]></add>
+		</operation>  
+
+		 <operation error="skip">
+			<search position="before"><![CDATA[
+            $('#table-campaigns').on('keyup change input', 'input[name^="campaigns"][name$="[percentage]"]', function() {
+      ]]></search>
+			<add><![CDATA[
+        $('body').on('keyup change', 'input[name="reset_campaigns[<?php echo settings::get('store_currency_code'); ?>]"]', function() { 
+      $('input[name^="campaigns"][name$="[<?php echo settings::get('store_currency_code'); ?>]"]').each(function(){
+         $(this).val($('input[name="reset_campaigns[<?php echo settings::get('store_currency_code'); ?>]"]').val());
+         $(this).trigger('keyup');
+       });
+      }); 
+      ]]></add>
+		</operation>
+
+		 <operation error="skip">
+			<search position="replace" offset="33"><![CDATA[
+          	var new_campaign_i = 1;
+
+      ]]></search>
+			<add><![CDATA[
+              var new_campaign_i = 1;
+  $('#table-campaigns').on('click', '.add', function(e) {
+    e.preventDefault();
+    var output = '<tr>'
+               + '  <td><br /><a class="remove" style="width: 10px;" href="#" title="<?php echo functions::general_escape_js(language::translate('title_remove', 'Remove'), true); ?>"><?php echo functions::general_escape_js(functions::draw_fonticon('fa-times-circle fa-lg', 'style="color: #ff6e6e;"')); ?></a></td>'
+               + '  <td><?php echo functions::general_escape_js(language::translate('title_start_date', 'Start Date')); ?><br />'
+               + '    <?php echo functions::general_escape_js(functions::form_draw_hidden_field('campaigns[new_campaign_i][id]', '') . functions::form_draw_datetime_field('campaigns[new_campaign_i][start_date]', true, '', 'campaigns_price_1')); ?></td>'
+               + '  </td>'
+               + '  <td><?php echo functions::general_escape_js(language::translate('title_end_date', 'End Date')); ?><br />'
+               + '    <?php echo functions::general_escape_js(functions::form_draw_datetime_field('campaigns[new_campaign_i][end_date]', true, '', 'campaigns_price_1')); ?></td>'
+               + '  </td>'
+               + '  <td style="display: none;">- %<br />'
+               + '  <td style="display: none;">  <?php echo functions::general_escape_js(functions::form_draw_decimal_field('campaigns[new_campaign_i][percentage]', '', 2, 0, null)); ?>'
+               + '  </td>'
+               + '  <td><?php echo functions::general_escape_js(settings::get('store_currency_code')); ?><br />'
+               + '    <?php echo functions::general_escape_js(functions::form_draw_currency_field(settings::get('store_currency_code'), 'campaigns[new_campaign_i]['. settings::get('store_currency_code') .']', '')); ?>'
+               + '  </td>'
+                  <?php
+                    foreach (array_keys(currency::$currencies) as $currency_code) {
+                      if ($currency_code == settings::get('store_currency_code')) continue;
+                  ?>
+               + '  <td style="display: none;"><?php echo functions::general_escape_js($currency_code); ?><br />'
+               + '    <?php echo functions::general_escape_js(functions::form_draw_currency_field($currency_code, 'campaigns[new_campaign_i]['. $currency_code .']', '')); ?>'
+               + '  </td>'
+<?php
+  }
+?>
+               + '</tr>';
+   while ($('input[name="campaigns[new_'+new_campaign_i+']"]').length) new_campaign_i++;
+    output = output.replace(/new_campaign_i/g, 'new_' + new_campaign_i);
+    $('#table-campaigns tbody').append(output);
+    new_campaign_i++;
+  });			
+
+      ]]></add>
+		</operation>		
+		
+	</file>		
+</modification>

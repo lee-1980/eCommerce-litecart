@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Wholesaler Control</id>
+	<version>1.1</version>
+	<vqmver required="true">2.4.0</vqmver>
+	<author>s22</author>
+
+
+	<file name="includes/entities/ent_order.inc.php">
+		<operation error="log">
+			<search position="before"><![CDATA[
+            $mod_order = new mod_order();
+      ]]></search>
+			<add><![CDATA[
+            // MINIMUM ORDER VALUE
+            if (!empty(customer::$data['wholesale_subtotal'] == 1)) {
+            foreach ($this->data['order_total'] as $row) {
+              if ($row['module_id'] == 'ot_subtotal') {
+               if ($row['value'] < 3000) { // Store currency
+                 return 'Minimum order for wholesale subtotal is RM 3000';
+               }
+              }
+             }
+            }
+
+            // MINIMUM ORDER VALUE
+            if (!empty(customer::$data['wholesale_subtotal'] == 2)) {
+            foreach ($this->data['order_total'] as $row) {
+              if ($row['module_id'] == 'ot_subtotal') {
+               if ($row['value'] < 1500) { // Store currency
+                 return 'Minimum order for wholesale subtotal is RM 1500';
+               }
+              }
+             }
+            }
+            
+            // STOP CUSTOMER FROM BUYING
+            if (!empty(customer::$data['wholesale_subtotal'] == 3)) {
+            foreach ($this->data['order_total'] as $row) {
+              if ($row['module_id'] == 'ot_subtotal') {
+               if ($row['value'] < 100000) { // Store currency
+                 return 'Unfortunately you had reach the maximum intallment plan order.';
+               }
+              }
+             }
+            }    
+            
+            // BANNED CUSTOMER 
+            if (!empty(customer::$data['wholesale_subtotal'] == 9)) {
+            foreach ($this->data['order_total'] as $row) {
+              if ($row['module_id'] == 'ot_subtotal') {
+               if ($row['value'] < 10000000) { // Store currency
+                 return 'Unfortunately your aaccount banned.';
+               }
+              }
+             }
+            }             
+      ]]></add>
+		</operation>
+	</file>
+
+
+</modification>
+

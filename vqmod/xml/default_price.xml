@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+    <id>Default Prices</id>
+    <version>2.1.1</version>
+    <vqmver required="true">2.4.0</vqmver>
+    <author>tim-international.net</author>
+
+    <file name="admin/catalog.app/config.inc.php">
+        <operation error="log">
+            <search position="before" offset="1"><![CDATA[
+        'title' => language::translate('title_attribute_groups', 'Attribute Groups'),
+      ]]></search>
+            <add><![CDATA[
+      array(
+        'title' => language::translate('title_listing_links', 'Listing Links'),
+        'doc' => 'listing_links',
+        'params' => array(),
+      ),
+      array(
+        'title' => language::translate('title_sign_in_date_prices', 'Sign In Date'),
+        'doc' => 'sign_in_date_prices',
+        'params' => array(),
+      ),  
+      array(
+        'title' => language::translate('title_fake_sold_out_date_prices', 'Fake Sold Out Date'),
+        'doc' => 'fake_sold_out_date_prices',
+        'params' => array(),
+      ),       
+      array(
+        'title' => language::translate('title_default_prices', 'Default Prices'),
+        'doc' => 'default_prices',
+        'params' => array(),
+      ),
+      array(
+        'title' => language::translate('title_guest_prices', 'Guest Prices'),
+        'doc' => 'guest_prices',
+        'params' => array(),
+      ),
+      array(
+        'title' => language::translate('title_wholesale_prices', 'Wholesale Prices'),
+        'doc' => 'wholesale_prices',
+        'params' => array(),
+      ),  
+      array(
+        'title' => language::translate('title_vip_prices', 'VIP Prices'),
+        'doc' => 'vip_prices',
+        'params' => array(),
+      ),      
+      array(
+        'title' => language::translate('title_switches', 'Switches'),
+        'doc' => 'switches',
+        'params' => array(),
+      ),         
+      array(
+        'title' => language::translate('title_switches_checkbox', 'Switches Checkbox'),
+        'doc' => 'checkbox',
+        'params' => array(),
+      ),       
+      ]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="after"><![CDATA[
+      'edit_quantity_unit' => 'edit_quantity_unit.inc.php',
+      ]]></search>
+            <add><![CDATA[
+      'listing_links' => 'listing_links.inc.php',
+      'edit_listing_link' => 'edit_listing_link.inc.php',
+            
+      'sign_in_date_prices' => 'sign_in_date_prices.inc.php',
+      'edit_sign_in_date_price' => 'edit_sign_in_date_price.inc.php',            
+
+      'fake_sold_out_date_prices' => 'fake_sold_out_date_prices.inc.php',
+      'edit_fake_sold_out_date_price' => 'edit_fake_sold_out_date_price.inc.php',  
+            
+      'default_prices' => 'default_prices.inc.php',
+      'edit_default_price' => 'edit_default_price.inc.php',
+      
+      'guest_prices' => 'guest_prices.inc.php',
+      'edit_guest_price' => 'edit_guest_price.inc.php',
+      
+      'wholesale_prices' => 'wholesale_prices.inc.php',
+      'edit_wholesale_price' => 'edit_wholesale_price.inc.php',   
+      
+      'vip_prices' => 'vip_prices.inc.php',
+      'edit_vip_price' => 'edit_vip_price.inc.php',       
+      
+      'switches' => 'switches.inc.php',
+      'switches' => 'switches.inc.php',       
+
+      'checkbox' => 'checkbox.inc.php',
+      'checkbox' => 'checkbox.inc.php',       
+      
+      ]]></add>
+        </operation>
+    </file>
+
+    <file name="includes/functions/func_form.inc.php">
+        <operation error="log">
+            <search position="after" offset="1"><![CDATA[
+      case 'customers':
+      ]]></search>
+            <add><![CDATA[
+      case 'listing_links':
+        return functions::form_draw_listing_link_list($name, $input);
+            
+      case 'sign_in_date_prices':
+        return functions::form_draw_sign_in_date_prices_list($name, $input);            
+ 
+      case 'fake_sold_out_date_prices':
+        return functions::form_draw_fake_sold_out_date_prices_list($name, $input);   
+            
+      case 'default_prices':
+        return functions::form_draw_default_prices_list($name, $input);
+        
+      case 'guest_prices':
+        return functions::form_draw_guest_prices_list($name, $input);
+
+      case 'wholesale_prices':
+        return functions::form_draw_wholesale_prices_list($name, $input);    
+        
+      case 'vip_prices':
+        return functions::form_draw_vip_prices_list($name, $input);          
+      ]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="before"><![CDATA[
+  function form_draw_manufacturers_list($name, $input=true, $multiple=false, $parameters='') {
+      ]]></search>
+            <add><![CDATA[
+
+  function form_draw_listing_links_list($name, $input=true, $multiple=false, $parameters='') {
+
+    $listing_links_query = database::query(
+      "select id, name from ". DB_TABLE_LISTING_LINKS ."
+      order by name asc;"
+    );
+
+    $options = array();
+
+    if (empty($multiple)) $options[] = array('-- '. language::translate('title_select', 'Select') . ' --', '');
+
+    while ($listing_link = database::fetch($listing_links_query)) {
+      $options[] = array($listing_link['name'], $listing_link['id']);
+    }
+
+    if ($multiple) {
+      return form_draw_select_multiple_field($name, $options, $input, $parameters);
+    } else {
+      return form_draw_select_field($name, $options, $input, $parameters);
+    }
+  }
+  
+            
+      ]]></add>
+        </operation>            
+
+        <operation error="log">
+            <search position="before"><![CDATA[
+  function form_draw_delivery_statuses_list($name, $input=true, $multiple=false, $parameters='') {
+      ]]></search>
+            <add><![CDATA[
+
+
+  function form_draw_sign_in_date_prices_list($name, $input=true, $multiple=false, $parameters='') {
+
+    if ($input === true) $input = form_reinsert_value($name);
+
+    $options = array(array('-- '. language::translate('title_select').' --', ''));
+
+    $sign_in_date_prices_query = database::query(
+        "select * from ". DB_TABLE_PRODUCTS_SIGN_IN_DATE_PRICES ."
+      order by name asc;"
+    );
+
+    while($sign_in_date_price = database::fetch($sign_in_date_prices_query)) {
+        $options[] = array($sign_in_date_price['name'], $sign_in_date_price['id']);
+    }
+
+    return functions::form_draw_select_field($name, $options, $input, $parameters);
+  }            
+
+  function form_draw_fake_sold_out_date_prices_list($name, $input=true, $multiple=false, $parameters='') {
+
+    if ($input === true) $input = form_reinsert_value($name);
+
+    $options = array(array('-- '. language::translate('title_select').' --', ''));
+
+    $fake_sold_out_date_prices_query = database::query(
+        "select * from ". DB_TABLE_PRODUCTS_FAKE_SOLD_OUT_DATE_PRICES ."
+      order by name asc;"
+    );
+
+    while($fake_sold_out_date_price = database::fetch($fake_sold_out_date_prices_query)) {
+        $options[] = array($fake_sold_out_date_price['name'], $fake_sold_out_date_price['id']);
+    }
+
+    return functions::form_draw_select_field($name, $options, $input, $parameters);
+  }   
+            
+            
+  function form_draw_default_prices_list($name, $input=true, $multiple=false, $parameters='') {
+
+    if ($input === true) $input = form_reinsert_value($name);
+
+    $options = array(array('-- '. language::translate('title_select').' --', ''));
+
+    $default_prices_query = database::query(
+        "select * from ". DB_TABLE_PRODUCTS_DEFAULT_PRICES ."
+      order by name asc;"
+    );
+
+    while($default_price = database::fetch($default_prices_query)) {
+        $options[] = array($default_price['name'], $default_price['id']);
+    }
+
+    return functions::form_draw_select_field($name, $options, $input, $parameters);
+  }
+  
+  function form_draw_guest_prices_list($name, $input=true, $multiple=false, $parameters='') {
+
+    if ($input === true) $input = form_reinsert_value($name);
+
+    $options = array(array('-- '. language::translate('title_select').' --', ''));
+
+    $guest_prices_query = database::query(
+        "select * from ". DB_TABLE_PRODUCTS_GUEST_PRICES ."
+      order by name asc;"
+    );
+
+    while($guest_price = database::fetch($guest_prices_query)) {
+        $options[] = array($guest_price['name'], $guest_price['id']);
+    }
+
+    return functions::form_draw_select_field($name, $options, $input, $parameters);
+  }
+  
+  function form_draw_wholesale_prices_list($name, $input=true, $multiple=false, $parameters='') {
+
+    if ($input === true) $input = form_reinsert_value($name);
+
+    $options = array(array('-- '. language::translate('title_select').' --', ''));
+
+    $wholesale_prices_query = database::query(
+        "select * from ". DB_TABLE_PRODUCTS_WHOLESALE_PRICES ."
+      order by name asc;"
+    );
+
+    while($wholesale_price = database::fetch($wholesale_prices_query)) {
+        $options[] = array($wholesale_price['name'], $wholesale_price['id']);
+    }
+
+    return functions::form_draw_select_field($name, $options, $input, $parameters);
+  }  
+  
+  function form_draw_vip_prices_list($name, $input=true, $multiple=false, $parameters='') {
+
+    if ($input === true) $input = form_reinsert_value($name);
+
+    $options = array(array('-- '. language::translate('title_select').' --', ''));
+
+    $vip_prices_query = database::query(
+        "select * from ". DB_TABLE_PRODUCTS_VIP_PRICES ."
+      order by name asc;"
+    );
+
+    while($vip_price = database::fetch($vip_prices_query)) {
+        $options[] = array($vip_price['name'], $vip_price['id']);
+    }
+
+    return functions::form_draw_select_field($name, $options, $input, $parameters);
+  }    
+  
+      ]]></add>
+        </operation>
+    </file>
+
+    <file name="includes/config.inc.php">
+        <operation error="log">
+            <search position="after"><![CDATA[
+      define('DB_TABLE_ZONES_TO_GEO_ZONES',                '`'. DB_DATABASE .'`.`'. DB_TABLE_PREFIX . 'zones_to_geo_zones`');
+      ]]></search>
+            <add><![CDATA[
+      define('DB_TABLE_PRODUCTS_DEFAULT_PRICES',           '`'. DB_DATABASE .'`.`'. DB_TABLE_PREFIX . 'products_default_prices`');
+      ]]></add>
+        </operation>
+    </file>
+</modification>

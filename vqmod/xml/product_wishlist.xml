@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<modification>
+
+    <id>New Products</id>
+    <version>1.0</version>
+    <vqmver required="true">2.4.0</vqmver>
+    <author>tim-international.net</author>
+
+    <file name="includes/templates/*.catalog/views/box_site_menu.inc.php">
+        <operation error="log">
+            <search position="before"><![CDATA[
+      <?php if ($categories) { ?>
+      ]]></search>
+            <add><![CDATA[
+        <li class="new-products dropdown">
+          <a href="<?php echo document::href_ilink('wishlist'); ?>"><?php echo language::translate('title_wishlist', 'Wishlist'); ?> <i class="fa fa-heart" aria-hidden="true"></i></a>
+        </li>
+        <li class="new-products dropdown">
+          <a href="https://t.me/ittoys"><?php echo language::translate('title_telegram_channel', 'Channel'); ?> <span style="color: #001ede;"><i class="fa fa-telegram" aria-hidden="true"></i></span></a>
+        </li>        
+
+      ]]></add>
+        </operation>
+    </file>
+
+    <file name="includes/templates/*.catalog/views/listing_product_column.inc.php">
+        <operation error="log" offset="3">
+            <search position="before" ><![CDATA[
+      </article>
+      ]]></search>
+            <add><![CDATA[
+          <button class="wish"><i class="fa fa-heart <?php echo !isset($wishable)?(empty(customer::$data['id'])&&in_array($product_id, session::$data['wishlist'])?"wished":""): "wished"; ?>" aria-hidden="true"></i><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></button>
+          <button class="shopee">
+          <?php if (!empty(reference::product($product_id)->shopee) && (reference::product($product_id)->quantity > 0)) { ?> 
+            <a class= <a href="<?php echo $shopee ?>" target=\\"_blank\\"> <img class="image img-responsive" src="<?php echo WS_DIR_IMAGES; ?>Shopee Logo Small.png" srcset="" alt="<?php echo WS_DIR_IMAGES; ?>Shopee Logo Small.png" /></a>
+          <?php } ?> 
+          
+          <span class="visible-xs"><button class="lazada">
+          <?php if (!empty(reference::product($product_id)->lazada) && (reference::product($product_id)->quantity > 0)) { ?>   
+            <a class= <a href="<?php echo $lazada ?>" target=\\"_blank\\"> <img class="image img-responsive" src="<?php echo WS_DIR_IMAGES; ?>Lazada Logo Small.png" srcset="" alt="<?php echo WS_DIR_IMAGES; ?>Lazada Logo Small.png" /></a>
+          <?php } ?>
+          
+          <button class="shopee_backend">
+           <?php if (!empty(user::$data['status']) && (!empty(reference::product($product_id)->shopee_backend))) { ?> 
+           <a class=<a href="<?php echo $shopee_backend ?>" target=\\"_blank\\"> <img class="image img-responsive" src="<?php echo WS_DIR_IMAGES; ?>Shopee Backend Small.jpg" srcset="" alt="<?php echo WS_DIR_IMAGES; ?>Shopee Backend Small.jpg" /></a>           
+           <?php } ?>
+           
+          <button class="lazada_backend"> 
+           <?php if (!empty(user::$data['status']) && (!empty(reference::product($product_id)->lazada_backend))) { ?>    
+           <a class=<a href="<?php echo $lazada_backend ?>" target=\\"_blank\\"> <img class="image img-responsive" src="<?php echo WS_DIR_IMAGES; ?>Lazada Backend Small.jpg" srcset="" alt="<?php echo WS_DIR_IMAGES; ?>Lazada Backend Small.jpg" /></a> 
+           <?php } ?>           
+      ]]></add>
+        </operation>
+    </file>
+
+    <file name="includes/templates/*.catalog/layouts/default.inc.php">
+        <operation error="log">
+            <search position="before" ><![CDATA[
+            </body>
+      ]]></search>
+            <add><![CDATA[
+        <script type="text/javascript">
+        $('body').on('click', '.product-column .wish', function(){
+          $(this).addClass('loading');
+          var productID = $(this).closest('article').find('a.link').data('id');
+          updateWishList(productID, $(this));
+        });
+        $('body').on('click', '.box-wishlist .wish', function(){
+          $(this).addClass('loading');
+          var productID = $(this).closest('article').data('id');
+          updateWishList(productID, $(this));
+        });
+        function updateWishList(productId, elem_pro){
+        var url = '<?php echo document::ilink('ajax/wishlist'); ?>';
+           $.ajax({
+      type: 'post',
+      url: url,
+      data: {id: productId},
+      dataType: 'json',
+      error: function(jqXHR, textStatus, errorThrown) {
+        console.log(errorThrown);
+      },
+      success: function(data) {
+        $(elem_pro).removeClass('loading');
+        console.log(data);
+        if(data.status==="200removed!"){
+        $(elem_pro).find('.fa-heart').removeClass('wished');
+         if (window.location.href.indexOf("wishlist") > -1) {
+              $(elem_pro).closest('article.product-column').remove();
+         }
+        }
+        else{
+        $(elem_pro).find('.fa-heart').addClass('wished');
+        }
+      }
+    });
+        }
+        </script>
+
+      ]]></add>
+        </operation>
+    </file>
+
+    <file name="includes/library/lib_cache.inc.php">
+        <operation error="log">
+            <search position="after"><![CDATA[
+      $dependencies[] = 'site';
+      ]]></search>
+            <add><![CDATA[
+      $dependencies[] = 'wishlist';
+      ]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="after" offset="2"><![CDATA[
+            $hash_string .= $_SERVER['REQUEST_URI'];
+      ]]></search>
+            <add><![CDATA[
+          case 'wishlist':
+            $hash_string .= isset(session::$data['wishlist-changable']) && is_array(session::$data['wishlist-changable']) && count(session::$data['wishlist-changable']) > 0 ? implode(',', session::$data['wishlist-changable']) :'';
+            break;
+      ]]></add>
+        </operation>
+
+    </file>
+
+    <file name="includes/functions/func_catalog.inc.php">
+        <operation error="log">
+            <search position="after"><![CDATA[
+      ) pp on (pp.product_id = p.id)
+      	]]></search>
+            <add><![CDATA[
+        left join (
+        select product_id , id as wishable
+        from ". DB_TABLE_WISHLIST ."
+        where (customer_id = '". (!empty(customer::$data['id'])?(int)customer::$data['id']:0) ."')
+      ) pwl on (pwl.product_id = p.id)
+
+      	]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="after"><![CDATA[
+      pi.short_description,
+      	]]></search>
+            <add><![CDATA[ pwl.wishable, ]]></add>
+        </operation>
+    </file>
+
+    <file name="includes/functions/func_draw.inc.php">
+        <operation error="log">
+            <search position="after"><![CDATA[
+        'sticker' => $sticker,
+      	]]></search>
+            <add><![CDATA[
+        'wishable' => $product['wishable'],
+      	]]></add>
+        </operation>
+
+    </file>
+
+    <file name="includes/references/ref_product.inc.php">
+        <operation error="log">
+            <search position="after"><![CDATA[
+        case 'images':
+      ]]></search>
+            <add><![CDATA[
+            $wishlist_query = database::query(
+                "select * from ". DB_TABLE_WISHLIST ." where product_id = '". (int)$this->_id ."' and customer_id = '" . (!empty(customer::$data['id'])?(int)customer::$data['id'] : 0 )."' limit 1;"
+            );
+            if($wishlist = database::fetch($wishlist_query)){
+                $this->_data['wishable'] = $wishlist['id'];
+            }
+            else{
+                $this->_data['wishable'] = null;
+            }
+
+      ]]></add>
+        </operation>
+
+    </file>
+
+    <file name="pages/product.inc.php">
+        <operation error="log">
+            <search position="after"><![CDATA[
+            'sticker' => '',
+      ]]></search>
+            <add><![CDATA[
+            'wishable' => $product->wishable,
+            ]]></add>
+        </operation>
+
+    </file>
+
+    <file name="pages/search.inc.php">
+        <operation error="log">
+            <search position="before"><![CDATA[
+      <?php
+      	]]></search>
+            <add><![CDATA[
+      <?php error_reporting(0); ?>
+      	]]></add>
+        </operation>        
+
+        <operation error="log">
+            <search position="after"><![CDATA[
+      ) pp on (pp.product_id = p.id)
+      	]]></search>
+            <add><![CDATA[
+        left join (
+        select product_id , id as wishable
+        from ". DB_TABLE_WISHLIST ."
+        where (customer_id = '". (!empty(customer::$data['id'])?(int)customer::$data['id']:0) ."')
+      ) pwl on (pwl.product_id = p.id)
+
+      	]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="after"><![CDATA[
+      pi.short_description,
+      	]]></search>
+            <add><![CDATA[ pwl.wishable, ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/catalog.app/edit_product.inc.php">
+        <operation error="log">
+            <search position="after"><![CDATA[
+        <li><a data-toggle="tab" href="#tab-stock"><?php echo language::translate('title_stock', 'Stock'); ?></a></li>
+      ]]></search>
+            <add><![CDATA[
+        <li><a data-toggle="tab" href="#tab-wishlist"><?php echo language::translate('title_wishlist', 'WishList'); ?></a></li>
+      ]]></add>
+        </operation>
+        
+        <operation error="log">
+            <search position="before" offset="2"><![CDATA[
+        <div class="panel-action btn-group">
+      ]]></search>
+            <add><![CDATA[
+            <?php
+            if(!empty($_GET['product_id'])){
+             $wishlist_query = database::query(
+        "select * from ". DB_TABLE_WISHLIST ." where  product_id = '" . (int)$_GET['product_id'] ."';"
+    );
+            ?>
+        <div id="tab-wishlist" class="tab-pane">
+           <div class="panel panel-default">
+        <div class="panel-heading">
+          <h2 class="panel-title"><?php echo language::translate('title_wishlist_customers', 'WishList Customers'); ?></h2>
+        </div>
+        <div class="panel-body table-responsive">
+          <table class="table table-striped table-hover table-input data-table">
+            <thead>
+              <tr>
+                <th><?php echo language::translate('title_name', 'Name'); ?></th>
+                <th style="width: 200px;"><?php echo language::translate('title_phone', 'Phone'); ?></th>
+                <th style="width: 200px;"><?php echo language::translate('title_email', 'Email'); ?></th>
+                <th style="width: 200px;"><?php echo language::translate('title_date', 'Date'); ?></th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php while($wishlist = database::fetch($wishlist_query)) {
+              $customer = new ent_customer($wishlist['customer_id']);?>
+              <tr class="item">
+                <td>
+                <a href="<?php echo document::href_link('', array('app' => 'customers', 'doc' => 'edit_customer', 'customer_id' => $wishlist['customer_id']), true); ?>"><?php echo $customer->data['firstname'].' '.$customer->data['lastname'] ;?> </a>
+              </td>
+              <td class="date"><?php echo $customer->data['phone']; ?></td>
+              <td class="date"><a href="<?php echo document::href_link('', array('app' => 'customers', 'doc' => 'edit_customer', 'customer_id' => $wishlist['customer_id']), true); ?>"><?php echo $customer->data['email']; ?></td>
+              <td class="date"><?php echo $wishlist['created_at']; ?></td>
+            </tr>
+            <?php } ?>
+          </tbody>
+        </table>
+      </div>
+    </div>
+        </div>
+        <?php }?>
+
+      ]]></add>
+        </operation>
+
+    </file>
+
+    <file name="admin/customers.app/edit_customer.inc.php">
+        <operation error="log">
+            <search position="before" ><![CDATA[
+        <div class="panel-action btn-group">
+      ]]></search>
+            <add><![CDATA[
+            <?php
+            if(!empty($_GET['customer_id'])){
+             $wishlist_query = database::query(
+        "select * from ". DB_TABLE_WISHLIST ." where  customer_id = '" . (int)$_GET['customer_id'] ."';"
+    );
+            ?>
+        <div class="col-md-12 panel panel-default" style="width: auto; height: auto;">
+        <div class="panel-heading">
+          <h2 class="panel-title"><?php echo language::translate('title_wishlist_products', 'WishList Products'); ?></h2>
+        </div>
+        <div class="panel-body table-responsive">
+          <table class="table table-striped table-hover table-input data-table">
+            <thead>
+              <tr>
+                <th><?php echo language::translate('title_item', 'Item'); ?></th>
+                <th style="width: 200px;"><?php echo language::translate('title_date', 'Date'); ?></th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php while($wishlist = database::fetch($wishlist_query)) {
+              $product = new ent_product($wishlist['product_id']); ?>
+              <tr class="item">
+                <td>
+                <a href="<?php echo document::href_link('', array('app' => 'catalog', 'doc' => 'edit_product', 'product_id' => $wishlist['product_id']), true); ?>"><?php echo $product->data['name'][language::$selected['code']]; ?></a>
+              </td>
+              <td class="date"><?php echo $wishlist['created_at']; ?></td>
+            </tr>
+            <?php } ?>
+          </tbody>
+        </table>
+      </div>
+        </div>
+        <?php }?>
+      ]]></add>
+        </operation>
+
+    </file>
+
+     <file name="includes/templates/*.catalog/views/box_product.inc.php">        
+      <operation error="log">            
+       <search position="before"><![CDATA[      
+          <div class="buy_now" style="margin: 1em 0;">      	
+       ]]></search>            
+      <add><![CDATA[        
+         <a class="box-wishlist text-center"><button class="wish"><strong>Wishlist !! </strong><i class="fa fa-heart" aria-hidden="true"></i><i class="fa fa-spinner fa-spin" aria-hidden="true"> </i></button></a> 
+          &nbsp;&nbsp;&nbsp;
+         <a href="https://t.me/ittoys"><span style="color: black; font-size:18px;"><strong>Telegram Channel <span style="color: #001ede; font-size:20px;"><i class="fa fa-telegram" aria-hidden="true"></i></span></span></strong></a>
+       ]]></add>        
+      </operation>    
+
+     </file>
+
+</modification>
+
+
+
+<!--
+
+
+    <file name="includes/templates/*.catalog/views/box_product.inc.php">
+
+        <operation error="log">
+
+            <search position="after"><![CDATA[
+
+      <div class="social-bookmarks text-center">
+
+      	]]></search>
+
+            <add><![CDATA[
+
+        <a class="box-wishlist text-center"><button class="wish"><i class="fa fa-heart <?php echo !isset($wishable)?(empty(customer::$data['id'])&&in_array($product_id, session::$data['wishlist'])?"wished":""): "wished"; ?>" aria-hidden="true"></i><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></button></a>
+
+      	]]></add>
+
+        </operation>
+
+    </file
+
+    
+
+    -->

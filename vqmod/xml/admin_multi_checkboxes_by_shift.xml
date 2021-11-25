@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+  <id>Admin Multi Checkboxes Checking</id>
+  <version>1.0</version>
+  <vqmver required="true">2.4.0</vqmver>
+  <author>Nicolas Molinari</author>
+  <file name="includes/templates/*.admin/layouts/default.inc.php">
+    <operation error="log">
+      <search position="after"><![CDATA[
+    {snippet:javascript}
+      ]]></search>
+      <add><![CDATA[
+    <script>
+      $(document).ready(function() {
+        var lastChecked = null;
+
+        $('input[type="checkbox"]').click(function(e) {
+          if (!lastChecked) {
+            lastChecked = this;
+            return;
+          }
+
+          if (e.shiftKey) {
+            var start = $('input[type="checkbox"]').index(this);
+            var end = $('input[type="checkbox"]').index(lastChecked);
+
+            $('input[type="checkbox"]').slice(Math.min(start,end), Math.max(start,end)+ 1).prop('checked', lastChecked.checked);
+          }
+
+          lastChecked = this;
+        });
+      });
+    </script>
+    ]]></add>
+    </operation>
+  </file>
+</modification>

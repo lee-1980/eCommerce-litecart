@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Custom Order Widget</id>
+	<version>2.0</version>
+	<vqmver required="true">2.4.0</vqmver>
+	<author>ittoysline</author>
+
+
+
+  <file name="admin/orders.widget/orders.inc.php">
+   
+      
+		<operation error="log">
+			<search position="replace"><![CDATA[
+      <td><a href="<?php echo document::href_link('', array('app' => 'orders', 'doc' => 'edit_order', 'order_id' => $order['id']), true); ?>"><?php echo $order['customer_company'] ? $order['customer_company'] : $order['customer_firstname'] .' '. $order['customer_lastname']; ?></a></td>
+      ]]></search>
+			<add><![CDATA[
+             
+       <td><a href="<?php echo document::href_link('', array('app' => 'orders', 'doc' => 'edit_order', 'order_id' => $order['id']), true); ?>"><?php echo $order['customer_firstname'] .' '. $order['customer_lastname']; ?></a></td>
+      ]]></add>
+		</operation>
+     </file>			
+</modification>

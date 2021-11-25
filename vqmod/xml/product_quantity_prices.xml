@@ -1,0 +1,710 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+  <id>Product Quantity Prices</id>
+  <version>2.1.1</version>
+  <vqmver required="true">2.4.0</vqmver>
+  <author>tim-international.net</author>
+
+  <file name="admin/catalog.app/edit_product.inc.php">
+    <operation error="log">
+      <search position="after"><![CDATA[
+      if (empty($_POST['images'])) $_POST['images'] = array();
+      ]]></search>
+      <add><![CDATA[
+      if (empty($_POST['quantity_prices'])) $_POST['quantity_prices'] = array();
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+      <search position="after" index="1"><![CDATA[
+    'prices',
+      ]]></search>
+      <add><![CDATA[
+    'quantity_prices',
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+      <search position="before"><![CDATA[
+        <h2><?php echo language::translate('title_campaigns', 'Campaigns'); ?></h2>
+      ]]></search>
+      <add><![CDATA[
+        <h2><?php echo language::translate('title_quantity_prices', 'Quantity Prices'); ?></h2>
+        <table id="quantity-prices" class="table table-striped">
+          <thead>
+            <tr>
+               <td colspan="5"><a class="add" href="#" title="<?php echo htmlspecialchars(language::translate('title_add', 'Add')); ?>"><?php echo functions::draw_fonticon('fa-plus-circle', 'style="color: #66cc66;"'); ?></a>
+               <a class="delete" style="margin-left: 20px;" href="#" title="<?php echo htmlspecialchars(language::translate('title_delete', 'Delete')); ?>"><?php echo functions::draw_fonticon('fa-trash-o', 'style="color: #ff6e6e;"'); ?></a>
+               <a class="hide_show" style="margin-left: 20px;" href="#" title="<?php echo htmlspecialchars(language::translate('title_toggle', 'Toggle')); ?>"><?php echo functions::draw_fonticon('fa-eye-slash', 'style="color: #6d6ff7;"'); ?></a>
+               </td>
+            </tr>          
+
+          </thead>
+          <thead>
+            <tr>
+              <th style="width: 200px;"><?php echo language::translate('title_quantity', 'Quantity'); ?></th>
+              <th colspan="<?php echo count(currency::$currencies); ?>"><?php echo language::translate('title_price', 'Price'); ?></th>
+            </tr>          
+
+          </thead>
+          <tbody>
+            <?php if (!empty($_POST['quantity_prices'])) foreach (array_keys($_POST['quantity_prices']) as $key) { ?>
+            <tr>
+              <td><?php echo functions::form_draw_hidden_field('quantity_prices['.$key.'][id]', true) . functions::form_draw_decimal_field('quantity_prices['.$key.'][quantity]', true, 2); ?></td>
+              <td style="width: 250px;"><?php echo functions::form_draw_currency_field(settings::get('store_currency_code'), 'quantity_prices['.$key.']['. settings::get('store_currency_code') .']', true); ?></td>
+           <?php
+              foreach (array_keys(currency::$currencies) as $currency_code) {
+                if ($currency_code == settings::get('store_currency_code')) continue;
+                ?>
+              <td style="width: 250px;"><?php echo functions::form_draw_currency_field($currency_code, 'quantity_prices['.$key.']['. $currency_code. ']', isset($_POST['quantity_prices'][$key][$currency_code]) ? number_format($_POST['quantity_prices'][$key][$currency_code], 4, '.', '') : '', 'data-size="small"'); ?></td>
+                <?php 
+                     }
+                     ?>
+              <td><a class="remove" href="#" title="<?php echo htmlspecialchars(language::translate('title_remove', 'Remove')); ?>"><?php echo functions::draw_fonticon('fa-times-circle fa-lg', 'style="color: #ff6e6e;"'); ?></a></td>
+            </tr>
+            <?php } ?>
+            </tbody>
+            <tfoot>
+          </tfoot>
+        </table>
+
+<script>
+  $('body').on('keyup change', 'input[name^="quantity_prices"][name$="[<?php echo settings::get('store_currency_code'); ?>]"]', function() {
+    var parent = $(this).closest('tr');
+    var percentage = ($('input[name="prices[<?php echo settings::get('store_currency_code'); ?>]"]').val() - $(this).val()) / $('input[name="prices[<?php echo settings::get('store_currency_code'); ?>]"]').val() * 100;
+    percentage = Number(percentage).toFixed(2);
+    $(parent).find('input[name$="[percentage]"]').val(percentage);
+
+    <?php foreach (currency::$currencies as $currency) { ?>
+    var value = 0;
+    value = $(parent).find('input[name^="quantity_prices"][name$="[<?php echo settings::get('store_currency_code'); ?>]"]').val() * <?php echo $currency['value']; ?>;
+    value = Number(value).toFixed(<?php echo $currency['decimals']; ?>);
+    $(parent).find('input[name^="quantity_prices"][name$="[<?php echo $currency['code']; ?>]"]').attr('placeholder', value);
+    if ($(parent).find('input[name^="quantity_prices"][name$="[<?php echo $currency['code']; ?>]"]').val() == 0) {
+      $(parent).find('input[name^="quantity_prices"][name$="[<?php echo $currency['code']; ?>]"]').val('');
+    }
+    <?php } ?>
+  });
+  $('input[name^="quantity_prices"][name$="[<?php echo settings::get('store_currency_code'); ?>]"]').trigger('keyup');
+
+  var new_quantity_price_i = 1;
+  $('#quantity-prices').on('click', '.add', function(e) {
+    e.preventDefault();
+    var output = '<tr>'
+               + '  <td><?php echo str_replace(PHP_EOL, '', functions::form_draw_hidden_field('quantity_prices[new_quantity_price_i][id]', '') . functions::form_draw_decimal_field('quantity_prices[new_quantity_price_i][quantity]', '', 2, 0, null, 'data-size="tiny"')); ?></td>'
+               + '  <td style="width: 250px;"><?php echo str_replace(PHP_EOL, '', functions::form_draw_currency_field(settings::get('store_currency_code'), 'quantity_prices[new_quantity_price_i]['. settings::get('store_currency_code') .']', '')); ?></td>'
+<?php
+  foreach (array_keys(currency::$currencies) as $currency_code) {
+    if ($currency_code == settings::get('store_currency_code')) continue;
+?>
+               + '  <td style="width: 250px;"><?php echo str_replace(PHP_EOL, '', functions::form_draw_currency_field($currency_code, 'quantity_prices[new_quantity_price_i]['. $currency_code .']', '', 'data-size="small"')); ?></td>'
+<?php
+  }
+?>
+               + '  <td><a class="remove" href="#" title="<?php echo htmlspecialchars(language::translate('title_remove', 'Remove')); ?>"><?php echo functions::draw_fonticon('fa-times-circle fa-lg', 'style="color: #ff6e6e;"'); ?></a></td>'
+               + '</tr>';
+    while ($('input[name="quantity_prices[new_'+new_quantity_price_i+']"]').length) new_quantity_price_i++;
+    output = output.replace(/new_quantity_price_i/g, 'new_' + new_quantity_price_i);
+    $('#quantity-prices tbody').append(output);
+    new_quantity_price_i++;
+  });
+
+  var new_quantity_price_i = 1;
+  $('#quantity-prices').on('click', '.add', function(e) {
+    e.preventDefault();
+    var output = '<tr>'
+               + '  <td><?php echo str_replace(PHP_EOL, '', functions::form_draw_hidden_field('quantity_prices[new_quantity_price_i][id]', '') . functions::form_draw_decimal_field('quantity_prices[new_quantity_price_i][quantity]', '', 2, 0, null, 'data-size="tiny"')); ?></td>'
+               + '  <td style="width: 250px;"><?php echo str_replace(PHP_EOL, '', functions::form_draw_currency_field(settings::get('store_currency_code'), 'quantity_prices[new_quantity_price_i]['. settings::get('store_currency_code') .']', '')); ?></td>'
+<?php
+  foreach (array_keys(currency::$currencies) as $currency_code) {
+    if ($currency_code == settings::get('store_currency_code')) continue;
+?>
+               + '  <td style="width: 250px;"><?php echo str_replace(PHP_EOL, '', functions::form_draw_currency_field($currency_code, 'quantity_prices[new_quantity_price_i]['. $currency_code .']', '', 'data-size="small"')); ?></td>'
+<?php
+  }
+?>
+               + '  <td><a class="remove" href="#" title="<?php echo htmlspecialchars(language::translate('title_remove', 'Remove')); ?>"><?php echo functions::draw_fonticon('fa-times-circle fa-lg', 'style="color: #ff6e6e;"'); ?></a></td>'
+               + '</tr>';
+    while ($('input[name="quantity_prices[new_'+new_quantity_price_i+']"]').length) new_quantity_price_i++;
+    output = output.replace(/new_quantity_price_i/g, 'new_' + new_quantity_price_i);
+    $('#quantity-prices tbody').append(output);
+    new_quantity_price_i++;
+  });
+
+  var new_quantity_price_i = 1;
+  $('#quantity-prices').on('click', '.add', function(e) {
+    e.preventDefault();
+    var output = '<tr>'
+               + '  <td><?php echo str_replace(PHP_EOL, '', functions::form_draw_hidden_field('quantity_prices[new_quantity_price_i][id]', '') . functions::form_draw_decimal_field('quantity_prices[new_quantity_price_i][quantity]', '', 2, 0, null, 'data-size="tiny"')); ?></td>'
+               + '  <td style="width: 250px;"><?php echo str_replace(PHP_EOL, '', functions::form_draw_currency_field(settings::get('store_currency_code'), 'quantity_prices[new_quantity_price_i]['. settings::get('store_currency_code') .']', '')); ?></td>'
+<?php
+  foreach (array_keys(currency::$currencies) as $currency_code) {
+    if ($currency_code == settings::get('store_currency_code')) continue;
+?>
+               + '  <td style="width: 250px;"><?php echo str_replace(PHP_EOL, '', functions::form_draw_currency_field($currency_code, 'quantity_prices[new_quantity_price_i]['. $currency_code .']', '', 'data-size="small"')); ?></td>'
+<?php
+  }
+?>
+               + '  <td><a class="remove" href="#" title="<?php echo htmlspecialchars(language::translate('title_remove', 'Remove')); ?>"><?php echo functions::draw_fonticon('fa-times-circle fa-lg', 'style="color: #ff6e6e;"'); ?></a></td>'
+               + '</tr>';
+    while ($('input[name="quantity_prices[new_'+new_quantity_price_i+']"]').length) new_quantity_price_i++;
+    output = output.replace(/new_quantity_price_i/g, 'new_' + new_quantity_price_i);
+    $('#quantity-prices tbody').append(output);
+    new_quantity_price_i++;
+  });
+
+  $('#quantity-prices').on('click', '.remove', function(e) {
+    e.preventDefault();
+    $(this).closest('tr').remove();
+  });
+  
+  $('#quantity-prices').on('click', '.delete', function(e) {
+      e.preventDefault();
+      $('#quantity-prices tbody tr').remove();
+  });
+$('#quantity-prices').on('click', '.hide_show', function(e) {
+    e.preventDefault();
+    $('#quantity-prices tbody tr').toggle();
+});
+$('#quantity-pricess tbody tr').toggle();  
+  
+</script>
+      ]]></add>
+    </operation>
+  </file>
+
+  <file name="includes/entities/ent_currency.inc.php">
+    <operation error="log">
+      <search position="after" offset="1"><![CDATA[
+            throw new Exception('Cannot rename the store currency.');
+      ]]></search>
+      <add><![CDATA[
+            database::query(
+              "alter table ". DB_TABLE_PRODUCTS_QUANTITY_PRICES ."
+              change `". database::input($currency['code']) ."` `". database::input($this->data['code']) ."` decimal(11, 4) not null;"
+            );
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+      <search position="after" offset="1"><![CDATA[
+        $this->data['id'] = database::insert_id();
+      ]]></search>
+      <add><![CDATA[
+
+      $products_prices_query = database::query(
+        "show fields from ". DB_TABLE_PRODUCTS_QUANTITY_PRICES ."
+        where `Field` = '". database::input($this->data['code']) ."';"
+      );
+      if (database::num_rows($products_prices_query) == 0) {
+        database::query(
+          "alter table ". DB_TABLE_PRODUCTS_QUANTITY_PRICES ."
+          add `". database::input($this->data['code']) ."` decimal(11, 4) not null;"
+        );
+      }
+      ]]></add>
+    </operation>
+  </file>
+
+  <file name="includes/entities/ent_product.inc.php">
+    <operation error="log">
+      <search position="after"><![CDATA[
+      $this->data['prices'] = array();
+      ]]></search>
+      <add><![CDATA[
+      $this->data['quantity_prices'] = array();
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+      <search position="before" offset="1"><![CDATA[
+      $product_campaigns_query = database::query(
+      ]]></search>
+      <add><![CDATA[
+      $product_quantity_prices_query = database::query(
+        "select * from ". DB_TABLE_PRODUCTS_QUANTITY_PRICES ."
+        where product_id = '". (int)$this->data['id'] ."'
+        order by quantity;"
+      );
+      while ($product_quantity_price = database::fetch($product_quantity_prices_query)) {
+        $this->data['quantity_prices'][$product_quantity_price['id']] = $product_quantity_price;
+      }
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+      <search position="after" offset="5"><![CDATA[
+          "update ". DB_TABLE_PRODUCTS_PRICES ." set
+      ]]></search>
+      <add><![CDATA[
+
+      database::query(
+        "delete from ". DB_TABLE_PRODUCTS_QUANTITY_PRICES ."
+        where product_id = '". (int)$this->data['id'] ."'
+        and id not in ('". @implode("', '", @array_keys($this->data['quantity_prices'])) ."');"
+      );
+
+      if (!empty($this->data['quantity_prices'])) {
+        foreach (array_keys($this->data['quantity_prices']) as $key) {
+          if (empty($this->data['quantity_prices'][$key]['id'])) {
+            database::query(
+              "insert into ". DB_TABLE_PRODUCTS_QUANTITY_PRICES ."
+              (product_id)
+              values ('". (int)$this->data['id'] ."');"
+            );
+            $this->data['quantity_prices'][$key]['id'] = database::insert_id();
+          }
+
+          $sql_currency_quantity_prices = "";
+          foreach (array_keys(currency::$currencies) as $currency_code) {
+            $sql_currency_quantity_prices .= $currency_code ." = '". (float)$this->data['quantity_prices'][$key][$currency_code] ."', ";
+          }
+          $sql_currency_quantity_prices = rtrim($sql_currency_quantity_prices, ', ');
+
+          database::query(
+            "update ". DB_TABLE_PRODUCTS_QUANTITY_PRICES ." set
+            quantity = ". (int)$this->data['quantity_prices'][$key]['quantity'] .",
+            $sql_currency_quantity_prices
+            where product_id = '". (int)$this->data['id'] ."'
+            and id = '". (int)$this->data['quantity_prices'][$key]['id'] ."'
+            limit 1;"
+          );
+        }
+      }
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+      <search position="after" offset="2"><![CDATA[
+        "delete from ". DB_TABLE_PRODUCTS_PRICES ."
+      ]]></search>
+      <add><![CDATA[
+      database::query(
+        "delete from ". DB_TABLE_PRODUCTS_QUANTITY_PRICES ."
+        where product_id = '". (int)$this->data['id'] ."';"
+      );
+      ]]></add>
+    </operation>
+  </file>
+
+  <file name="includes/library/lib_cart.inc.php">
+    <operation error="log">
+      <search position="before"><![CDATA[
+        'price' => (!empty($product->campaign) && $product->campaign['price'] > 0) ? $product->campaign['price'] : $product->price,
+      ]]></search>
+      <add><![CDATA[
+        'unit_price' => (!empty($product->campaign) && $product->campaign['price'] > 0) ? $product->campaign['price'] : $product->price,
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+      <search position="before" index="1"><![CDATA[
+      if (settings::get('round_amounts')) {
+      ]]></search>
+      <add><![CDATA[
+      $product_quantity_prices_query = database::query(
+        "select * from ". DB_TABLE_PRODUCTS_QUANTITY_PRICES ."
+        where product_id = ". (int)$item['product_id'] ."
+        and quantity <= ". (float)$item['quantity'] ."
+        order by quantity desc
+        limit 1;"
+      );
+      $product_quantity_price = database::fetch($product_quantity_prices_query);
+    if ((empty(customer::$data['code'] == 1)) && (!empty(customer::$data['id'])) && (empty(customer::$data['enable_quantity_price']) && (reference::product($product_id)->date_valid_to >= date('Y-m-d H:i:s'))))   {
+      if (!empty($product_quantity_price[settings::get('store_currency_code')]) && $product_quantity_price[settings::get('store_currency_code')] != 0) {
+        if (!empty($product_quantity_price[currency::$selected['code']]) && $product_quantity_price[currency::$selected['code']] != 0) {
+          $item['price'] = $product_quantity_price[currency::$selected['code']];
+        } else {
+          $item['price'] = $product_quantity_price[settings::get('store_currency_code')];
+        }
+
+        $item['price'] += $item['extras'];
+        $item['tax'] = tax::get_tax($item['price'], $item['tax_class_id']);
+      }
+     }
+      ]]></add>
+    </operation>
+
+<!--
+    <operation error="log">
+      <search position="before" index="2"><![CDATA[
+      if (settings::get('round_amounts')) {
+      ]]></search>
+      <add><![CDATA[
+      $product_quantity_prices_query = database::query(
+        "select * from ". DB_TABLE_PRODUCTS_QUANTITY_PRICES ."
+        where product_id = ". (int)self::$items[$item_key]['product_id'] ."
+        and quantity <= ". (float)self::$items[$item_key]['quantity'] ."
+        order by quantity desc
+        limit 1;"
+      );
+      $product_quantity_price = database::fetch($product_quantity_prices_query);
+
+      if ((empty(customer::$data['code'] == 1)) && (!empty(customer::$data['id'])) && (reference::product($product_id)->date_valid_to >= date('Y-m-d H:i:s')))   {
+        if (!empty($product_quantity_price[settings::get('store_currency_code')]) && $product_quantity_price[settings::get('store_currency_code')] != 0) {
+          if (!empty($product_quantity_price[currency::$selected['code']]) && $product_quantity_price[currency::$selected['code']] != 0) {
+            self::$items[$item_key]['price'] = $product_quantity_price[currency::$selected['code']];
+          } else {
+            self::$items[$item_key]['price'] = $product_quantity_price[settings::get('store_currency_code')];
+          }
+          self::$items[$item_key]['price'] += self::$items[$item_key]['extras'];
+          self::$items[$item_key]['tax'] = tax::get_tax(self::$items[$item_key]['price'], self::$items[$item_key]['tax_class_id']);
+        }
+      } else {
+        self::$items[$item_key]['price'] = self::$items[$item_key]['unit_price'];
+        self::$items[$item_key]['price'] += self::$items[$item_key]['extras'];
+        self::$items[$item_key]['tax'] = tax::get_tax(self::$items[$item_key]['price'], self::$items[$item_key]['tax_class_id']);
+      }
+    }
+      ]]></add>
+    </operation>
+    
+    -->
+  </file>
+
+  <file name="includes/references/ref_product.inc.php">
+    <operation error="log">
+      <search position="before"><![CDATA[
+        case 'sold_out_status':
+      ]]></search>
+      <add><![CDATA[
+        case 'quantity_prices':
+
+          $this->_data['quantity_prices'] = array();
+
+          $product_quantity_prices_query = database::query(
+            "select * from ". DB_TABLE_PRODUCTS_QUANTITY_PRICES ."
+            where product_id = ". (int)$this->_id ."
+            order by quantity asc;"
+          );
+          while ($product_quantity_price = database::fetch($product_quantity_prices_query)) {
+            if (!empty($product_quantity_price[$this->_currency_code]) && $product_quantity_price[$this->_currency_code] != 0) {
+              $this->_data['quantity_prices'][$product_quantity_price['quantity']] = currency::convert($product_quantity_price[$this->_currency_code], $this->_currency_code, settings::get('store_currency_code'));
+            } else {
+              $this->_data['quantity_prices'][$product_quantity_price['quantity']] = $product_quantity_price[settings::get('store_currency_code')];
+            }
+          }
+
+          break;
+      ]]></add>
+    </operation>
+  </file>
+
+  <file name="includes/functions/func_draw.inc.php">
+    <operation error="log">
+      <search position="after"><![CDATA[
+      'campaign_price' => (float)$product['campaign_price'] ? tax::get_price($product['campaign_price'], $product['tax_class_id']) : null,
+      ]]></search>
+      <add><![CDATA[
+      'quantity_price' => reference::product($product['id'])->quantity_prices ? tax::get_price($qty_price=end(reference::product($product['id'])->quantity_prices), $product['tax_class_id']) : null,
+      ]]></add>
+    </operation>
+  </file>
+
+  <file name="includes/templates/*.catalog/views/listing_product.inc.php">
+    <operation error="log">
+      <search position="replace" offset="6"><![CDATA[
+      <div class="price-wrapper">
+      ]]></search>
+      <add><![CDATA[
+      <div class="price-wrapper">
+        <?php if (!empty($quantity_price)) { ?>
+        <span class="regular-price"><?php echo currency::format($quantity_price); ?> - <?php echo currency::format($regular_price); ?></span>
+        <?php } else if ($campaign_price) { ?>
+        <del class="regular-price"><?php echo currency::format($regular_price); ?></del> <strong class="campaign-price"><?php echo currency::format($campaign_price); ?></strong>
+        <?php } else { ?>
+        <span class="price"><?php echo currency::format($regular_price); ?></span>
+        <?php } ?>
+      </div>
+      ]]></add>
+    </operation>
+  </file>
+
+  <file name="pages/product.inc.php">
+    <operation error="log">
+      <search position="before"><![CDATA[
+// Tax
+      ]]></search>
+      <add><![CDATA[
+// Quantity Prices
+  $_page->snippets['quantity_prices'] = array();
+  foreach($product->quantity_prices as $qty => $price) {
+    $_page->snippets['quantity_prices'][] = array(
+      'quantity' => (float)$qty,
+      'price' => tax::get_price($price, $product->tax_class_id),
+    );
+  }
+      ]]></add>
+    </operation>
+  </file>
+
+  <file name="includes/templates/*.catalog/views/box_product.inc.php">
+    <operation error="log">
+      <search position="replace" offset="19"><![CDATA[
+        <div class="price-wrapper">
+      ]]></search>
+      <add><![CDATA[
+      
+   <style>
+   #box-product .quantity-prices {
+    font-size: 18px;
+    font-weight: bold;
+    background-image: url("/images/transparent.png");
+   }
+   #box-product .quantity-prices {
+     background-image: url("/images/transparent.png");
+     border-collapse: separate;
+     border-collapse: collapse;
+     width: 25%;
+   }
+   #box-product .quantity-prices td, #box-product .quantity-prices th {
+     padding: 3px 5px;
+     cursor: pointer;  
+     width: 35%;
+   }
+   </style>
+
+</span>
+
+    <?php if ((!empty($quantity_prices)) && (empty(customer::$data['code'])) && (empty(customer::$data['enable_quantity_price']) && (!empty(customer::$data['id'])) && (reference::product($product_id)->date_valid_from > date('Y-m-d H:i:s'))))   { ?> 
+      <div class="price-wrapper">
+        <table class="quantity-prices table table-striped data-table">
+          <thead>
+            <tr>
+              <th><?php echo language::translate('title_qty', 'Qty'); ?></th>
+              <th><?php echo language::translate('title_unit_price', 'Per /pcs'); ?></th>
+            <tr>
+          </thead>
+          <tbody>
+            <tr data-quantity="1" data-price="<?php echo $campaign_price ? $campaign_price : $regular_price; ?>" data-tax="<?php echo $campaign_price ? currency::format_raw(tax::get_tax($campaign_price, $tax_class_id)) : currency::format_raw(tax::get_tax($regular_price, $tax_class_id)); ?>" data-tax-formatted="<?php echo $campaign_price ? currency::format(tax::get_tax($campaign_price, $tax_class_id)) : currency::format(tax::get_tax($regular_price, $tax_class_id)); ?>">
+              <td>1 pcs </td>
+              <td>
+                : <?php if ($campaign_price) { ?>
+                <del class="regular-price"><?php echo $regular_price; ?></del> <strong class="campaign-price"><?php echo currency::format($campaign_price); ?></strong>
+                <?php } else { ?>
+                <span class="price"><?php echo currency::format($regular_price); ?></span>
+                <?php } ?>
+              </td>
+            <tr>
+            <?php foreach ($quantity_prices as $quantity_price) { ?>
+            <tr data-quantity="<?php echo $quantity_price['quantity']; ?>" data-price="<?php echo currency::format_raw($quantity_price['price']); ?>" data-tax="<?php echo currency::format_raw(tax::get_tax($quantity_price['price'], $tax_class_id)); ?>" data-tax-formatted="<?php echo currency::format(tax::get_tax($quantity_price['price'], $tax_class_id)); ?>">
+              <td><?php echo $quantity_price['quantity']; ?> pcs </td>
+              <td>: <?php echo currency::format($quantity_price['price']); ?></td>
+            <tr>
+            <?php } ?>
+          </tbody>
+        </table>
+      </div>
+
+<script>
+  $(document).ready(function(){
+  $('#box-product .price-wrapper tbody tr').click(function(){
+    $('input[name="quantity"]').val($(this).data('quantity')).trigger('change');
+  });
+
+  $('#box-product').on('keyup change', 'input[name="quantity"]', function(){
+    var quantity = $(this).val();
+    $('#box-product .price-wrapper tbody tr').css('background', '#ffffff00').css('color', 'inherit');
+    $($('#box-product .price-wrapper tbody tr').get().reverse()).each(function(i, row){
+    console.log($(row).data('quantity'), quantity);
+      if ($(row).data('quantity') <= quantity) {
+        $(row).css('background', '#ffffff00').css('color', '#FF0000');
+        $('#box-product .tax .amount-formatted').text($(row).data('tax-formatted') + " ("+ Math.round($(row).data('tax')/$(row).data('price')*100) +" %)");
+        return false;
+      }
+    });
+  });
+
+  $('input[name="quantity"]').trigger('change');
+  });
+</script>
+
+
+
+
+      <?php } else { ?>
+
+<table auto="" border="0" cellpadding="5" cellspacing="3" style="background-color: transparent; color: #5f6062;  text-align: left;"><tbody>
+<tr align="left"><td width="200"><div class="separator" style="clear: both; text-align: center;">
+</div>
+
+            <div class="price-wrapper2">
+            <?php if ((empty(customer::$data['id']) && (!empty(reference::product($product_id)->signin) && (empty(reference::product($product_id)->disable_sign_in)))) 
+            || (empty(customer::$data['id']) &&  (!empty(reference::product($product_id)->sign_in_date_price_prices)))            
+            || (empty(customer::$data['id']) && (!empty($campaign_price)) && (!empty(reference::product($product_id)->sign_in_deal)))
+            || (empty(customer::$data['id']) && (!empty(reference::product($product_id)->sign_in_date_price_prices) && (!empty(reference::product($product_id)->addtocart) && (!empty(reference::product($product_id)->newarrival))))
+            || (empty(customer::$data['id']) && ((!empty(reference::product($product_id)->guest_price_prices) && (!empty(reference::product($product_id)->sign_in)))))
+            )) { ?> 
+            <span style="font-size: medium;">
+            <a href="<?php echo document::href_link('login', array('redirect_url' => document::link())); ?>"><?php echo language::translate('text_Kindly_sign_in_to_see_price_&_picture_/_order_this_item', 'Kindly sign in to see price & picture / order this item'); ?></span></a>
+            </br>
+            </br>
+            
+
+            
+            <?php } else if (!empty(customer::$data['id']) && ($campaign_price)) { ?>
+            </s></span><span style=" font-size: 21px;"><s><span style="color: black;"> <strong><?php echo currency::format (reference::product($product_id)->original_price); ?></strong></s></span>
+           
+            <?php if (!empty(reference::product($product_id)->specialprice) && (!empty(reference::product($product_id)->guest_price_prices))) { ?> 
+            </br></span><span style=" font-size: 25px;"><span style="color: blue;"> <s><strong><?php echo currency::format (reference::product($product_id)->guest_price_prices); ?></strong></s></span>
+            <?php } ?>
+            
+            <?php if (!empty(reference::product($product_id)->master_customer_special_price) && (!empty(reference::product($product_id)->customer_specialprice) && (!empty(reference::product($product_id)->default_price_price)))) { ?> 
+            </br></span><span style=" font-size: 27px;"><span style="color: green;"> <s><strong><?php echo currency::format (reference::product($product_id)->default_price_price); ?></strong></s></span>
+            <?php } ?>
+            </br></span> <strong class="campaign-price"><?php echo currency::format($campaign_price); ?></strong>
+            
+            <?php } else if (!empty(customer::$data['id']== 4640) || (!empty(customer::$data['id']== 4785))) { ?>
+            <strong><?php echo currency::format($regular_price); ?></strong></span></br>             
+            <strong><?php echo currency::format (reference::product($product_id)->purchase_price); ?></strong></span> 
+            
+            <?php } else if (empty(customer::$data['international']) && (!empty(reference::product($product_id)->guess_price))) { ?>   
+            <strong>$ <span class="price"><?php echo nl2br($guess_price); ?></strong>            
+            
+            <?php } else if (!empty(customer::$data['id']) && (!empty($campaign_price) )) { ?> 
+            <s><strong><span style=" font-size: 22px;"><?php echo currency::format (reference::product($product_id)->original_price); ?></strong></span></s></br>      
+            
+            <?php  if (!empty(reference::product($product_id)->guest_price_prices)) { ?> 
+            <s></span><span style=" font-size: 27px;"><span style="color: blue;"><strong><?php echo currency::format (reference::product($product_id)->guest_price_prices); ?></strong></s></br>
+            <?php } ?>
+            
+            <?php  if (!empty(reference::product($product_id)->default_price_price) && (empty(customer::$data['enable_wholesale_price']))) { ?> 
+            <s><strong></span><span style=" font-size: 30px;"><span style="color: green;"><?php echo currency::format (reference::product($product_id)->default_price_price); ?></strong></s></br>
+            <?php } ?>  
+            
+            <strong class="campaign-price2"><span style=" font-size: 33px;"><span style="color: red;"><?php echo currency::format($campaign_price); ?></span></strong>
+            <?php } else if (!empty(customer::$data['code']) && (!empty($campaign_price))) { if(!empty(reference::product($product_id)->sign_in_deal)) { ?>
+            <strong class="campaign-price2"><span style=" font-size: 29px;"><span style="color: red;"><?php echo currency::format($campaign_price); ?></span></strong>
+            <?php } else {?>
+
+            <span style=" font-size: 25px;"><s><strong><?php echo currency::format (reference::product($product_id)->original_price); ?></strong></s></br>
+            <?php }} else { ?>
+
+            <?php if (!empty(customer::$data['id']) && (!empty($campaign_price) && (empty(reference::product($product_id)->signin)))) { ?> 
+            <span style=" font-size: 25px;"><s><strong><?php echo currency::format (reference::product($product_id)->original_price); ?></strong></s></br> 
+
+            <?php  if (!empty(customer::$data['id']) && (empty(customer::$data['code']) && (!empty(reference::product($product_id)->guest_price_prices)))) { ?> 
+            <span style=" font-size: 27px;"><s><strong></span><span style="color: green;"><?php echo currency::format (reference::product($product_id)->customer_group_prices); ?></strong></s></br> 
+            <?php } ?>
+
+            <?php } else if (!empty(customer::$data['id']) && (!empty(customer::$data['code']) && (!empty(reference::product($product_id)->insaneprice)))) { ?>
+            <span style=" font-size: 26px; color: black">  <strong><?php echo currency::format($regular_price); ?></strong></span> 
+            
+            <!-- 06 Sep 2021 -->
+            <?php } else if (!empty(customer::$data['id']) && (!empty(customer::$data['code']) && (!empty(reference::product($product_id)->disable_master_guest_special_price || master_guest_special_price)))) { ?>
+            <span style=" font-size: 26px; color: black"><s><strong><?php echo currency::format (reference::product($product_id)->original_price); ?></strong></s></span> </br> 
+            <span style=" color: red">  <strong><?php echo currency::format($regular_price); ?></strong></span>          
+        
+            <?php } else if (!empty(customer::$data['code'])) { ?>
+            <span class="price" style="color: black;"><strong><?php echo currency::format($regular_price); ?></strong></span>
+
+            <?php } else if (!empty($campaign_price)) { ?>
+            <span style=" font-size: 22px; color: black"><s><strong><?php echo currency::format (reference::product($product_id)->original_price); ?></strong></s></span> </br>
+
+            <?php if (!empty(reference::product($product_id)->guest_price_prices)) { ?>
+            <span style="color: blue;"><del class="regular-price2"><span style=" font-size: 24px;"><strong><?php echo currency::format($regular_price); ?></strong></del></br> 
+            <?php } ?>
+
+            <strong class="campaign-price2"><?php echo currency::format($campaign_price); ?></strong>
+
+            <?php } else { ?>
+            <span class="price"><?php  if ((!empty(customer::$data['id']) && (!empty(reference::product($product_id)->guest_price_prices))) ||  ((!empty(customer::$data['id'])) && (empty(reference::product($product_id)->no_customer_group_prices)) && (!empty(reference::product($product_id)->customer_group_prices)) ) ) { ?> 
+            <span style="color: red;"><span style=" font-size: 29px;">
+            
+            <?php } else if (empty(customer::$data['id']) && ((!empty(reference::product($product_id)->master_guest_special_price) && (!empty(reference::product($product_id)->specialprice) && (!empty(reference::product($product_id)->guest_price_prices)))))) { ?>
+            <span style="color: red;"><span style=" font-size: 29px;">
+            <?php } ?> 
+            
+            <?php if (!empty(customer::$data['id']) && (!empty(reference::product($product_id)->no_customer_group_prices))) { ?>
+            <!-- NONE -->
+
+            <?php } else if (!empty(customer::$data['id']) && (!empty(reference::product($product_id)->customer_group_prices) && (empty(reference::product($product_id)->customer_specialprice) 
+            && (empty(reference::product($product_id)->default_price_price) )) 
+            || (!empty(reference::product($product_id)->master_guest_special_price) && (!empty(reference::product($product_id)->specialprice) && (empty(reference::product($product_id)->guest_price_prices))) 
+            || (empty(reference::product($product_id)->specialprice) && (empty(reference::product($product_id)->guest_price_prices))
+            )))) { ?>
+            <span style=" font-size: 23px; color: black"><s><strong><?php echo currency::format (reference::product($product_id)->original_price); ?></strong></s></span> </br> 
+            
+            <?php if (!empty(reference::product($product_id)->specialprice) && (!empty(reference::product($product_id)->master_guest_special_price))
+            || (!empty(reference::product($product_id)->specialprice) && (!empty(reference::product($product_id)->disable_master_guest_special_price)))
+            ) { ?>
+            <span style=" font-size: 27px; color: blue;"><s><strong><?php echo currency::format (reference::product($product_id)->guest_price_prices); ?></strong></s></span></br>
+            <?php } ?>
+            
+            <?php } else if (empty(customer::$data['id']) && ((!empty(reference::product($product_id)->master_guest_special_price) && (!empty(reference::product($product_id)->guest_price_prices))))) { ?>
+            <?php if (empty(reference::product($product_id)->no_customer_group_prices)) { ?>
+            <span style=" font-size: 23px; color: black"><s><strong><?php echo currency::format (reference::product($product_id)->original_price); ?></strong></s></span> </br>  
+            <?php } ?>
+        
+            <?php } else if (!empty(customer::$data['id']) && (!empty(reference::product($product_id)->guest_price_prices))) { ?>
+            <span style=" font-size: 23px; color: black"><s><strong><?php echo currency::format (reference::product($product_id)->original_price); ?></strong></s></span> </br>
+            <span style=" font-size: 26px; color: blue"><s><strong><?php echo currency::format (reference::product($product_id)->guest_price_prices); ?></strong></s></span> </br> 
+
+            <?php } else if (empty(customer::$data['id']) && (!empty(reference::product($product_id)->disable_master_guest_special_price))) { ?>
+            <span style=" font-size: 26px; color: black"><s><strong><?php echo currency::format (reference::product($product_id)->original_price); ?></strong></s></span> </br> <span style=" color: red">
+
+            <?php } else if (!empty(customer::$data['id'])) { ?>
+            <span style=" font-size: 23px; color: black"><s><strong><?php echo currency::format (reference::product($product_id)->original_price); ?></strong></s></span> </br>  
+            <?php } ?> 
+        
+            <?php if (!empty(reference::product($product_id)->no_customer_group_prices)) { ?>
+            <span style=" font-size: 29px; color: black">
+
+            <?php } else if (empty(reference::product($product_id)->customer_group_prices)) { ?>
+            <span style=" font-size: 29px; color: red">
+            <?php } ?>   
+            
+            <?php if ((empty(customer::$data['id']) || (!empty(customer::$data['id']))) && (!empty(reference::product($product_id)->guest_price_prices)) && (empty(reference::product($product_id)->no_customer_group_prices))) { ?>
+            <span style=" color: red">
+            <?php } else if (empty(customer::$data['id']))  { ?>           
+            
+            <span style=" color: black">
+            <?php } ?> 
+            <strong><?php echo currency::format($regular_price); ?></strong></span> 
+
+            <?php } ?>            
+            <?php } ?>
+       </div>     
+      <?php } ?> 
+      
+      </span>    
+</span>
+</td>
+<td>
+    <?php if (!empty(reference::product($product_id)->shopee) && (reference::product($product_id)->quantity > 0)) { ?> 		
+           <?php if (!empty(reference::product($product_id)->shopee)) { ?> 
+           <a href="<?php echo $shopee ?>" target=\\"_blank\\"> <img class="image img-responsive" src="<?php echo WS_DIR_IMAGES; ?>Shopee Logo.png" srcset="" alt="<?php echo WS_DIR_IMAGES; ?>Shopee Logo.png" /> 
+           <?php } ?>
+</td>
+<td>
+           <?php if (!empty(reference::product($product_id)->lazada) && (reference::product($product_id)->quantity > 0)) { ?> 
+           <a href="<?php echo $lazada ?>" target=\\"_blank\\"> <img class="image img-responsive" src="<?php echo WS_DIR_IMAGES; ?>Lazada Logo.png" srcset="" alt="<?php echo WS_DIR_IMAGES; ?>Lazada Logo.png" />  
+           <?php } ?>
+
+</td>
+</tr>
+<tr align="left"><td valign="top">
+
+</td>
+<td valign="top">
+           <?php if (!empty(user::$data['status']) && (!empty(reference::product($product_id)->shopee_backend))) { ?> 
+           <a href="<?php echo $shopee_backend ?>" target=\\"_blank\\"> <img class="image img-responsive" src="<?php echo WS_DIR_IMAGES; ?>Shopee Backend.jpg" srcset="" alt="<?php echo WS_DIR_IMAGES; ?>Shopee Backend.jpg" />           
+           <?php } ?>
+</td>
+<td valign="top">
+           <?php if (!empty(user::$data['status']) && (!empty(reference::product($product_id)->lazada_backend))) { ?>    
+           <a href="<?php echo $lazada_backend ?>" target=\\"_blank\\"> <img class="image img-responsive" src="<?php echo WS_DIR_IMAGES; ?>Lazada Backend.jpg" srcset="" alt="<?php echo WS_DIR_IMAGES; ?>Lazada Backend.jpg" /> 
+           <?php } ?>
+
+
+</td></tr>
+</tbody>
+<?php } ?>
+</table>
+    
+      ]]></add>
+    </operation>
+   </file>   
+
+</modification>
+

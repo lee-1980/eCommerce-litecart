@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Change Order Status</id>
+	<version>2.1</version>
+	<vqmver required="true">2.4.0</vqmver>
+	<author>litecart.net</author>
+
+	<file path="admin/orders.app/" name="orders.inc.php">
+		<operation error="log">
+			<search position="after" offset="2"><![CDATA[
+      notices::add('errors', $e->getMessage());
+      ]]></search>
+			<add><![CDATA[
+  if (!empty($_POST['set_order_status'])) {
+    try {
+      if (empty($_POST['orders'])) throw new Exception(language::translate('error_must_select_orders', 'You must select orders to perform the operation'));
+       foreach ($_POST['orders'] as $order_id) {
+        $order = new ctrl_order($order_id);
+        $order->data['order_status_id'] = $_POST['order_status_id'];
+        $order->save();
+      }
+      notices::add('success', language::translate('success_changes_saved', 'Changes saved'));
+    } catch(Exception $e) {
+      notices::$data['errors'][] = $e->getMessage();
+    }
+  }
+      ]]></add>
+		</operation>
+
+		<operation error="log">
+			<search position="after"><![CDATA[
+    <ul id="order-actions" class="list-inline">
+      ]]></search>
+			<add><![CDATA[
+      <li><fieldset>
+        <legend><?php echo language::translate('title_order_status', 'Order Status'); ?></legend>
+        <div class="input-group">
+          <?php echo functions::form_draw_order_status_list('order_status_id', true); ?>
+          <span class="input-group-btn">
+            <button class="btn btn-default" name="set_order_status" value="true" type="submit" formtarget="_self"><?php echo language::translate('title_set', 'Set'); ?></button>
+          </span>
+        </div>
+      </fieldset></li>
+      ]]></add>
+		</operation>
+	</file>
+
+</modification>

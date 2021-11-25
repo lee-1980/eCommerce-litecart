@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Maximum Product Quantity</id>
+	<version>1.1</version>
+	<vqmver required="true">2.4.0</vqmver>
+	<author>jee80</author>
+
+	<file name="pages/product.inc.php">
+		<operation error="log">
+			<search position="after"><![CDATA[
+	'gtin' => $product->gtin,
+      	]]></search>
+			<add><![CDATA[
+    'max_qty' => $product->max_qty,
+      	]]></add>
+		</operation>
+	</file>
+
+	<file name="includes/library/lib_cart.inc.php">
+		<operation error="log">
+			<search position="before"><![CDATA[
+	if ($product->status == 0) {
+      ]]></search>
+			<add><![CDATA[
+    
+        if ($product->max_qty&&($product->max_qty - $quantity - (isset(self::$items[$item_key]) ? self::$items[$item_key]['quantity'] : 0)) < 0 && empty($product->sold_out_status['orderable'])) {
+            throw new Exception(strtr(language::translate('error_maximum_purchase_for_this_item_is_1', 'Maximum purchase for this item is %limitquantity.'), array('%limitquantity' => round($product->max_qty, $product->quantity_unit['decimals']))));
+        }
+
+        if (reference::product($product_id)->date_valid_from < date('Y-m-d H:i:s') && reference::product($product_id)->preorderable){
+          throw new Exception(strtr(language::translate('error_unfortunately_pre-order_for_this_item_has_closed', 'Unfortunately pre-order for this item has closed'), array('%date' => language::strftime(language::$selected['format_date'], strtotime($product->date_valid_to)))));
+        }
+        
+        
+      ]]></add>
+		</operation>
+	</file>
+
+	<file name="includes/templates/*.catalog/views/box_product.inc.php">
+		<operation error="log">
+			<search position="before"><![CDATA[
+      <?php if (!$catalog_only_mode) { ?>
+      	]]></search>
+			<add><![CDATA[
+			</br>
+        </br>
+      <div style="margin:0 0 1em 0; color:red;">
+		<?php
+		  if ($max_qty) {
+		    echo language::translate('warn_item_max_qty', 'The maximum purchase of this product is').' '.$max_qty;
+		  }
+		?>
+      </div>
+
+      	]]></add>
+		</operation>
+
+	</file>
+
+	<file name="admin/catalog.app/edit_product.inc.php">
+
+		<operation error="log">
+			<search position="after"><![CDATA[
+        'options_stock',
+      ]]></search>
+			<add><![CDATA[
+        'max_qty',
+      ]]></add>
+		</operation>
+
+
+
+	</file>
+
+	<file name="includes/entities/ent_product.inc.php">
+		<operation error="log">
+			<search position="after"><![CDATA[
+            taric = '". database::input($this->data['taric']) ."',
+      ]]></search>
+			<add><![CDATA[
+            max_qty = '". database::input($this->data['max_qty']) ."',
+      ]]></add>
+		</operation>
+	</file>
+
+</modification>
+
+<!--
+
+NOTES:
+• You need to create a field in lc_products called `max_qty`
+
+ALTER TABLE `lc_products`
+ADD COLUMN `max_qty` INT(4) AFTER `purchases`;
+
+-->

@@ -1,0 +1,15 @@
+[01-Dec-2020 10:22:19] PHP Warning:  Unexpected character in input:  '\' (ASCII=92) state=1 in /home/ittoysco/public_html/handlers/js-compressor.php on line 21
+[01-Dec-2020 10:22:19] PHP Warning:  Unexpected character in input:  '\' (ASCII=92) state=1 in /home/ittoysco/public_html/handlers/js-compressor.php on line 21
+[01-Dec-2020 10:22:19] PHP Parse error:  syntax error, unexpected T_STRING in /home/ittoysco/public_html/handlers/js-compressor.php on line 21
+[01-Dec-2020 10:22:21] PHP Warning:  Unexpected character in input:  '\' (ASCII=92) state=1 in /home/ittoysco/public_html/handlers/js-compressor.php on line 21
+[01-Dec-2020 10:22:21] PHP Warning:  Unexpected character in input:  '\' (ASCII=92) state=1 in /home/ittoysco/public_html/handlers/js-compressor.php on line 21
+[01-Dec-2020 10:22:21] PHP Parse error:  syntax error, unexpected T_STRING in /home/ittoysco/public_html/handlers/js-compressor.php on line 21
+[01-Dec-2020 10:22:38] PHP Warning:  Unexpected character in input:  '\' (ASCII=92) state=1 in /home/ittoysco/public_html/handlers/js-compressor.php on line 21
+[01-Dec-2020 10:22:38] PHP Warning:  Unexpected character in input:  '\' (ASCII=92) state=1 in /home/ittoysco/public_html/handlers/js-compressor.php on line 21
+[01-Dec-2020 10:22:38] PHP Parse error:  syntax error, unexpected T_STRING in /home/ittoysco/public_html/handlers/js-compressor.php on line 21
+[01-Dec-2020 10:22:40] PHP Warning:  Unexpected character in input:  '\' (ASCII=92) state=1 in /home/ittoysco/public_html/handlers/js-compressor.php on line 21
+[01-Dec-2020 10:22:40] PHP Warning:  Unexpected character in input:  '\' (ASCII=92) state=1 in /home/ittoysco/public_html/handlers/js-compressor.php on line 21
+[01-Dec-2020 10:22:40] PHP Parse error:  syntax error, unexpected T_STRING in /home/ittoysco/public_html/handlers/js-compressor.php on line 21
+[01-Dec-2020 10:22:49] PHP Warning:  Unexpected character in input:  '\' (ASCII=92) state=1 in /home/ittoysco/public_html/handlers/js-compressor.php on line 21
+[01-Dec-2020 10:22:49] PHP Warning:  Unexpected character in input:  '\' (ASCII=92) state=1 in /home/ittoysco/public_html/handlers/js-compressor.php on line 21
+[01-Dec-2020 10:22:49] PHP Parse error:  syntax error, unexpected T_STRING in /home/ittoysco/public_html/handlers/js-compressor.php on line 21

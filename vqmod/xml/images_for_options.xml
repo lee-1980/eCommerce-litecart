@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+  <id>Images for Options</id>
+  <version>0.2</version>
+  <vqmver required="true">2.6.4</vqmver>
+  <author>developer_cz</author> 
+  <file name="admin/catalog.app/edit_product.inc.php">
+    <operation error="log">
+      <search position="after" offset="5"><![CDATA[<div id="tab-options" class="tab-pane">]]></search>
+      <add><![CDATA[<?php
+        if (!empty($_POST['images'])) { 
+        ?>
+        <div id="image-for-option" class="lightbox" style="display: none; max-width: 640px;">
+        <h3 class="title"><?php echo language::translate('title_images') ?></h3>
+        <a href="#" data-image-id="0" class="set_image_id_for_option">
+          <div class="thumbnail pull-left" style="margin:5px">
+            <img style="max-width:100px;max-height:100px" data-id="0" src="<?php echo document::href_link(WS_DIR_HTTP_HOME . functions::image_thumbnail(FS_DIR_HTTP_ROOT . WS_DIR_IMAGES . 'no_image.png', $product_image_width, $product_image_height, settings::get('product_image_clipping'))); ?>" alt="" />
+          </div>
+        </a>         
+        <?php foreach (array_keys($_POST['images']) as $key) { ?>
+          <a href="#" data-image-id="<?php echo $key ?>" class="set_image_id_for_option">
+                <div class="thumbnail pull-left" style="margin:5px 10px">
+                  <img style="max-width:100px;max-height:100px" data-id="<?php echo $key ?>" src="<?php echo document::href_link(WS_DIR_HTTP_HOME . functions::image_thumbnail(FS_DIR_HTTP_ROOT . WS_DIR_IMAGES . $product->data['images'][$key]['filename'], $product_image_width, $product_image_height, settings::get('product_image_clipping'))); ?>" alt="" />
+                </div>
+          </a>        
+        <?php } ?>
+      </div>
+        <?php }
+        if(database::fetch(database::query("SHOW COLUMNS FROM ". DB_TABLE_PRODUCTS_OPTIONS ."  LIKE 'image_id'")) === NULL){
+          database::query("ALTER TABLE ". DB_TABLE_PRODUCTS_OPTIONS ." ADD `image_id` INT");          
+        } ?>
+        <th>&nbsp;</th>
+      ]]></add>
+    </operation>
+    <operation error="log">
+      <search position="before"><![CDATA[<td><?php echo functions::form_draw_option_groups_list('options['.$key.'][group_id]', true); ?></td>]]></search>
+      <add><![CDATA[<td>
+      <?php $image_id = isset($product->data['options'][$key]['image_id'])?(int)$product->data['options'][$key]['image_id']:0; ?>
+      <a href="#" data-option_id="<?php echo $key ?>" class="set_image_for_option" data-toggle="lightbox" data-target="#image-for-option">
+      <div class="thumbnail pull-left">
+          <input id="inp-option_image_<?php echo $key ?>" type="hidden" name="options[<?php echo $key ?>][image_id]" value="<?php echo $image_id ?>">
+          <?php
+            if($image_id > 0 && isset($product->data['images'][$image_id]) && !empty($product->data['images'][$image_id]['filename'])){
+              echo '<img style="max-width:25px;max-height:25px" class="main-image" src="'. document::href_link(WS_DIR_HTTP_HOME . functions::image_thumbnail(FS_DIR_HTTP_ROOT . WS_DIR_IMAGES . $product->data['images'][$image_id]['filename'], $product_image_width, $product_image_height, settings::get('product_image_clipping'))) .'" alt="" />';
+            } else { 
+              echo '<img style="max-width:25px;max-height:25px" class="main-image" src="'. document::href_link(WS_DIR_HTTP_HOME . functions::image_thumbnail(FS_DIR_HTTP_ROOT . WS_DIR_IMAGES . 'no_image.png', $product_image_width, $product_image_height, settings::get('product_image_clipping'))) .'" alt="" />'; 
+          } ?>
+      </div>
+      </a>
+      </td>]]></add>
+    </operation>
+    <operation error="log">
+      <search position="replace"><![CDATA[+ '  <td><?php echo functions::general_escape_js(functions::form_draw_option_groups_list('options[new_option_i][group_id]', '')); ?></td>']]></search>
+      <add><![CDATA[+ '  <td colspan="2"><?php echo functions::general_escape_js(functions::form_draw_option_groups_list('options[new_option_i][group_id]', '')); ?></td>']]></add>
+    </operation>
+    <operation error="log">
+      <search position="before"><![CDATA[</script>]]></search>
+      <add><![CDATA[
+      var image_for_option_id = 0;
+      $('#table-options').on('click', '.set_image_for_option',function(e) {
+        image_for_option_id = $(this).data('option_id');
+        return true;                  
+      });
+      $('body').on('click', 'a.set_image_id_for_option',function(e) {
+        e.preventDefault;
+        $('input#inp-option_image_'+image_for_option_id).val($(this).data('image-id'));
+        $('input#inp-option_image_'+image_for_option_id).parent().find('img').attr('src', $(this).find('img').attr('src'));        
+        $.featherlight.close();                  
+      });
+      ]]></add>
+    </operation>    
+  </file>
+  <file name="includes/controllers/ctrl_product.inc.php">
+    <operation error="log">
+      <search position="after"><![CDATA[value_id = ". (int)$this->data['options'][$key]['value_id'] .",]]></search>
+      <add><![CDATA[image_id = ".(int)$this->data['options'][$key]['image_id'].",]]></add>
+    </operation>
+  </file>
+  <file name="includes/references/ref_product.inc.php">
+    <operation error="log">
+      <search position="before"><![CDATA[// Price Adjust]]></search>
+      <add><![CDATA[$this->_data['options'][$product_option['group_id']]['values'][$product_option['value_id']]['image_id'] = $product_option['image_id'];]]></add>
+    </operation>
+  </file>  
+  <file name="pages/product.inc.php">
+    <operation error="log">
+      <search position="before">// Extra Images</search>
+      <add><![CDATA[// Images for Options
+  list($width, $height) = functions::image_scale_by_width(480, settings::get('product_image_ratio'));
+  foreach ($product->images as $productImageId => $image) {
+    $_page->snippets['images_for_options'][] = array(
+      'id' => $productImageId,
+      'original' => ltrim(WS_DIR_IMAGES . $image, '/'),
+      'thumbnail' => functions::image_thumbnail(FS_DIR_HTTP_ROOT . WS_DIR_IMAGES . $image, $width, $height, settings::get('product_image_clipping'), settings::get('product_image_trim')),
+      'thumbnail_2x' => functions::image_thumbnail(FS_DIR_HTTP_ROOT . WS_DIR_IMAGES . $image, $width*2, $height*2, settings::get('product_image_clipping'), settings::get('product_image_trim')),
+      'viewport' => array(
+        'width' => $width,
+        'height' => $height,
+      ),
+    );
+  }]]></add>
+    </operation>
+    <operation error="log">
+      <search position="replace">data-price-adjust</search>
+      <add><![CDATA[data-image-id="'.(int)$value['image_id'].'" data-price-adjust]]></add>
+    </operation>
+  </file>
+  <file name="includes/templates/default.catalog/views/box_product.inc.php">
+    <operation error="log">
+      <search position="before"><![CDATA[<?php foreach ($options as $option) { ?>]]></search>
+      <add><![CDATA[<?php if ($images_for_options) { ?><script>
+      var images_for_options_a = [];
+      var images_for_options_t = [];
+      var images_for_options_t2 = [];
+      <?php foreach ($images_for_options as $_i => $image) {
+        if($_i === 0) { echo 'var images_for_options_first_id = '.$image['id'].';'."\n"; } 
+        echo 'images_for_options_a['.$image['id'].']="'.document::href_link(WS_DIR_HTTP_HOME . $image['original']).'"'."\n";
+        echo 'images_for_options_t['.$image['id'].']="'.document::href_link(WS_DIR_HTTP_HOME . $image['thumbnail']).'"'."\n";
+        echo 'images_for_options_t2['.$image['id'].']="'.document::href_link(WS_DIR_HTTP_HOME . $image['thumbnail_2x']).'"'."\n"; 
+      } ?>
+      var set_image_for_option = function(id){
+        if(id === undefined || id < 1) { id = images_for_options_first_id; }
+        var a = $('#box-product .main-image');
+        var img = $('#box-product .main-image > img');
+        a.attr('href', images_for_options_a[id]);
+        img.attr('src', images_for_options_t[id]);
+        img.attr('srcset', images_for_options_t[id]+" 1x, "+images_for_options_t2[id]+" 2x");        
+      };
+      
+      $("select[name^='options\[']").change(function(e){
+        var id = $(this).find('option:selected').data('image-id');
+        set_image_for_option(id);         
+      });
+
+      $("input[type='radio'][name^='options\[']").change(function(e){
+        var id = $(this).data('image-id');        
+        set_image_for_option(id);         
+      });      
+      </script><?php } ?>]]></add>
+    </operation>
+  </file>
+</modification>

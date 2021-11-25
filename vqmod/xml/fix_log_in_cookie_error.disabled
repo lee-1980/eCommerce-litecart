@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+  <id>Fix Log In Cookie Error</id>
+  <version>2.0</version>
+  <vqmver required="true">2.4.0</vqmver>
+  <author>tim-international.net</author>
+
+
+
+  <file name="includes/library/lib_session.inc.php">
+ 		<operation error="log">
+			<search position="before" ><![CDATA[
+      if (!self::start()) trigger_error('Failed to start a session', E_USER_WARNING);
+      ]]></search>
+			<add><![CDATA[
+      if (isset($_COOKIE[ini_get('session.name')]) && $_COOKIE[ini_get('session.name')] == '') {
+        trigger_error('Resetting a broken session missing a session id', E_USER_WARNING);
+        unset($_COOKIE[ini_get('session.name')]);
+      }  
+
+      ]]></add>
+		</operation> 	
+	</file>
+		
+</modification>
+
+

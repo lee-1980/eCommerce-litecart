@@ -1,0 +1,31 @@
+## [2020-06-02 21:28:19] Request #######################################
+
+POST /cgi-bin/webscr HTTP/1.1
+Host: ipnpb.paypal.com
+User-Agent: LiteCart/2.2.2
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 1165
+Connection: Close
+
+mc_gross=538.00&protection_eligibility=Ineligible&address_status=confirmed&item_number1=6710&payer_id=8Q2FCVLUTE3C8&tax=0.00&address_street=511-A%2C+Block-B%2C%0D%0AJalan+Gajah+Berang%2C&payment_date=06%3A28%3A11+Jun+02%2C+2020+PDT&payment_status=Completed&charset=windows-1252&address_zip=75200&mc_shipping=0.00&first_name=Jackson&mc_fee=22.98&address_country_code=MY&address_name=Jackson+Wang&notify_version=3.9&custom=4326&payer_status=unverified&business=ittoys116%40gmail.com&address_country=Malaysia&num_cart_items=1&address_city=Melaka&verify_sign=AZx6TYpYD0WLvDUQBSV5BjG70nfoAI96M6pgPsYnPhnNW6exnRukx9fa&payer_email=jackson10%40live.com.my&tax1=0.00&txn_id=9XE6358281876721V&payment_type=instant&last_name=Wang&address_state=MELAKA&item_name1=Power+Rangers+Lightning+Collection%0D%0AWhite+Ranger+Helmet&receiver_email=ittoys116%40gmail.com&payment_fee=&shipping_discount=0.00&quantity1=2&insurance_amount=0.00&receiver_id=LZRLCR9BD8MK2&txn_type=cart&discount=0.00&mc_gross_1=538.00&mc_currency=MYR&residence_country=MY&receipt_id=1886-6936-4712-3719&shipping_method=Default&transaction_subject=&payment_gross=&ipn_track_id=10d83e7b72e00&cmd=_notify-validate
+
+## [2020-06-02 21:28:22] Response — 1408 bytes transferred in 2.663 s ##
+
+HTTP/1.1 200 OK
+Cache-Control: max-age=0, no-cache, no-store, must-revalidate
+Content-Type: text/html; charset=UTF-8
+Date: Tue, 02 Jun 2020 13:28:21 GMT
+Paypal-Debug-Id: ac3c1a6d5f9c6
+Set-Cookie: cwrClyrK4LoCV1fydGbAxiNL6iG=xO1-EueK-vpeLMTnIlyBbjQv8s660QBEBF6HuofKAYdjscbbwnXHBUOUDvTHDkJ0dUhEmMDgLxkZumN-uo9jxTnIiWEOq8usWtmNYBx3D8J6g8rHjWxOzClg1bAJdpznivdhMU95nC7gCaGn1yQvdqtZ_d299XKWJJeZw7w7RMsOZi9HBYJb_909c654AzrvlRMg8tS1eqx1cTYvTc-tUkZ6O_j_Qo2nJGhDhE8SworxCKoxzRbEUZaK5kAPDd-1eQa28RTMqQu8BJIEjKt_SRuU9pj2nXIgaSaruMAuHGVZWsu-2IGX5MsPja2AiMkUdpXVU6KL-4AIv7aLVsnFRt4XqOj43Z3-YX_X4QYdy0juIrRMuaUXjM84mqWtqCf27LTrgHTyB9Pnb-izr9qSC_t55oLZwUdzTARwuNn8Q2Z6rI8SBdMtGGR_Cqq; Path=/; Domain=paypal.com; HttpOnly; Secure
+Set-Cookie: cookie_check=yes; Path=/; Domain=paypal.com; Expires=Fri, 31 May 2030 13:28:21 GMT; HttpOnly; Secure
+Set-Cookie: navcmd=_notify-validate; Path=/; Domain=paypal.com; HttpOnly; Secure
+Set-Cookie: navlns=0.0; Path=/; Domain=paypal.com; Expires=Thu, 02 Jun 2022 13:28:21 GMT; HttpOnly; Secure
+Set-Cookie: X-PP-SILOVER=name%3DLIVE6.WEB.1%26silo_version%3D880%26app%3Dappdispatcher%26TIME%3D1591104502%26HTTP_X_PP_AZ_LOCATOR%3Ddcg13.slc; Path=/; Domain=paypal.com; Expires=Tue, 02 Jun 2020 13:58:22 GMT; HttpOnly; Secure
+Set-Cookie: X-PP-L7=1; Path=/; Domain=paypal.com; Secure
+Vary: Accept-Encoding
+X-Frame-Options: SAMEORIGIN
+Content-Length: 8
+Connection: close
+
+VERIFIED
+

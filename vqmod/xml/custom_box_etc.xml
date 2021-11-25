@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+  <id>Custom Box Etc</id>
+  <version>2.0</version>
+  <vqmver required="true">2.4.0</vqmver>
+  <author>ittoysline</author>
+
+  <file name="includes/templates/*.catalog/views/box_checkout_customer.inc.php">
+	    <operation error="log">
+      <search position="replace" offset="6"><![CDATA[     
+         <?php echo functions::form_draw_hidden_field('customer_details', 'true'); ?>
+      ]]></search>
+      <add><![CDATA[     
+         <?php echo functions::form_draw_hidden_field('customer_details', 'true'); ?>
+      ]]></add>
+    </operation>
+      
+	    <operation error="log">
+      <search position="replace"><![CDATA[     
+         <button class="btn btn-block btn-default" name="save_customer_details" type="submit" disabled="disabled"><?php echo language::translate('title_save_changes', 'Save Changes'); ?></button>
+      ]]></search>
+      <add><![CDATA[     
+         <button class="btn btn-block btn-default_save" name="save_customer_details" type="submit" disabled="disabled"><?php echo language::translate('title_save_changes', 'Save Changes'); ?></button>
+      ]]></add>
+    </operation>
+
+<!-- enable read only -->
+
+		<operation error="skip">
+			<search position="before" ><![CDATA[
+      <div class="address billing-address">
+      	]]></search>
+			<add><![CDATA[
+      <?php if (empty(customer::$data['id'])) { ?>
+      	]]></add>
+		</operation>
+
+		<operation error="skip">
+			<search position="before" ><![CDATA[
+        <div class="address shipping-address">
+      	]]></search>
+			<add><![CDATA[
+<?php } ?>
+
+<?php if (!empty(customer::$data['id'])) { ?>
+<style>
+input[type="text"]:read-only { color: #7a0000; }
+</style>
+  <div class="address billing-address">
+
+    <?php if (settings::get('customer_field_company') || settings::get('customer_field_tax_id')) { ?>
+    <div class="row">
+      <?php if (settings::get('customer_field_company')) { ?>
+      <div class="form-group col-xs-6">
+        <label><?php echo language::translate('title_company', 'Company'); ?> (<?php echo language::translate('text_or_leave_blank', 'Or leave blank'); ?>)</label>
+        <?php echo functions::form_draw_text_field('company', true); ?>
+      </div>
+      <?php } ?>
+
+      <?php if (settings::get('customer_field_tax_id')) { ?>
+      <div class="form-group col-xs-6">
+        <label><?php echo language::translate('title_tax_id', 'Tax ID'); ?></label>
+        <?php echo functions::form_draw_text_field('tax_id', true); ?>
+      </div>
+      <?php } ?>
+    </div>
+    <?php } ?>
+
+    <div class="row">
+      <div class="form-group col-xs-6">
+        <label><?php echo language::translate('title_firstname', 'First Name'); ?></label>
+        <span style="color: red;"><?php echo functions::form_draw_text_field('firstname', true, 'required="required" readonly'); ?>
+      </div>
+
+      <div class="form-group col-xs-6">
+        <label><?php echo language::translate('title_lastname', 'Last Name'); ?></label>
+        <?php echo functions::form_draw_text_field('lastname', true, 'required="required" readonly'); ?>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-xs-6">
+        <label><?php echo language::translate('title_address1', 'Address 1'); ?></label>
+        <?php echo functions::form_draw_text_field('address1', true, 'required="required" readonly'); ?>
+      </div>
+
+      <div class="form-group col-xs-6">
+        <label><?php echo language::translate('title_address2', 'Address 2'); ?></label>
+        <?php echo functions::form_draw_text_field('address2', true, 'readonly="readonly"'); ?>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-xs-6">
+        <label><?php echo language::translate('title_postcode', 'Postal Code'); ?></label>
+        <?php echo functions::form_draw_text_field('postcode', true, 'required="required" readonly'); ?>
+      </div>
+
+      <div class="form-group col-xs-6">
+        <label><?php echo language::translate('title_city', 'City'); ?></label>
+        <?php echo functions::form_draw_text_field('city', true, 'required="required" readonly'); ?>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-xs-6">
+        <label><?php echo language::translate('title_country', 'Country'); ?></label>
+        <?php echo functions::form_draw_countries_list('country_code', true); ?>
+      </div>
+
+      <div class="form-group col-xs-6">
+        <label><?php echo language::translate('title_zone_state_province', 'Zone/State/Province'); ?></label>
+        <?php echo functions::form_draw_zones_list(isset($_POST['country_code']) ? $_POST['country_code'] : '', 'zone_code', true); ?>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-xs-6">
+        <label><?php echo language::translate('title_email_address', 'Email Address'); ?></label>
+        <?php echo functions::form_draw_email_field('email', true, 'required="required" readonly'); ?>
+      </div>
+
+      <div class="form-group col-xs-6">
+        <label><?php echo language::translate('title_phone', 'Phone'); ?></label>
+        <?php echo functions::form_draw_phone_field('phone', true, 'required="required"'); ?>
+      </div>
+    </div>
+  </div>
+<?php } ?>
+
+      	]]></add>
+		</operation>
+  
+  </file>
+  
+
+  
+  <file name="includes/templates/*.catalog/views/box_checkout_summary.inc.php">
+	    <operation error="log">
+      <search position="replace"><![CDATA[     
+      <table class="table table-striped table-bordered data-table">
+      ]]></search>
+      <add><![CDATA[ 
+      <table class="table table-striped_1 table-bordered data-table">
+      ]]></add>
+    </operation>
+       
+	    <operation error="log">
+      <search position="replace"><![CDATA[     
+         <button class="btn btn-block btn-lg btn-success" type="submit" name="confirm_order" value="true"<?php echo !empty($error) ? ' disabled="disabled"' : ''; ?>><?php echo $confirm; ?></button>
+      ]]></search>
+      <add><![CDATA[ 
+      <span style="font-size: medium;">
+         <button class="btn btn-block btn-lg btn-success_confirm" type="submit" name="confirm_order" value="true"<?php echo !empty($error) ? ' disabled="disabled"' : ''; ?>><?php echo $confirm; ?></button>
+      ]]></add>
+    </operation>
+
+   
+	
+  </file>  
+
+<file name="includes/templates/*.catalog/views/box_account_login.inc.php"> 
+    <operation error="log">
+      <search position="replace"><![CDATA[
+       <div class="btn-group btn-block">
+      ]]></search>
+      <add><![CDATA[
+       <div class="btn-group_signin">
+      ]]></add>
+    </operation>  
+  </file>
+  
+<file name="includes/templates/*.catalog/views/box_checkout_payment.inc.php"> 
+    <operation error="log">
+      <search position="replace"><![CDATA[
+       <div class="price"><?php echo (empty($option['error']) && $option['cost'] != 0) ? '+ ' . currency::format(tax::get_price($option['cost'], $option['tax_class_id'])) : language::translate('text_no_fee', 'No fee'); ?></div>
+      ]]></search>
+      <add><![CDATA[
+       <div class="price"><?php echo (empty($option['error']) && $option['cost'] != 0) ? ' ' . currency::format(tax::get_price($option['cost'], $option['tax_class_id'])) : language::translate('text_no_fee', 'No fee'); ?></div>
+      ]]></add>
+    </operation>  
+  </file>  
+ 
+  
+<file name="includes/templates/*.catalog/views/box_filter.inc.php"> 
+    <operation error="log">
+      <search position="replace"><![CDATA[
+       <div class="form-control">
+      ]]></search>
+      <add><![CDATA[
+       <div class="form-control_1">
+      ]]></add>
+    </operation>
+    
+    <operation error="log">
+      <search position="replace"><![CDATA[
+       <section id="box-filter" class="box">
+      ]]></search>
+      <add><![CDATA[
+       <section id="box-filter" class="box hidden-xs">
+      ]]></add>
+    </operation> 
+
+<!--  
+
+<file name="includes/templates/*.catalog/views/box_checkout_payment.inc.php"> 
+    <operation error="log">
+      <search position="replace"><![CDATA[
+       <div class="price"><?php echo (empty($option['error']) && $option['cost'] != 0) ? '+ ' . currency::format(tax::get_price($option['cost'], $option['tax_class_id'])) : language::translate('text_no_fee', 'No fee'); ?></div>
+      ]]></search>
+      <add><![CDATA[
+       <div class="price"><?php echo (empty($option['error']) && $option['cost'] != 0) ? '+ ' . currency::format(tax::get_price($option['cost'], $option['tax_class_id'])) : language::translate('text_no_fee', 'No fee'); ?>0</div>
+      ]]></add>
+    </operation>  
+  </file>  
+  
+<file name="includes/templates/*.catalog/views/box_checkout_shipping.inc.php"> 
+    <operation error="log">
+      <search position="replace"><![CDATA[
+       <div class="price"><?php echo (empty($option['error']) && $option['cost'] != 0) ? '+ ' . currency::format(tax::get_price($option['cost'], $option['tax_class_id'])) : language::translate('text_no_fee', 'No fee'); ?></div>
+      ]]></search>
+      <add><![CDATA[
+       <div class="price"><?php echo (empty($option['error']) && $option['cost'] != 0) ? '+ ' . currency::format(tax::get_price($option['cost'], $option['tax_class_id'])) : language::translate('text_no_fee', 'No fee'); ?>0</div>
+      ]]></add>
+    </operation>  
+  </file> 
+
+	    <operation error="log">
+      <search position="replace"><![CDATA[     
+      <td class="text-right"><?php echo !empty(customer::$data['display_prices_including_tax']) ? currency::format($row['value'] + $row['tax'], false) : currency::format($row['value'], false); ?></td>
+      ]]></search>
+      <add><![CDATA[ 
+      <td class="text-right"><?php echo !empty(customer::$data['display_prices_including_tax']) ? currency::format($row['value'] + $row['tax'], false) : currency::format($row['value'], false); ?>0</td>
+      ]]></add>
+    </operation>
+    
+	    <operation error="log">
+      <search position="replace"><![CDATA[     
+      <td class="text-right" style="width: 25%;"><strong><?php echo currency::format($payment_due, false); ?></strong></td>
+      ]]></search>
+      <add><![CDATA[ 
+      <td class="text-right" style="width: 25%;"><strong><?php echo currency::format($payment_due, false); ?>0</strong></td>
+      ]]></add>
+    </operation> 
+
+
+
+
+    <operation error="log">
+      <search position="replace"><![CDATA[
+       <h2><?php echo $group['name']; ?></h2>
+      ]]></search>
+      <add><![CDATA[
+       <h2><?php echo $group['name']; ?><tr>
+       <td style="float:right"><a class="remove" href="#" title="<?php echo htmlspecialchars(language::translate('title_remove', 'Remove')); ?>">
+       <?php echo functions::draw_fonticon('fa-trash-o', 'style="color: #cc3333;"'); ?></a></td></tr></h2>
+       
+    <script>
+$('#form[name="filter_form"]').on('click', '.remove', function(e) {
+    e.preventDefault();
+    $(this).closest('tr').remove();
+});
+    </script>
+      ]]></add>
+    </operation>
+-->    
+  </file>
+
+     
+      
+ 
+  <file name="includes/templates/*.catalog/views/box_contact_us.inc.php">
+	 <operation error="log">
+      <search position="replace"><![CDATA[     
+         <p><?php echo functions::form_draw_button('send', language::translate('title_send', 'Send'), 'submit', 'style="font-weight: bold;"'); ?></p>
+      ]]></search>
+      <add><![CDATA[     
+         <p><?php echo functions::form_draw_button('send', language::translate('title_send', 'Send'), 'submit', 'style="width: 150px"'); ?></p>
+      ]]></add>
+    </operation>      
+      
+	 <operation error="log">
+      <search position="after"><![CDATA[     
+         <?php if (settings::get('store_phone')) { ?><p class="phone"><?php echo functions::draw_fonticon('fa-phone'); ?> <a href="tel:<?php echo settings::get('store_phone'); ?>"><?php echo settings::get('store_phone'); ?></a></p><?php } ?>
+      ]]></search>
+      <add><![CDATA[     
+         <?php echo functions::draw_fonticon('fa-phone'); ?> <a href="tel:+6012 392 5533">+6012 392 5533 - Jansen 
+         </br>
+         </br>
+         <span style="color: #333333;"><?php echo functions::draw_fonticon('fa-phone'); ?></span> <a href="tel:+6016 357 6838">+6016 357 6838 - David
+         </br>
+      ]]></add>
+    </operation>
+
+	 <operation error="log">
+      <search position="after"><![CDATA[     
+         <p class="email"><?php echo functions::draw_fonticon('fa-envelope'); ?> <a href="mailto:<?php echo settings::get('store_email'); ?>"><?php echo settings::get('store_email'); ?></a></p>
+      ]]></search>
+      <add><![CDATA[     
+         <?php include vmod::check(FS_DIR_HTTP_ROOT . WS_DIR_TEMPLATE . 'views/box_store_map.inc.php'); ?>
+      ]]></add>
+    </operation>
+    
+	 <operation error="log">
+      <search position="after"><![CDATA[     
+         </section>
+      ]]></search>
+      <add><![CDATA[     
+        <div class="separator" style="clear: both; text-align: center;">
+        <img src="<?php echo WS_DIR_IMAGES; ?>Warehouse.jpg"
+		style="max-width: 100%; max-height: 100%;" alt="<?php echo WS_DIR_IMAGES; ?>Warehouse.jpg"onContextMenu="return false;">
+        </div>
+      ]]></add>
+    </operation>     
+ </file> 
+ 
+</modification>
+
+<!--    <operation error="log">
+      <search position="replace"><![CDATA[
+       <ul class="list-unstyled">
+      ]]></search>
+      <add><![CDATA[
+       <ul class="list-unstyled_1">
+      ]]></add>
+    </operation>   -->   
+
+
+
+
+<!--	    <operation error="log">
+      <search position="replace" offset="15"><![CDATA[     
+         <?php echo functions::form_draw_text_field('address1', true, 'required="required"'); ?>
+      ]]></search>
+      <add><![CDATA[     
+        <?php echo functions::form_draw_text_field('address1', true, 'required="required"'); ?>
+      </div>
+
+      <div class="form-group col-xs-6">
+        <label><?php echo language::translate('title_postcode', 'Postal Code'); ?></label>
+        <?php echo functions::form_draw_text_field('postcode', true); ?>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-xs-6">
+        <label><?php echo language::translate('title_address2', 'Address 2'); ?></label>
+        <?php echo functions::form_draw_text_field('address2', true); ?>
+      </div>
+
+        <div class="form-group col-sm-6">
+      ]]></add>
+    </operation>
+ 
+	    <operation error="log">
+      <search position="replace" offset="15"><![CDATA[     
+         <?php echo functions::form_draw_text_field('shipping_address[address1]', true); ?>
+      ]]></search>
+      <add><![CDATA[     
+          <?php echo functions::form_draw_text_field('shipping_address[address1]', true); ?>
+        </div>
+
+        <div class="form-group col-sm-6">
+          <label><?php echo language::translate('title_postcode', 'Postal Code'); ?></label>
+          <?php echo functions::form_draw_text_field('shipping_address[postcode]', true); ?>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-sm-6">
+          <label><?php echo language::translate('title_address2', 'Address 2'); ?></label>
+          <?php echo functions::form_draw_text_field('shipping_address[address2]', true); ?>
+        </div>
+
+        <div class="form-group col-sm-6">
+      ]]></add>
+    </operation> -->

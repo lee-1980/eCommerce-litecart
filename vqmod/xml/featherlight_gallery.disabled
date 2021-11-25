@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Regional Stickers</id>
+	<version>1.0</version>
+	<vqmver required="true">2.6.1</vqmver>
+	<author>developer_cz</author>	
+	<file name="includes/functions/func_draw.inc.php">
+		<operation error="log">
+			<search position="after"><![CDATA[document::$snippets['head_tags']['featherlight']]]></search>
+			<add><![CDATA[    document::$snippets['head_tags']['featherlight'] = '<link rel="stylesheet" href="'. WS_DIR_EXT .'featherlight_gallery/featherlight.min.css" />' . PHP_EOL . '<link rel="stylesheet" href="'. WS_DIR_EXT .'featherlight_gallery/featherlight.gallery.min.css" />';]]></add>
+		</operation>
+		<operation error="log">
+			<search position="after"><![CDATA[document::$snippets['foot_tags']['featherlight']]]></search>
+			<add><![CDATA[    document::$snippets['foot_tags']['featherlight'] = '<script src="'. WS_DIR_EXT .'featherlight_gallery/featherlight.min.js"></script>' . PHP_EOL . '<script src="'. WS_DIR_EXT .'featherlight_gallery/featherlight.gallery.min.js"></script>';]]></add>
+		</operation>
+		<operation error="log">
+			<search position="replace">.featherlight({</search>
+			<add>.featherlightGallery({</add>
+		</operation>
+	</file>
+</modification>

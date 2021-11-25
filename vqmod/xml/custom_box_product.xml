@@ -1,0 +1,404 @@
+<modification>
+	<id>Custom Box Product</id>
+	<version>2.0</version>
+	<vqmver required="true">2.4.0</vqmver>
+	<author>ittoysline</author>
+
+	<file name="includes/templates/*.catalog/views/box_product.inc.php">
+		<operation error="skip">
+			<search position="replace" offset="5"><![CDATA[
+      <?php if ($short_description) { ?>
+      	]]></search>
+			<add><![CDATA[
+      <!-- NONE -->
+      	]]></add>
+		</operation>
+	
+		<operation error="skip">
+			<search position="after"><![CDATA[
+      <div class="codes" style="margin: 1em 0;">
+      	]]></search>
+			<add><![CDATA[
+      <?php if ($short_description) { ?>
+        <?php echo language::translate('title_short_name', 'Name:'); ?>&nbsp;<?php echo $short_description; ?>
+      <?php } ?>
+
+      	]]></add>
+		</operation>
+
+		<operation error="skip">
+			<search position="before"><![CDATA[
+      <?php if ($gtin) { ?>
+      	]]></search>
+			<add><![CDATA[
+      <?php echo nl2br($medium_description); ?>
+      </br>
+      <label><?php echo language::translate('title_dimensions', 'Dimension'); ?>: </label>      
+        <?php echo strtr("%length x %width x %height %class", array(
+          '%length' => (float)reference::product($product_id)->dim_x,
+          '%width' => (float)reference::product($product_id)->dim_y,
+          '%height' => (float)reference::product($product_id)->dim_z,
+          '%class' => reference::product($product_id)->dim_class,
+        ));
+      ?>
+
+     <?php if (!empty(user::$data['status']) || (customer::$data['id'] == 4640) || (customer::$data['id'] == 4653)){ ?>
+     <?php error_reporting(0); ?>
+     </br>
+     Weight: <?php echo weight::format(reference::product($product_id)->weight, reference::product($product_id)->weight_class ); ?>
+     </br>
+     Quantity: <?php echo $quantity; ?> pcs
+     </br>
+     Keywords: <?php echo implode (", ", $keywords); ?>
+    <?php } ?>       
+
+      	]]></add>
+		</operation>
+
+		<operation error="skip">
+			<search position="replace" offset="5"><![CDATA[
+      <?php if ($cheapest_shipping_fee !== null) { ?>
+      	]]></search>
+			<add><![CDATA[
+      <!-- NONE -->
+      	]]></add>
+		</operation>
+
+
+   <operation error="skip">
+    <search position="before"><![CDATA[
+        <div class="price-wrapper">
+            ]]></search>
+    <add><![CDATA[
+
+       <?php if ($cheapest_shipping_fee !== null) { ?>
+      <div class="cheapest-shipping" style="margin: 1em 0;">
+        <?php echo functions::draw_fonticon('fa-truck'); ?> <?php echo strtr(language::translate('text_cheapest_shipping_from_price', 'Cheapest shipping from <strong class="value">%price</strong>'), array('%price' => currency::format($cheapest_shipping_fee))); ?><strong></strong>
+      </div>
+      <?php } ?>     
+
+        <?php  if ((!empty(customer::$data['id'])  && (!empty(reference::product($product_id)->signin)) && (!empty(reference::product($product_id)->guest_price_prices))) 
+        || (!empty(customer::$data['id']) || (empty(customer::$data['id'])  && (!empty(reference::product($product_id)->no_customer_group_prices))))
+        || (empty(customer::$data['id']) && (!empty($campaign_price) && (empty(reference::product($product_id)->sign_in_deal)) && (!empty(reference::product($product_id)->sign_in))))
+        || (empty(customer::$data['id']) && (!empty($campaign_price) && (!empty(reference::product($product_id)->sign_in_deal)) || (!empty($campaign_price) && (!empty(reference::product($product_id)->sign_in)))))
+        || (empty(customer::$data['id']) && (!empty(reference::product($product_id)->sign_in)) && (empty(reference::product($product_id)->sign_in_deal)))
+        || (empty(customer::$data['id']) && (empty(reference::product($product_id)->sign_in)) && (empty(reference::product($product_id)->signin)) && ((!empty(reference::product($product_id)->specialprice) && (!empty(reference::product($product_id)->guest_price_prices)))))
+        || (empty(customer::$data['id']) && (!empty(reference::product($product_id)->stock_quantity_guest_prices)))
+        ) { ?>
+        <!-- NONE --> 
+
+        <?php } else if (!empty(customer::$data['id']) && (!empty(reference::product($product_id)->stock_quantity_prices)))  { ?>
+        <span style=" font-size: 21px;"><s><strong><?php echo currency::format (reference::product($product_id)->original_price); ?></strong></s></span><span style="color: red;"><span style=" font-size: 26px;"> 
+
+        <?php } else if (!empty(customer::$data['id']) && (!empty(reference::product($product_id)->specialprice) && (empty(reference::product($product_id)->guest_price_prices) ))) { ?>
+        <span style=" font-size: 21px;"><s><strong><?php echo currency::format (reference::product($product_id)->original_price); ?></strong>
+
+        <?php } else if (!empty(customer::$data['id']) && (!empty($campaign_price) && (empty(reference::product($product_id)->sign_in_deal)) && (!empty(reference::product($product_id)->sign_in)) )) { ?>
+        <span style=" font-size: 21px;"><s><strong><?php echo currency::format (reference::product($product_id)->original_price); ?></strong></s>
+
+        <?php } else if (!empty(customer::$data['id']) && (empty($campaign_price) && (empty(reference::product($product_id)->signin)) && (!empty(reference::product($product_id)->default_price_price)))) { ?>
+        <!-- NONE -->
+
+        <?php } else if (!empty(customer::$data['id']) && (!empty(customer::$data['enable_wholesale_price']) && (!empty($campaign_price) && (!empty(reference::product($product_id)->sign_in_deal)) || (!empty($campaign_price) && (!empty(reference::product($product_id)->sign_in)) )))) { ?>
+        <span style=" font-size: 21px;"><s><strong><?php echo currency::format (reference::product($product_id)->original_price); ?></strong></s></span><span style="color: black;"><span style=" font-size: 23px;"> 
+
+        <?php } else if (!empty(customer::$data['id']) && (!empty(reference::product($product_id)->sign_in)) && (empty(reference::product($product_id)->sign_in_deal)) ) { ?>        
+        <span style=" font-size: 21px;"><s><?php echo currency::format (reference::product($product_id)->original_price); ?></s></span><span style="color: black;"><span style=" font-size: 26px;"> 
+
+        <?php } else if (!empty(customer::$data['id']) && (empty(customer::$data['code']) && (empty($campaign_price) && (!empty(reference::product($product_id)->customer_group_prices)))) && (!empty(reference::product($product_id)->customer_group_prices))) { ?>
+        <!-- NONE -->
+
+        <?php if (!empty(reference::product($product_id)->customer_group_prices) && (empty(reference::product($product_id)->no_customer_group_prices))) { ?>
+        <span style=" font-size: 21px;"><s><strong><?php echo currency::format (reference::product($product_id)->original_price); ?></strong></s></span>
+        <?php } ?>
+
+        <?php } else if (!empty(customer::$data['id']) && (empty($campaign_price) && ((!empty(reference::product($product_id)->guest_price_prices)) || (!empty(reference::product($product_id)->customer_group_prices))))) { ?>
+        <span style=" font-size: 21px;"><s><strong><?php echo currency::format (reference::product($product_id)->original_price); ?></strong></s></span>
+
+        <?php } else if ((!empty(customer::$data['id']) && (empty($campaign_price) && ((empty(reference::product($product_id)->guest_price_prices)) || (empty(reference::product($product_id)->customer_group_prices))))) 
+        || (empty(customer::$data['id']) && (empty($campaign_price) && ((empty(reference::product($product_id)->guest_price_prices)) || (empty(reference::product($product_id)->customer_group_prices)))))
+        ) { ?>
+        <!-- NONE -->   
+        <?php } ?>
+        </br>
+
+<!--
+        <?php if ((!empty(customer::$data['id']) && (!empty(reference::product($product_id)->no_customer_group_prices) && (!empty(reference::product($product_id)->guest_price_prices) && (empty($campaign_price))))) 
+        || (!empty(customer::$data['id']) && (!empty(reference::product($product_id)->disable_master_customer_special_price) && (!empty(reference::product($product_id)->customer_group_prices) && (empty($campaign_price)))))
+        ) { ?>
+        <span style=" font-size: 21px; color: black;"><s><strong><?php echo currency::format (reference::product($product_id)->original_price); ?></strong></s></span>
+        <?php } ?>
+-->   
+        ]]></add>
+    </operation>
+
+
+		<operation error="skip">
+			<search position="before" offset="2"><![CDATA[
+      <div class="buy_now" style="margin: 1em 0;">
+      	]]></search>
+			<add><![CDATA[
+      <div style="margin:0 0 1em 0; color:#CC0000;">
+
+       <?php  if (!empty($date_valid_from_closing) && (!empty($date_valid_to_closing)) ) { ?>
+		<?php  if ($quantity <= 0 ) { ?>
+		</br>
+	 	 <strong><?php echo language::translate('title_unfortunately_this_item', 'Unfortunately this item'); ?> </strong>
+		<?php } ?>      
+
+        <?php if (!empty(reference::product($product_id)->backorder) || ((!empty(reference::product($product_id)->prebackorder) && (!empty(reference::product($product_id)->preorderable)) && (!empty(reference::product($product_id)->date_valid_to <= date('Y-m-d H:i:s'))))) ) { ?>
+         </br><strong><?php echo language::translate('title_closing_date', 'Closing Date:'); ?> <?php echo nl2br($date_valid_from_closing); ?></strong>
+
+        <?php } else if ((!empty(reference::product($product_id)->prebackorder) && (!empty(reference::product($product_id)->preorderable)) && (!empty(reference::product($product_id)->date_valid_to >= date('Y-m-d H:i:s'))))) { ?>
+         <strong><?php echo language::translate('title_closing_date', 'Closing Date:'); ?> <?php echo nl2br($date_valid_to_closing); ?></strong>
+
+        <?php } else if (!empty(reference::product($product_id)->backorder) || (!empty(reference::product($product_id)->preorderable)  && (!empty(reference::product($product_id)->date_valid_from >= date('Y-m-d H:i:s'))))) { ?>   
+         <strong><?php echo language::translate('title_closing_date', 'Closing Date:'); ?> <?php echo nl2br($date_valid_from_closing); ?></strong>
+
+        <?php } else if (!empty(reference::product($product_id)->backorder) || (!empty(reference::product($product_id)->preorderable)  && (!empty(reference::product($product_id)->date_valid_from <= date('Y-m-d H:i:s'))))) { ?>   
+         <strong><?php echo language::translate('title_closing_date', 'Closing Date:'); ?> <?php echo nl2br($date_valid_from_closing); ?></strong>
+        </br>
+        <strong><?php echo language::translate('title_unfortunately_preorder', 'Unfortunately Pre-order'); ?> </strong> 
+
+        <?php } else if (reference::product($product_id)->date_valid_to <= date('Y-m-d H:i:s') && (!empty(reference::product($product_id)->prebackorder))) { ?>
+         <strong><?php echo language::translate('title_unfortunately_preorder', 'Unfortunately Pre-order'); ?> </strong> 
+       <?php } ?>      
+       <?php } ?>
+
+    <?php if (empty($date_valid_from_closing)) { ?>  
+		<?php  if ($quantity <= 0 ) { ?>
+		</br>
+	 	 <strong><?php echo language::translate('title_unfortunately_this_item', 'Unfortunately this item'); ?> </strong>
+		<?php } ?>      
+
+        <?php if (!empty(reference::product($product_id)->backorder) || ((!empty(reference::product($product_id)->prebackorder) && (!empty(reference::product($product_id)->preorderable)) && (!empty(reference::product($product_id)->date_valid_to <= date('Y-m-d H:i:s'))))) ){ ?>
+         </br><strong><?php echo language::translate('title_closing_date', 'Closing Date:'); ?> <?php echo language::strftime(language::$selected['format_date'], strtotime('-1 day', strtotime(reference::product($product_id)->date_valid_from))); ?></strong>
+
+        <?php } else if ((!empty(reference::product($product_id)->prebackorder) && (!empty(reference::product($product_id)->preorderable)) && (!empty(reference::product($product_id)->date_valid_to >= date('Y-m-d H:i:s'))))) { ?>
+         <strong><?php echo language::translate('title_closing_date', 'Closing Date:'); ?> <?php echo language::strftime(language::$selected['format_date'], strtotime('-1 day', strtotime(reference::product($product_id)->date_valid_to))); ?></strong>
+
+        <?php } else if (!empty(reference::product($product_id)->backorder) || (!empty(reference::product($product_id)->preorderable)  && (!empty(reference::product($product_id)->date_valid_from >= date('Y-m-d H:i:s')))) ){ ?>   
+         <strong><?php echo language::translate('title_closing_date', 'Closing Date:'); ?> <?php echo language::strftime(language::$selected['format_date'], strtotime('-1 day', strtotime(reference::product($product_id)->date_valid_from))); ?></strong>
+
+        <?php } else if (!empty(reference::product($product_id)->backorder) || (!empty(reference::product($product_id)->preorderable)  && (!empty(reference::product($product_id)->date_valid_from <= date('Y-m-d H:i:s')))) ){ ?>   
+         <strong><?php echo language::translate('title_closing_date', 'Closing Date:'); ?> <?php echo language::strftime(language::$selected['format_date'], strtotime('-1 day', strtotime(reference::product($product_id)->date_valid_from))); ?></strong>
+        </br>
+        <strong><?php echo language::translate('title_unfortunately_preorder', 'Unfortunately Pre-order'); ?> </strong> 
+
+        <?php } else if (reference::product($product_id)->date_valid_to <= date('Y-m-d H:i:s') && (!empty(reference::product($product_id)->prebackorder))) { ?>
+         <strong><?php echo language::translate('title_unfortunately_preorder', 'Unfortunately Pre-order'); ?> </strong>  
+        <?php } ?>
+        <?php } ?>
+		</div> 
+
+     <?php if (empty(reference::product($product_id)->box_conditions)) { ?>	
+
+        <?php  if ((!empty(reference::product($product_id)->addtocart) || (!empty(reference::product($product_id)->preorderable)))) { ?>
+        <span style=" font-size: 18px;"><strong><?php echo language::translate('title_conditions', 'Condition:'); ?></strong></span></br>
+
+        <?php } else if (!empty(reference::product($product_id)->preowned)) { ?>
+        <span style=" font-size: 18px;"><strong><?php echo language::translate('title_box_damaged', 'Box Damaged !!'); ?></strong></span></br>
+        <?php } ?>
+        <?php } ?>
+        <span style=" font-size: 18px;"><strong><?php echo ucwords(nl2br($box_conditions)); ?></strong></span>
+
+      	]]></add>
+		</operation>
+		
+			
+		
+		<operation error="skip">
+			<search position="before"><![CDATA[
+      <div class="social-bookmarks text-center">
+      	]]></search>
+			<add><![CDATA[
+      <span style=" font-size: 14px;"><?php echo language::translate('title_your_entire_order', 'Your entire order'); ?>
+      </div>
+      	]]></add>
+		</operation>
+		
+		<operation error="skip">
+			<search position="replace" offset="6"><![CDATA[
+      <div class="tax" style="margin: 0 0 1em 0;">
+      	]]></search>
+			<add><![CDATA[
+      
+      	]]></add>
+		</operation>			
+
+	
+		
+    <file name="pages/product.inc.php">
+    <operation error="log">
+      <search position="after"><![CDATA[
+            $product = reference::product($_GET['product_id']);
+      ]]></search>
+      <add><![CDATA[
+      
+      
+            if (!empty(user::$data['status']) || (customer::$data['id'] == 4640) || (customer::$data['id'] == 4653)) {
+               $product_env = new ent_product($product->id);
+               
+            }
+      ]]></add>
+    </operation>
+    
+    <operation error="log">
+    <search position="after"><![CDATA[
+            'catalog_only_mode' => settings::get('catalog_only_mode'),
+      ]]></search>
+    <add><![CDATA[
+            'customer_group_prices' => isset($product_env)?$product_env->data['customer_group_prices']:null,
+      ]]></add>
+    </operation>
+  </file>
+    
+    
+    <operation error="log">
+      <search position="after" offset="7"><![CDATA[
+        <div class="social-bookmarks text-center">
+      ]]></search>
+      <add><![CDATA[
+      <?php error_reporting(0); ?>
+        <?PHP if(isset($customer_group_prices)) { ?>
+        
+        <span style="color:red; margin-bottom: 10px; display:block;"> Click <i class="fa fa-eye" id="customer_group_price_show_hide" style="color:blue;" aria-hidden="true"></i> to see customer group prices</span>
+        <div style="overflow-x: scroll; display:none;" id="customer-group-prices">
+        <table class="table table-striped data-table">
+          <tbody>
+          
+          <?php if (!empty($customer_group_prices)) foreach (array_keys($customer_group_prices) as $key) { ?>
+            <tr>
+
+              <td><?php
+              $customer_groups_query = database::query(
+              "select * from ". DB_TABLE_CUSTOMER_GROUPS ."
+               order by name asc;"
+              );
+
+              while($customer_group = database::fetch($customer_groups_query)) {
+                 if($customer_group['id'] === $customer_group_prices[$key]['customer_group_id'])
+                 echo $customer_group['name'].' ';
+              }
+               ?></td>
+
+              <?php foreach (array_keys(currency::$currencies) as $currency_code) { if (empty($currency_code == settings::get('store_currency_code'))) continue; ?>
+              <td><?php echo $currency_code.":".$customer_group_prices[$key][$currency_code];?></td>
+              <td><<?php echo currency::format (reference::product($product_id)->purchase_price); ?></td>
+
+              <?php } ?>
+            </tr>
+            <?php } ?>
+          </tbody>
+        </table>
+        <div>
+        </div>
+        </div>
+        <script>
+        $('body').on('click', '#customer_group_price_show_hide', function(){
+
+              if($('#customer-group-prices').css('display') == "none"){
+              console.log('tete');
+              $('#customer-group-prices').css('display','block');
+              }
+              else{
+              $('#customer-group-prices').css('display','none');
+              }
+        });
+        </script>
+        <?PHP }?>
+
+      ]]></add>
+    </operation>    
+ 
+     </file>   
+</modification>
+
+<!--
+
+        <?PHP if(isset($customer_group_prices)) {
+        ?>
+        <span style="color:red; margin-bottom: 10px; display:block;"> Click <i class="fa fa-eye" id="customer_group_price_show_hide" style="color:blue;" aria-hidden="true"></i> to see customer price</span>
+        <div style="overflow-x: scroll; display:none;" id="customer-group-prices">
+        <table class="table table-striped data-table">
+          <tbody>
+          <?php if (!empty($customer_group_prices)) foreach (array_keys($customer_group_prices) as $key) { ?>
+            <tr>
+
+              <td><?php
+              $customer_groups_query = database::query(
+              "select * from ". DB_TABLE_CUSTOMER_GROUPS ."
+               order by name asc;"
+              );
+
+              while($customer_group = database::fetch($customer_groups_query)) {
+                 if($customer_group['id'] === $customer_group_prices[$key]['customer_group_id'])
+                 echo $customer_group['name'].' ';
+              }
+               ?></td>
+              <td>
+                <?php echo $customer_group_prices[$key]['start_date']; ?>
+              </td>
+              <td>
+                <?php echo $customer_group_prices[$key]['end_date']; ?>
+              </td>
+              <?php foreach (array_keys(currency::$currencies) as $currency_code) { if (empty($currency_code == settings::get('store_currency_code'))) continue; ?>
+              <td><?php echo $currency_code.":".$customer_group_prices[$key][$currency_code];?></td>
+              <?php foreach (array_keys(currency::$currencies) as $currency_code) { if (!empty($currency_code == settings::get('store_currency_code'))) continue; ?>
+              <td><?php echo $currency_code.":".$customer_group_prices[$key][$currency_code];?></td>
+              <?php } ?>
+              <?php } ?>
+            </tr>
+            <?php } ?>
+          </tbody>
+        </table>
+        <div>
+        
+        <script>
+        $('body').on('click', '#customer_group_price_show_hide', function(){
+
+              if($('#customer-group-prices').css('display') == "none"){
+              console.log('tete');
+              $('#customer-group-prices').css('display','block');
+              }
+              else{
+              $('#customer-group-prices').css('display','none');
+              }
+        });
+        </script>
+        <?PHP }?>
+
+
+<?php echo nl2br($date_valid_from_closing); ?>
+
+		<operation error="log">
+			<search position="before"><![CDATA[
+      <?php if (!$catalog_only_mode) { ?>
+      	]]></search>
+			<add><![CDATA[
+	  </br>	
+      <div style="margin:0 0 1em 0; color:red;">
+      <?php if ((!empty(reference::product($product_id)->prebackorder) && (!empty(reference::product($product_id)->date_valid_to <= date('Y-m-d H:i:s'))))) { ?>
+      <strong><?php echo language::translate('title_closing_date', 'Closing Date:'); ?> <?php echo nl2br($date_valid_from_closing); ?></strong>
+      </br>
+      <strong><?php echo language::translate('title_prebackorder_closing_date', 'Closing date for'); ?> </strong>
+      
+      <?php } else if ((!empty(reference::product($product_id)->backorder) && (!empty(reference::product($product_id)->date_valid_to <= date('Y-m-d H:i:s'))))) { ?>
+      <strong><?php echo language::translate('title_closing_date', 'Closing Date:'); ?> <?php echo nl2br($date_valid_from_closing); ?></strong> 
+      
+      <?php } else if ((!empty(reference::product($product_id)->preorderable) && (!empty(reference::product($product_id)->date_valid_from <= date('Y-m-d H:i:s'))))) { ?>
+      <strong><?php echo language::translate('title_closing_date', 'Closing Date:'); ?> <?php echo nl2br($date_valid_from_closing); ?></strong>
+      </br>
+      <strong><?php echo language::translate('title_unfortunately_preorder', 'Unfortunately Pre-order'); ?> </strong>  
+      
+      <?php } else if ((!empty(reference::product($product_id)->prebackorder) && (!empty(reference::product($product_id)->date_valid_to <= date('Y-m-d H:i:s'))))) { ?>
+      <strong><?php echo language::translate('title_closing_date', 'Closing Date:'); ?> <?php echo nl2br($date_valid_to_closing); ?></strong>
+      <?php } ?>
+      	]]></add>
+		</operation>
+
+
+
+ <?php if ((!empty(reference::product($product_id)->prebackorder) && (!empty(reference::product($product_id)->date_valid_to <= date('Y-m-d H:i:s'))))) { ?>
+ 
+ -->

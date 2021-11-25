@@ -1,0 +1,2449 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+    <id>Default Price Prices And Stock Quantity Price </id>
+    <version>2.1.1</version>
+    <vqmver required="true">2.4.0</vqmver>
+    <author>Olaf-international.net</author>
+
+    <file name="admin/catalog.app/edit_product.inc.php">
+        <operation error="log">
+            <search position="after"><![CDATA[
+      if (empty($_POST['images'])) $_POST['images'] = array();
+      ]]></search>
+            <add><![CDATA[
+      if (empty($_POST['stock_quantity_guest_prices'])) $_POST['stock_quantity_guest_prices'] = array();      
+      if (empty($_POST['stock_quantity_prices'])) $_POST['stock_quantity_prices'] = array();
+      if (empty($_POST['default_price_prices'])) $_POST['default_price_prices'] = array();
+      if (empty($_POST['guest_price_prices'])) $_POST['guest_price_prices'] = array();
+      if (empty($_POST['sign_in_date_price_prices'])) $_POST['sign_in_date_price_prices'] = array();
+      if (empty($_POST['fake_sold_out_date_price_prices'])) $_POST['fake_sold_out_date_price_prices'] = array();
+	  if (empty($_POST['wholesale_price_prices'])) $_POST['wholesale_price_prices'] = array();
+      ]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="after" index="1"><![CDATA[
+    'prices',
+      ]]></search>
+            <add><![CDATA[
+    'stock_quantity_guest_prices',       
+    'stock_quantity_prices',
+    'default_price_prices',
+    'guest_price_prices',
+    'sign_in_date_price_prices',
+	'wholesale_price_prices',
+	'fake_sold_out_date_price_prices',
+      ]]></add>
+        </operation>
+
+
+
+        <operation error="log">
+            <search position="before"><![CDATA[
+        <h2><?php echo language::translate('title_customer_group_prices', 'Customer Group Prices'); ?></h2>
+      ]]></search>
+            <add><![CDATA[
+	                     
+   <style>
+            #sign-in-date-price-prices td:not(:last-child){
+                width: 260px;
+            }
+        </style>
+        <h2><?php echo language::translate('title_sign_in_date_price_prices', 'Sign In Date'); ?></h2>
+
+        <table id="sign-in-date-price-prices" class="table table-striped data-table">
+            <thead>
+            <tr>
+                <td colspan="5">
+                <a class="add" href="#" title="<?php echo htmlspecialchars(language::translate('title_add', 'Add')); ?>"><?php echo functions::draw_fonticon('fa-plus-circle', 'style="color: #66cc66;"'); ?></a>
+                <a class="delete" style="margin-left: 20px;" href="#" title="<?php echo htmlspecialchars(language::translate('title_delete', 'Delete')); ?>"><?php echo functions::draw_fonticon('fa-trash-o', 'style="color: #ff6e6e;"'); ?></a>
+                <a class="hide_show" style="margin-left: 20px;" href="#" title="<?php echo htmlspecialchars(language::translate('title_toggle', 'Toggle')); ?>"><?php echo functions::draw_fonticon('fa-eye-slash', 'style="color: #6d6ff7;"'); ?></a>
+                </td>
+            </tr>            
+            </thead>
+            <thead>
+            <tr>
+            <th style="width: 10px;"></th>
+                <th style="width: 260px;"><?php echo language::translate('title_sign_in_date_price', 'Guest Price'); ?></th>
+                <th style="width: 260px;"><?php echo language::translate('title_start_date', 'Start Date'); ?></th>
+                <th style="width: 260px;"><?php echo language::translate('title_end_date', 'End Date'); ?></th>
+
+                <th></th>
+            </tr>            
+            </thead>
+            <tbody>
+            <?php if (!empty($_POST['sign_in_date_price_prices'])) foreach (array_keys($_POST['sign_in_date_price_prices']) as $key) { ?>
+                <tr>
+                <td style="width: 10px;"><a class="remove" href="#" title="<?php echo htmlspecialchars(language::translate('title_remove', 'Remove')); ?>"><?php echo functions::draw_fonticon('fa-times-circle fa-lg', 'style="color: #ff6e6e;"'); ?></a></td>
+
+                    <td><?php echo functions::form_draw_hidden_field('sign_in_date_price_prices['.$key.'][id]', true) . functions::form_draw_sign_in_date_prices_list('sign_in_date_price_prices['.$key.'][sign_in_date_price_id]', true); ?></td>
+                    <td><?php echo functions::form_draw_datetime_field('sign_in_date_price_prices['.$key.'][start_date]', true, '','sign_in_date_price'); ?></td>
+                    <td><?php echo functions::form_draw_datetime_field('sign_in_date_price_prices['.$key.'][end_date]', true, '','sign_in_date_price'); ?></td>
+                    <td>
+
+                </tr>
+            <?php } ?>
+            </tbody>
+            <tfoot>
+            </tfoot>
+        </table>
+<script>
+
+$('body').on('keyup change', 'input[name="reset_sign_in_date_price_prices[<?php echo settings::get('store_currency_code'); ?>]"]', function() { 
+    $('input[name^="sign_in_date_price_prices"][name$="[<?php echo settings::get('store_currency_code'); ?>]"]').each(function(){
+         $(this).val($('input[name="reset_sign_in_date_price_prices[<?php echo settings::get('store_currency_code'); ?>]"]').val());
+         $(this).trigger('keyup');
+    });
+});
+
+  $('body').on('keyup change', 'input[name^="sign_in_date_price_prices"][name$="[<?php echo settings::get('store_currency_code'); ?>]"]', function() {
+    var parent = $(this).closest('tr');
+    var percentage = ($('input[name="prices[<?php echo settings::get('store_currency_code'); ?>]"]').val() - $(this).val()) / $('input[name="prices[<?php echo settings::get('store_currency_code'); ?>]"]').val() * 100;
+    percentage = Number(percentage).toFixed(2);
+    $(parent).find('input[name$="[percentage]"]').val(percentage);
+console.log(percentage);
+    <?php foreach (currency::$currencies as $currency) { ?>
+    var value = 0;
+    value = $(parent).find('input[name^="sign_in_date_price_prices"][name$="[<?php echo settings::get('store_currency_code'); ?>]"]').val() * <?php echo $currency['value']; ?>;
+    value = Number(value).toFixed(<?php echo $currency['decimals']; ?>);
+    $(parent).find('input[name^="sign_in_date_price_prices"][name$="[<?php echo $currency['code']; ?>]"]').attr('placeholder', value);
+    if ($(parent).find('input[name^="sign_in_date_price_prices"][name$="[<?php echo $currency['code']; ?>]"]').val() == 0) {
+        $(parent).find('input[name^="sign_in_date_price_prices"][name$="[<?php echo $currency['code']; ?>]"]').val('');
+    }
+    <?php } ?>
+});
+$('input[name^="sign_in_date_price_prices"][name$="[<?php echo settings::get('store_currency_code'); ?>]"]').trigger('keyup');
+
+$('#sign-in-date-price-prices').on('click', '.remove', function(e) {
+    e.preventDefault();
+    $(this).closest('tr').remove();
+});
+$('#sign-in-date-price-prices').on('click', '.delete', function(e) {
+    e.preventDefault();
+    $('#sign-in-date-price-prices tbody tr').remove();
+});
+$('#sign-in-date-price-prices').on('click', '.hide_show', function(e) {
+    e.preventDefault();
+    $('#sign-in-date-price-prices tbody tr').toggle();
+});
+// $('#sign-in-date-price-prices tbody tr').toggle();
+
+var new_sign_in_date_price_price_i = 1;
+$('#sign-in-date-price-prices').on('click', '.add', function(e) {
+e.preventDefault();
+var output = '<tr>'
++ '<td class="text-right" style="width: 10px; padding: 15px;"><a class="remove" href="#" title="<?php echo htmlspecialchars(language::translate('title_remove', 'Remove')); ?>"><?php echo functions::draw_fonticon('fa-times-circle fa-lg', 'style="color: #ff6e6e;"'); ?></a></td>'
++ '<td><?php echo functions::general_escape_js(functions::form_draw_hidden_field('sign_in_date_price_prices[new_sign_in_date_price_price_i][id]', '') . functions::form_draw_sign_in_date_prices_list('sign_in_date_price_prices[new_sign_in_date_price_price_i][sign_in_date_price_id]', '')); ?></td>'
++ '<td><?php echo functions::general_escape_js(functions::form_draw_datetime_field('sign_in_date_price_prices[new_sign_in_date_price_price_i][start_date]', true, '', 'sign_in_date_price')); ?></td>'
++ '<td><?php echo functions::general_escape_js(functions::form_draw_datetime_field('sign_in_date_price_prices[new_sign_in_date_price_price_i][end_date]', true, '' , 'sign_in_date_price')); ?></td>'
++ '</tr>';
+while ($('input[name="sign_in_date_price_prices[new_'+new_sign_in_date_price_price_i+']"]').length) new_sign_in_date_price_price_i++;
+output = output.replace(/new_sign_in_date_price_price_i/g, 'new_' + new_sign_in_date_price_price_i);
+$('#sign-in-date-price-prices tbody').append(output);
+new_sign_in_date_price_price_i++;
+});
+
+</script>
+
+      ]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="before"><![CDATA[
+        <h2><?php echo language::translate('title_customer_group_prices', 'Customer Group Prices'); ?></h2>
+      ]]></search>
+            <add><![CDATA[
+                        
+      <h2><?php echo language::translate('title_stock_guest_prices', 'Stock Guest Prices'); ?></h2>
+        <table id="stock-quantity-guest-prices" class="table table-striped">
+            <thead>
+            <tr>
+               <td colspan="5">
+               <a class="add" href="#" title="<?php echo htmlspecialchars(language::translate('title_add', 'Add')); ?>"><?php echo functions::draw_fonticon('fa-plus-circle', 'style="color: #66cc66;"'); ?></a>
+               <a class="delete" style="margin-left: 20px;" href="#" title="<?php echo htmlspecialchars(language::translate('title_delete', 'Delete')); ?>"><?php echo functions::draw_fonticon('fa-trash-o', 'style="color: #ff6e6e;"'); ?></a>
+               <a class="hide_show" style="margin-left: 20px;" href="#" title="<?php echo htmlspecialchars(language::translate('title_toggle', 'Toggle')); ?>"><?php echo functions::draw_fonticon('fa-eye-slash', 'style="color: #6d6ff7;"'); ?></a>
+               </td>
+            </tr>
+            
+            </thead>
+            <thead>
+            <tr>
+            <th style="width: 10px;"></th>
+
+                <th style="width: 260px;"><?php echo language::translate('title_stock_guest_prices', 'Stock Guest Prices'); ?></th>
+                <th colspan="<?php echo count(currency::$currencies); ?>"><?php echo language::translate('title_price', 'Price'); ?></th>
+                <th></th>
+            </tr>            
+           
+            </thead>
+            <tbody>
+            <?php if (!empty($_POST['stock_quantity_guest_prices'])) foreach (array_keys($_POST['stock_quantity_guest_prices']) as $key) { ?>
+                <tr>
+                <td style="width: 10px; padding: 15px;"><a class="remove" href="#" title="<?php echo htmlspecialchars(language::translate('title_remove', 'Remove')); ?>"><?php echo functions::draw_fonticon('fa-times-circle fa-lg', 'style="color: #ff6e6e;"'); ?></a></td>
+                
+                    <td><?php echo functions::form_draw_hidden_field('stock_quantity_guest_prices['.$key.'][id]', true) . functions::form_draw_decimal_field('stock_quantity_guest_prices['.$key.'][stock_quantity]', true, 2); ?></td>
+                    <td style="width: 250px;"><?php echo functions::form_draw_currency_field(settings::get('store_currency_code'), 'stock_quantity_guest_prices['.$key.']['. settings::get('store_currency_code') .']', true); ?></td>
+                    <?php
+                    foreach (array_keys(currency::$currencies) as $currency_code) {
+                        if ($currency_code == settings::get('store_currency_code')) continue;
+                        ?>
+<!--
+                        <td style="width: 250px;"><?php echo functions::form_draw_currency_field($currency_code, 'stock_quantity_guest_prices['.$key.']['. $currency_code. ']', isset($_POST['stock_quantity_guest_prices'][$key][$currency_code]) ? number_format($_POST['stock_quantity_guest_prices'][$key][$currency_code], 4, '.', '') : '', 'data-size="small"'); ?></td>
+-->
+                        <?php
+                    }
+                    ?>
+                </tr>
+            <?php } ?>            
+            
+            </tbody>
+            <tfoot>
+            </tfoot>
+            
+        </table>
+<script>
+  $('body').on('keyup change', 'input[name^="stock_quantity_guest_prices"][name$="[<?php echo settings::get('store_currency_code'); ?>]"]', function() {
+    var parent = $(this).closest('tr');
+    var percentage = ($('input[name="prices[<?php echo settings::get('store_currency_code'); ?>]"]').val() - $(this).val()) / $('input[name="prices[<?php echo settings::get('store_currency_code'); ?>]"]').val() * 100;
+    percentage = Number(percentage).toFixed(2);
+    $(parent).find('input[name$="[percentage]"]').val(percentage);
+
+    <?php foreach (currency::$currencies as $currency) { ?>
+    var value = 0;
+    value = $(parent).find('input[name^="stock_quantity_guest_prices"][name$="[<?php echo settings::get('store_currency_code'); ?>]"]').val() * <?php echo $currency['value']; ?>;
+    value = Number(value).toFixed(<?php echo $currency['decimals']; ?>);
+    $(parent).find('input[name^="stock_quantity_guest_prices"][name$="[<?php echo $currency['code']; ?>]"]').attr('placeholder', value);
+    if ($(parent).find('input[name^="stock_quantity_guest_prices"][name$="[<?php echo $currency['code']; ?>]"]').val() == 0) {
+        $(parent).find('input[name^="stock_quantity_guest_prices"][name$="[<?php echo $currency['code']; ?>]"]').val('');
+    }
+    <?php } ?>
+});
+$('input[name^="stock_quantity_guest_prices"][name$="[<?php echo settings::get('store_currency_code'); ?>]"]').trigger('keyup');
+
+var new_stock_quantity_guest_price_i = 1;
+$('#stock-quantity-guest-prices').on('click', '.add', function(e) {
+    e.preventDefault();
+    var output = '<tr>'
+        + '  <td style="padding: 15px;"><a class="remove" href="#" title="<?php echo htmlspecialchars(language::translate('title_remove', 'Remove')); ?>"><?php echo functions::draw_fonticon('fa-times-circle fa-lg', 'style="color: #ff6e6e;"'); ?></a></td>'
+        + '  <td><?php echo str_replace(PHP_EOL, '', functions::form_draw_hidden_field('stock_quantity_guest_prices[new_stock_quantity_guest_price_i][id]', '') . functions::form_draw_decimal_field('stock_quantity_guest_prices[new_stock_quantity_guest_price_i][stock_quantity]', '', 2, 0, null, 'data-size="tiny"')); ?></td>'
+        + '  <td style="width: 250px;"><?php echo str_replace(PHP_EOL, '', functions::form_draw_currency_field(settings::get('store_currency_code'), 'stock_quantity_guest_prices[new_stock_quantity_guest_price_i]['. settings::get('store_currency_code') .']', '')); ?></td>'
+        <?php
+        foreach (array_keys(currency::$currencies) as $currency_code) {
+        if ($currency_code == settings::get('store_currency_code')) continue;
+        ?>
+//        + '  <td style="width: 250px;"><?php echo str_replace(PHP_EOL, '', functions::form_draw_currency_field($currency_code, 'stock_quantity_guest_prices[new_stock_quantity_guest_price_i]['. $currency_code .']', '', 'data-size="small"')); ?></td>'
+        <?php
+        }
+        ?>
+        + '</tr>';
+    while ($('input[name="stock_quantity_guest_prices[new_'+new_stock_quantity_guest_price_i+']"]').length) new_stock_quantity_guest_price_i++;
+    output = output.replace(/new_stock_quantity_guest_price_i/g, 'new_' + new_stock_quantity_guest_price_i);
+    $('#stock-quantity-guest-prices tbody').append(output);
+    new_stock_quantity_guest_price_i++;
+});
+
+var new_stock_quantity_guest_price_i = 2;
+$('#stock-quantity-guest-prices').on('click', '.add', function(e) {
+    e.preventDefault();
+    var output = '<tr>'
+        + ' <td style="padding: 15px;"><a class="remove" href="#" title="<?php echo htmlspecialchars(language::translate('title_remove', 'Remove')); ?>"><?php echo functions::draw_fonticon('fa-times-circle fa-lg', 'style="color: #ff6e6e;"'); ?></a></td>'
+    
+        + ' <td><?php echo str_replace(PHP_EOL, '', functions::form_draw_hidden_field('stock_quantity_guest_prices[new_stock_quantity_guest_price_i][id]', '') . functions::form_draw_decimal_field('stock_quantity_guest_prices[new_stock_quantity_guest_price_i][stock_quantity]', '', 2, 0, null, 'data-size="tiny"')); ?></td>'
+        + '  <td style="width: 250px;"><?php echo str_replace(PHP_EOL, '', functions::form_draw_currency_field(settings::get('store_currency_code'), 'stock_quantity_guest_prices[new_stock_quantity_guest_price_i]['. settings::get('store_currency_code') .']', '')); ?></td>'
+        <?php
+        foreach (array_keys(currency::$currencies) as $currency_code) {
+        if ($currency_code == settings::get('store_currency_code')) continue;
+        ?>
+//        + '  <td style="width: 250px;"><?php echo str_replace(PHP_EOL, '', functions::form_draw_currency_field($currency_code, 'stock_quantity_guest_prices[new_stock_quantity_guest_price_i]['. $currency_code .']', '', 'data-size="small"')); ?></td>'
+        <?php
+        }
+        ?>
+        + '</tr>';
+    while ($('input[name="stock_quantity_guest_prices[new_'+new_stock_quantity_guest_price_i+']"]').length) new_stock_quantity_guest_price_i++;
+    output = output.replace(/new_stock_quantity_guest_price_i/g, 'new_' + new_stock_quantity_guest_price_i);
+    $('#stock-quantity-guest-prices tbody').append(output);
+    new_stock_quantity_guest_price_i++;
+});
+
+var new_stock_quantity_guest_price_i = 3;
+$('#stock-quantity-guest-prices').on('click', '.add', function(e) {
+    e.preventDefault();
+    var output = '<tr>'
+        + '  <td style="padding: 15px;"><a class="remove" href="#" title="<?php echo htmlspecialchars(language::translate('title_remove', 'Remove')); ?>"><?php echo functions::draw_fonticon('fa-times-circle fa-lg', 'style="color: #ff6e6e;"'); ?></a></td>'
+    
+        + '  <td><?php echo str_replace(PHP_EOL, '', functions::form_draw_hidden_field('stock_quantity_guest_prices[new_stock_quantity_guest_price_i][id]', '') . functions::form_draw_decimal_field('stock_quantity_guest_prices[new_stock_quantity_guest_price_i][stock_quantity]', '', 2, 0, null, 'data-size="tiny"')); ?></td>'
+        + '  <td style="width: 250px;"><?php echo str_replace(PHP_EOL, '', functions::form_draw_currency_field(settings::get('store_currency_code'), 'stock_quantity_guest_prices[new_stock_quantity_guest_price_i]['. settings::get('store_currency_code') .']', '')); ?></td>'
+        <?php
+        foreach (array_keys(currency::$currencies) as $currency_code) {
+        if ($currency_code == settings::get('store_currency_code')) continue;
+        ?>
+//        + '  <td style="width: 250px;"><?php echo str_replace(PHP_EOL, '', functions::form_draw_currency_field($currency_code, 'stock_quantity_guest_prices[new_stock_quantity_guest_price_i]['. $currency_code .']', '', 'data-size="small"')); ?></td>'
+        <?php
+        }
+        ?>
+        + '</tr>';
+    while ($('input[name="stock_quantity_guest_prices[new_'+new_stock_quantity_guest_price_i+']"]').length) new_stock_quantity_guest_price_i++;
+    output = output.replace(/new_stock_quantity_guest_price_i/g, 'new_' + new_stock_quantity_guest_price_i);
+    $('#stock-quantity-guest-prices tbody').append(output);
+    new_stock_quantity_guest_price_i++;
+});
+
+var new_stock_quantity_guest_price_i = 4;
+$('#stock-quantity-guest-prices').on('click', '.add', function(e) {
+    e.preventDefault();
+    var output = '<tr>'
+        + '  <td style="padding: 15px;"><a class="remove" href="#" title="<?php echo htmlspecialchars(language::translate('title_remove', 'Remove')); ?>"><?php echo functions::draw_fonticon('fa-times-circle fa-lg', 'style="color: #ff6e6e;"'); ?></a></td>'
+    
+        + '  <td><?php echo str_replace(PHP_EOL, '', functions::form_draw_hidden_field('stock_quantity_guest_prices[new_stock_quantity_guest_price_i][id]', '') . functions::form_draw_decimal_field('stock_quantity_guest_prices[new_stock_quantity_guest_price_i][stock_quantity]', '', 2, 0, null, 'data-size="tiny"')); ?></td>'
+        + '  <td style="width: 250px;"><?php echo str_replace(PHP_EOL, '', functions::form_draw_currency_field(settings::get('store_currency_code'), 'stock_quantity_guest_prices[new_stock_quantity_guest_price_i]['. settings::get('store_currency_code') .']', '')); ?></td>'
+        <?php
+        foreach (array_keys(currency::$currencies) as $currency_code) {
+        if ($currency_code == settings::get('store_currency_code')) continue;
+        ?>
+//        + '  <td style="width: 250px;"><?php echo str_replace(PHP_EOL, '', functions::form_draw_currency_field($currency_code, 'stock_quantity_guest_prices[new_stock_quantity_guest_price_i]['. $currency_code .']', '', 'data-size="small"')); ?></td>'
+        <?php
+        }
+        ?>
+        + '</tr>';
+    while ($('input[name="stock_quantity_guest_prices[new_'+new_stock_quantity_guest_price_i+']"]').length) new_stock_quantity_guest_price_i++;
+    output = output.replace(/new_stock_quantity_guest_price_i/g, 'new_' + new_stock_quantity_guest_price_i);
+    $('#stock-quantity-guest-prices tbody').append(output);
+    new_stock_quantity_guest_price_i++;
+});
+
+$('#stock-quantity-guest-prices').on('click', '.remove', function(e) {
+    e.preventDefault();
+    $(this).closest('tr').remove();
+});
+
+$('#stock-quantity-guest-prices').on('click', '.delete', function(e) {
+    e.preventDefault();
+    $('#stock-quantity-guest-prices tbody tr').remove();
+});
+
+$('#stock-quantity-guest-prices').on('click', '.hide_show', function(e) {
+    e.preventDefault();
+    $('#stock-quantity-guest-prices tbody tr').toggle();
+});
+// $('#stock-quantity-guest-prices tbody tr').toggle();
+</script>
+
+      ]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="before"><![CDATA[
+        <h2><?php echo language::translate('title_customer_group_prices', 'Customer Group Prices'); ?></h2>
+      ]]></search>
+            <add><![CDATA[
+      <h2><?php echo language::translate('title_stock_prices', 'Stock Prices'); ?></h2>
+        <table id="stock-quantity-prices" class="table table-striped">
+            <thead>
+            <tr>
+               <td colspan="5"><a class="add" href="#" title="<?php echo htmlspecialchars(language::translate('title_add', 'Add')); ?>"><?php echo functions::draw_fonticon('fa-plus-circle', 'style="color: #66cc66;"'); ?></a>
+               <a class="delete" style="margin-left: 20px;" href="#" title="<?php echo htmlspecialchars(language::translate('title_delete', 'Delete')); ?>"><?php echo functions::draw_fonticon('fa-trash-o', 'style="color: #ff6e6e;"'); ?></a>
+               <a class="hide_show" style="margin-left: 20px;" href="#" title="<?php echo htmlspecialchars(language::translate('title_toggle', 'Toggle')); ?>"><?php echo functions::draw_fonticon('fa-eye-slash', 'style="color: #6d6ff7;"'); ?></a>
+               </td>
+            </tr>            
+
+            </thead>
+            <thead>
+            <tr>
+            <th style="width: 10px;"></th>
+                <th style="width: 260px;"><?php echo language::translate('title_stock_quantity', 'Stock Quantity'); ?></th>
+                <th colspan="<?php echo count(currency::$currencies); ?>"><?php echo language::translate('title_price', 'Price'); ?></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php if (!empty($_POST['stock_quantity_prices'])) foreach (array_keys($_POST['stock_quantity_prices']) as $key) { ?>
+                <tr>
+                <td style="width: 10px; padding: 15px;"><a class="remove" href="#" title="<?php echo htmlspecialchars(language::translate('title_remove', 'Remove')); ?>"><?php echo functions::draw_fonticon('fa-times-circle fa-lg', 'style="color: #ff6e6e;"'); ?></a></td>
+                    <td><?php echo functions::form_draw_hidden_field('stock_quantity_prices['.$key.'][id]', true) . functions::form_draw_decimal_field('stock_quantity_prices['.$key.'][stock_quantity]', true, 2); ?></td>
+                    <td style="width: 250px;"><?php echo functions::form_draw_currency_field(settings::get('store_currency_code'), 'stock_quantity_prices['.$key.']['. settings::get('store_currency_code') .']', true); ?></td>
+                    <?php
+                    foreach (array_keys(currency::$currencies) as $currency_code) {
+                        if ($currency_code == settings::get('store_currency_code')) continue;
+                        ?>
+<!--
+                        <td style="width: 250px;"><?php echo functions::form_draw_currency_field($currency_code, 'stock_quantity_prices['.$key.']['. $currency_code. ']', isset($_POST['stock_quantity_prices'][$key][$currency_code]) ? number_format($_POST['stock_quantity_prices'][$key][$currency_code], 4, '.', '') : '', 'data-size="small"'); ?></td>
+-->
+                        <?php
+                    }
+                    ?>
+                </tr>
+            <?php } ?>
+            </tbody>
+            
+            <tfoot>
+            </tfoot>
+        </table>
+<script>
+  $('body').on('keyup change', 'input[name^="stock_quantity_prices"][name$="[<?php echo settings::get('store_currency_code'); ?>]"]', function() {
+    var parent = $(this).closest('tr');
+    var percentage = ($('input[name="prices[<?php echo settings::get('store_currency_code'); ?>]"]').val() - $(this).val()) / $('input[name="prices[<?php echo settings::get('store_currency_code'); ?>]"]').val() * 100;
+    percentage = Number(percentage).toFixed(2);
+    $(parent).find('input[name$="[percentage]"]').val(percentage);
+
+    <?php foreach (currency::$currencies as $currency) { ?>
+    var value = 0;
+    value = $(parent).find('input[name^="stock_quantity_prices"][name$="[<?php echo settings::get('store_currency_code'); ?>]"]').val() * <?php echo $currency['value']; ?>;
+    value = Number(value).toFixed(<?php echo $currency['decimals']; ?>);
+    $(parent).find('input[name^="stock_quantity_prices"][name$="[<?php echo $currency['code']; ?>]"]').attr('placeholder', value);
+    if ($(parent).find('input[name^="stock_quantity_prices"][name$="[<?php echo $currency['code']; ?>]"]').val() == 0) {
+        $(parent).find('input[name^="stock_quantity_prices"][name$="[<?php echo $currency['code']; ?>]"]').val('');
+    }
+    <?php } ?>
+});
+$('input[name^="stock_quantity_prices"][name$="[<?php echo settings::get('store_currency_code'); ?>]"]').trigger('keyup');
+
+var new_stock_quantity_price_i = 1;
+$('#stock-quantity-prices').on('click', '.add', function(e) {
+    e.preventDefault();
+    var output = '<tr>'
+        + '  <td style="padding: 15px;"><a class="remove" href="#" title="<?php echo htmlspecialchars(language::translate('title_remove', 'Remove')); ?>"><?php echo functions::draw_fonticon('fa-times-circle fa-lg', 'style="color: #ff6e6e;"'); ?></a></td>'
+        + '  <td><?php echo str_replace(PHP_EOL, '', functions::form_draw_hidden_field('stock_quantity_prices[new_stock_quantity_price_i][id]', '') . functions::form_draw_decimal_field('stock_quantity_prices[new_stock_quantity_price_i][stock_quantity]', '', 2, 0, null, 'data-size="tiny"')); ?></td>'
+        + '  <td style="width: 250px;"><?php echo str_replace(PHP_EOL, '', functions::form_draw_currency_field(settings::get('store_currency_code'), 'stock_quantity_prices[new_stock_quantity_price_i]['. settings::get('store_currency_code') .']', '')); ?></td>'
+        <?php
+        foreach (array_keys(currency::$currencies) as $currency_code) {
+        if ($currency_code == settings::get('store_currency_code')) continue;
+        ?>
+//        + '  <td style="width: 250px;"><?php echo str_replace(PHP_EOL, '', functions::form_draw_currency_field($currency_code, 'stock_quantity_prices[new_stock_quantity_price_i]['. $currency_code .']', '', 'data-size="small"')); ?></td>'
+        <?php
+        }
+        ?>
+        + '</tr>';
+    while ($('input[name="stock_quantity_prices[new_'+new_stock_quantity_price_i+']"]').length) new_stock_quantity_price_i++;
+    output = output.replace(/new_stock_quantity_price_i/g, 'new_' + new_stock_quantity_price_i);
+    $('#stock-quantity-prices tbody').append(output);
+    new_stock_quantity_price_i++;
+});
+
+var new_stock_quantity_price_i = 2;
+$('#stock-quantity-prices').on('click', '.add', function(e) {
+    e.preventDefault();
+    var output = '<tr>'
+        + '  <td style="padding: 15px;"><a class="remove" href="#" title="<?php echo htmlspecialchars(language::translate('title_remove', 'Remove')); ?>"><?php echo functions::draw_fonticon('fa-times-circle fa-lg', 'style="color: #ff6e6e;"'); ?></a></td>'
+        + '  <td><?php echo str_replace(PHP_EOL, '', functions::form_draw_hidden_field('stock_quantity_prices[new_stock_quantity_price_i][id]', '') . functions::form_draw_decimal_field('stock_quantity_prices[new_stock_quantity_price_i][stock_quantity]', '', 2, 0, null, 'data-size="tiny"')); ?></td>'
+        + '  <td style="width: 250px;"><?php echo str_replace(PHP_EOL, '', functions::form_draw_currency_field(settings::get('store_currency_code'), 'stock_quantity_prices[new_stock_quantity_price_i]['. settings::get('store_currency_code') .']', '')); ?></td>'
+        <?php
+        foreach (array_keys(currency::$currencies) as $currency_code) {
+        if ($currency_code == settings::get('store_currency_code')) continue;
+        ?>
+//        + '  <td style="width: 250px;"><?php echo str_replace(PHP_EOL, '', functions::form_draw_currency_field($currency_code, 'stock_quantity_prices[new_stock_quantity_price_i]['. $currency_code .']', '', 'data-size="small"')); ?></td>'
+        <?php
+        }
+        ?>
+        + '</tr>';
+    while ($('input[name="stock_quantity_prices[new_'+new_stock_quantity_price_i+']"]').length) new_stock_quantity_price_i++;
+    output = output.replace(/new_stock_quantity_price_i/g, 'new_' + new_stock_quantity_price_i);
+    $('#stock-quantity-prices tbody').append(output);
+    new_stock_quantity_price_i++;
+});
+
+var new_stock_quantity_price_i = 3;
+$('#stock-quantity-prices').on('click', '.add', function(e) {
+    e.preventDefault();
+    var output = '<tr>'
+        + '  <td style="padding: 15px;"><a class="remove" href="#" title="<?php echo htmlspecialchars(language::translate('title_remove', 'Remove')); ?>"><?php echo functions::draw_fonticon('fa-times-circle fa-lg', 'style="color: #ff6e6e;"'); ?></a></td>'
+        + '  <td><?php echo str_replace(PHP_EOL, '', functions::form_draw_hidden_field('stock_quantity_prices[new_stock_quantity_price_i][id]', '') . functions::form_draw_decimal_field('stock_quantity_prices[new_stock_quantity_price_i][stock_quantity]', '', 2, 0, null, 'data-size="tiny"')); ?></td>'
+        + '  <td style="width: 250px;"><?php echo str_replace(PHP_EOL, '', functions::form_draw_currency_field(settings::get('store_currency_code'), 'stock_quantity_prices[new_stock_quantity_price_i]['. settings::get('store_currency_code') .']', '')); ?></td>'
+        <?php
+        foreach (array_keys(currency::$currencies) as $currency_code) {
+        if ($currency_code == settings::get('store_currency_code')) continue;
+        ?>
+//        + '  <td style="width: 250px;"><?php echo str_replace(PHP_EOL, '', functions::form_draw_currency_field($currency_code, 'stock_quantity_prices[new_stock_quantity_price_i]['. $currency_code .']', '', 'data-size="small"')); ?></td>'
+        <?php
+        }
+        ?>
+        + '</tr>';
+    while ($('input[name="stock_quantity_prices[new_'+new_stock_quantity_price_i+']"]').length) new_stock_quantity_price_i++;
+    output = output.replace(/new_stock_quantity_price_i/g, 'new_' + new_stock_quantity_price_i);
+    $('#stock-quantity-prices tbody').append(output);
+    new_stock_quantity_price_i++;
+});
+
+var new_stock_quantity_price_i = 4;
+$('#stock-quantity-prices').on('click', '.add', function(e) {
+    e.preventDefault();
+    var output = '<tr>'
+        + '  <td style="padding: 15px;"><a class="remove" href="#" title="<?php echo htmlspecialchars(language::translate('title_remove', 'Remove')); ?>"><?php echo functions::draw_fonticon('fa-times-circle fa-lg', 'style="color: #ff6e6e;"'); ?></a></td>'
+        + '  <td><?php echo str_replace(PHP_EOL, '', functions::form_draw_hidden_field('stock_quantity_prices[new_stock_quantity_price_i][id]', '') . functions::form_draw_decimal_field('stock_quantity_prices[new_stock_quantity_price_i][stock_quantity]', '', 2, 0, null, 'data-size="tiny"')); ?></td>'
+        + '  <td style="width: 250px;"><?php echo str_replace(PHP_EOL, '', functions::form_draw_currency_field(settings::get('store_currency_code'), 'stock_quantity_prices[new_stock_quantity_price_i]['. settings::get('store_currency_code') .']', '')); ?></td>'
+        <?php
+        foreach (array_keys(currency::$currencies) as $currency_code) {
+        if ($currency_code == settings::get('store_currency_code')) continue;
+        ?>
+//        + '  <td style="width: 250px;"><?php echo str_replace(PHP_EOL, '', functions::form_draw_currency_field($currency_code, 'stock_quantity_prices[new_stock_quantity_price_i]['. $currency_code .']', '', 'data-size="small"')); ?></td>'
+        <?php
+        }
+        ?>
+        + '</tr>';
+    while ($('input[name="stock_quantity_prices[new_'+new_stock_quantity_price_i+']"]').length) new_stock_quantity_price_i++;
+    output = output.replace(/new_stock_quantity_price_i/g, 'new_' + new_stock_quantity_price_i);
+    $('#stock-quantity-prices tbody').append(output);
+    new_stock_quantity_price_i++;
+});
+
+$('#stock-quantity-prices').on('click', '.remove', function(e) {
+    e.preventDefault();
+    $(this).closest('tr').remove();
+});
+
+$('#stock-quantity-prices').on('click', '.delete', function(e) {
+    e.preventDefault();
+    $('#stock-quantity-prices tbody tr').remove();
+});
+
+$('#stock-quantity-prices').on('click', '.hide_show', function(e) {
+    e.preventDefault();
+    $('#stock-quantity-prices tbody tr').toggle();
+});
+// $('#stock-quantity-prices tbody tr').toggle();
+</script>
+
+      ]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="before"><![CDATA[
+        <h2><?php echo language::translate('title_customer_group_prices', 'Customer Group Prices'); ?></h2>
+      ]]></search>
+            <add><![CDATA[
+      <style>
+            #default-price-prices td:not(:last-child){
+                width: 260px;
+            }
+        </style>
+        
+      <style>
+
+        <h2><?php echo language::translate('title_default_price_prices', 'Default Price Prices'); ?></h2>
+
+        <table id="default-price-prices" class="table table-striped data-table">
+            <thead>
+            <tr>
+                <td colspan="5">
+                <a class="add" href="#" title="<?php echo htmlspecialchars(language::translate('title_add', 'Add')); ?>"><?php echo functions::draw_fonticon('fa-plus-circle', 'style="color: #66cc66;"'); ?></a>
+                <a class="delete" style="margin-left: 20px;" href="#" title="<?php echo htmlspecialchars(language::translate('title_delete', 'Delete')); ?>"><?php echo functions::draw_fonticon('fa-trash-o', 'style="color: #ff6e6e;"'); ?></a>
+                <a class="hide_show" style="margin-left: 20px;" href="#" title="<?php echo htmlspecialchars(language::translate('title_toggle', 'Toggle')); ?>"><?php echo functions::draw_fonticon('fa-eye-slash', 'style="color: #6d6ff7;"'); ?></a>
+                <a class="delete_all" style="margin-left: 80px;" href="#" title="<?php echo htmlspecialchars(language::translate('title_delete', 'Delete')); ?>"><?php echo functions::draw_fonticon('fa-times-circle fa-lg', 'style="color: #ff6e6e;"'); ?></a>
+                </td>
+            </tr>                       
+            </thead>
+            <thead>
+            <tr>
+            <th style="width: 10px;"></th>
+                <th style="width: 260px;"><?php echo language::translate('title_default_price', 'Default Price'); ?></th>
+                <th style="width: 260px;"><?php echo language::translate('title_start_date', 'Start Date'); ?></th>
+                <th style="width: 260px;"><?php echo language::translate('title_end_date', 'End Date'); ?></th>
+                <th style="width: 260px;"><?php echo settings::get('store_currency_code'); ?></th>
+               <!-- <?php foreach (array_keys(currency::$currencies) as $currency_code) {
+                    if ($currency_code == settings::get('store_currency_code')) continue;
+                    ?>
+                    <th style="width: 260px;"><?php echo $currency_code; ?></th>
+                <?php } ?> -->
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php if (!empty($_POST['default_price_prices'])) foreach (array_keys($_POST['default_price_prices']) as $key) { ?>
+                <tr>
+                <td style="width: 10px; padding: 15px;"><a class="remove" href="#" title="<?php echo htmlspecialchars(language::translate('title_remove', 'Remove')); ?>"><?php echo functions::draw_fonticon('fa-times-circle fa-lg', 'style="color: #ff6e6e;"'); ?></a></td>
+                    <td><?php echo functions::form_draw_hidden_field('default_price_prices['.$key.'][id]', true) . functions::form_draw_default_prices_list('default_price_prices['.$key.'][default_price_id]', true); ?></td>
+                    <td><?php echo functions::form_draw_datetime_field('default_price_prices['.$key.'][start_date]', true, '','default_price'); ?></td>
+                    <td><?php echo functions::form_draw_datetime_field('default_price_prices['.$key.'][end_date]', true, '','default_price'); ?></td>
+                    <td><?php echo functions::form_draw_currency_field(settings::get('store_currency_code'), 'default_price_prices['.$key.']['. settings::get('store_currency_code') .']', true); ?></td><?php foreach (array_keys(currency::$currencies) as $currency_code) { if ($currency_code == settings::get('store_currency_code')) continue;?>
+                    <td style="display: none;"><?php echo functions::form_draw_currency_field($currency_code, 'default_price_prices['.$key.']['. $currency_code. ']', isset($_POST['default_price_prices'][$key][$currency_code]) ? number_format($_POST['default_price_prices'][$key][$currency_code], 4, '.', '') : '', 'data-size="small"'); ?></td>
+                    <?php } ?>
+                </tr>
+            <?php } ?>
+            </tbody>
+            <tfoot>
+            
+            </tfoot>
+        </table>
+<script>
+$('body').on('keyup change', 'input[name="reset_default_price_prices[<?php echo settings::get('store_currency_code'); ?>]"]', function() { 
+    $('input[name^="default_price_prices"][name$="[<?php echo settings::get('store_currency_code'); ?>]"]').each(function(){
+         $(this).val($('input[name="reset_default_price_prices[<?php echo settings::get('store_currency_code'); ?>]"]').val());
+         $(this).trigger('keyup');
+    });
+});
+
+
+  $('body').on('keyup change', 'input[name^="default_price_prices"][name$="[<?php echo settings::get('store_currency_code'); ?>]"]', function() {
+    var parent = $(this).closest('tr');
+    var percentage = ($('input[name="prices[<?php echo settings::get('store_currency_code'); ?>]"]').val() - $(this).val()) / $('input[name="prices[<?php echo settings::get('store_currency_code'); ?>]"]').val() * 100;
+    percentage = Number(percentage).toFixed(2);
+    $(parent).find('input[name$="[percentage]"]').val(percentage);
+console.log(percentage);
+    <?php foreach (currency::$currencies as $currency) { ?>
+    var value = 0;
+    value = $(parent).find('input[name^="default_price_prices"][name$="[<?php echo settings::get('store_currency_code'); ?>]"]').val() * <?php echo $currency['value']; ?>;
+    value = Number(value).toFixed(<?php echo $currency['decimals']; ?>);
+    $(parent).find('input[name^="default_price_prices"][name$="[<?php echo $currency['code']; ?>]"]').attr('placeholder', value);
+    if ($(parent).find('input[name^="default_price_prices"][name$="[<?php echo $currency['code']; ?>]"]').val() == 0) {
+        $(parent).find('input[name^="default_price_prices"][name$="[<?php echo $currency['code']; ?>]"]').val('');
+    }
+    <?php } ?>
+});
+$('input[name^="default_price_prices"][name$="[<?php echo settings::get('store_currency_code'); ?>]"]').trigger('keyup');
+
+$('#default-price-prices').on('click', '.remove', function(e) {
+    e.preventDefault();
+    $(this).closest('tr').remove();
+});
+
+  $('#default-price-prices').on('click', '.delete_all', function(e) {
+    e.preventDefault();
+    $('#default-price-prices tbody tr').remove();
+  });
+
+$('#default-price-prices').on('click', '.delete', function(e) {
+    e.preventDefault();
+    $('#default-price-prices tbody input[name^="default_price_prices"]').val('');
+    $('#default-price-prices tbody select[name^="default_price_prices"]').prop('selectedIndex', 0).selectmenu('refresh', true);
+});
+
+$('#default-price-prices').on('click', '.hide_show', function(e) {
+    e.preventDefault();
+    $('#default-price-prices tbody tr').toggle();
+});
+
+<!--  $('#default-price-prices tbody tr').toggle(); -->
+
+var new_default_price_price_i = 1;
+$('#default-price-prices').on('click', '.add', function(e) {
+e.preventDefault();
+var output = '<tr>'
++ '<td class="text-right" style="width: 10px;  padding: 15px;"><a class="remove" href="#" title="<?php echo htmlspecialchars(language::translate('title_remove', 'Remove')); ?>"><?php echo functions::draw_fonticon('fa-times-circle fa-lg', 'style="color: #ff6e6e;"'); ?></a></td>'
++ '<td><?php echo functions::general_escape_js(functions::form_draw_hidden_field('default_price_prices[new_default_price_price_i][id]', '') . functions::form_draw_default_prices_list('default_price_prices[new_default_price_price_i][default_price_id]', '1')); ?></td>'
++ '<td><?php echo functions::general_escape_js(functions::form_draw_datetime_field('default_price_prices[new_default_price_price_i][start_date]', true, '', 'default_price_1')); ?></td>'
++ '<td><?php echo functions::general_escape_js(functions::form_draw_datetime_field('default_price_prices[new_default_price_price_i][end_date]', true, '' , 'default_price_1')); ?></td>'
++ '<td><?php echo functions::general_escape_js(functions::form_draw_currency_field(settings::get('store_currency_code'), 'default_price_prices[new_default_price_price_i]['. settings::get("store_currency_code") .']', '', 'data-size="small"')); ?></td>'
+<?php foreach (array_keys(currency::$currencies) as $currency_code) {
+if ($currency_code == settings::get('store_currency_code')) continue;
+?>
++ ' <td style="display: none;"><?php echo functions::general_escape_js(functions::form_draw_currency_field($currency_code, 'default_price_prices[new_default_price_price_i]['. $currency_code .']', '', 'data-size="small"')); ?></td>'
+<?php } ?>
++ '</tr>';
+while ($('input[name="default_price_prices[new_'+new_default_price_price_i+']"]').length) new_default_price_price_i++;
+output = output.replace(/new_default_price_price_i/g, 'new_' + new_default_price_price_i);
+$('#default-price-prices tbody').append(output);
+new_default_price_price_i++;
+});
+
+var new_default_price_price_i = 2;
+$('#default-price-prices').on('click', '.add', function(e) {
+e.preventDefault();
+var output = '<tr>'
++ '<td class="text-right" style="width: 10px;  padding: 15px;"><a class="remove" href="#" title="<?php echo htmlspecialchars(language::translate('title_remove', 'Remove')); ?>"><?php echo functions::draw_fonticon('fa-times-circle fa-lg', 'style="color: #ff6e6e;"'); ?></a></td>'
++ '<td><?php echo functions::general_escape_js(functions::form_draw_hidden_field('default_price_prices[new_default_price_price_i][id]', '') . functions::form_draw_default_prices_list('default_price_prices[new_default_price_price_i][default_price_id]', '2')); ?></td>'
++ '<td><?php echo functions::general_escape_js(functions::form_draw_datetime_field('default_price_prices[new_default_price_price_i][start_date]', true, '', 'default_price_2')); ?></td>'
++ '<td><?php echo functions::general_escape_js(functions::form_draw_datetime_field('default_price_prices[new_default_price_price_i][end_date]', true, '' , 'default_price_2')); ?></td>'
++ '<td><?php echo functions::general_escape_js(functions::form_draw_currency_field(settings::get('store_currency_code'), 'default_price_prices[new_default_price_price_i]['. settings::get("store_currency_code") .']', '', 'data-size="small"')); ?></td>'
+<?php foreach (array_keys(currency::$currencies) as $currency_code) {
+if ($currency_code == settings::get('store_currency_code')) continue;
+?>
++ ' <td style="display: none;"><?php echo functions::general_escape_js(functions::form_draw_currency_field($currency_code, 'default_price_prices[new_default_price_price_i]['. $currency_code .']', '', 'data-size="small"')); ?></td>'
+<?php } ?>
++ '</tr>';
+while ($('input[name="default_price_prices[new_'+new_default_price_price_i+']"]').length) new_default_price_price_i++;
+output = output.replace(/new_default_price_price_i/g, 'new_' + new_default_price_price_i);
+$('#default-price-prices tbody').append(output);
+new_default_price_price_i++;
+});
+
+
+</script>
+
+      ]]></add>
+        </operation>
+		
+        <operation error="log">
+            <search position="before"><![CDATA[
+        <h2><?php echo language::translate('title_default_price_prices', 'Default Price Prices'); ?></h2>
+      ]]></search>
+            <add><![CDATA[
+	          
+            
+<style>
+            #guest-price-prices td:not(:last-child){
+                width: 260px;
+            }
+        </style>
+        
+        <h2><?php echo language::translate('title_guest_price_prices', 'Guest Price Prices'); ?></h2>
+       
+        
+        <table id="guest-price-prices" class="table table-striped data-table">
+            <thead>
+            <tr>
+                <td colspan="5">
+                <a class="add" href="#" title="<?php echo htmlspecialchars(language::translate('title_add', 'Add')); ?>"><?php echo functions::draw_fonticon('fa-plus-circle', 'style="color: #66cc66;"'); ?></a>
+                <a class="delete" style="margin-left: 20px;" href="#" title="<?php echo htmlspecialchars(language::translate('title_delete', 'Delete')); ?>"><?php echo functions::draw_fonticon('fa-trash-o', 'style="color: #ff6e6e;"'); ?></a>
+                <a class="hide_show" style="margin-left: 20px;" href="#" title="<?php echo htmlspecialchars(language::translate('title_toggle', 'Toggle')); ?>"><?php echo functions::draw_fonticon('fa-eye-slash', 'style="color: #6d6ff7;"'); ?></a>
+                <a class="delete_all" style="margin-left: 80px;" href="#" title="<?php echo htmlspecialchars(language::translate('title_delete', 'Delete')); ?>"><?php echo functions::draw_fonticon('fa-times-circle fa-lg', 'style="color: #ff6e6e;"'); ?></a>
+                </td>
+            </tr>                       
+            </thead>
+            <thead>
+            <tr>
+            <th style="width: 10px;"></th>
+                <th style="width: 260px;"><?php echo language::translate('title_guest_price', 'Default Price'); ?></th>
+                <th style="width: 260px;"><?php echo language::translate('title_start_date', 'Start Date'); ?></th>
+                <th style="width: 260px;"><?php echo language::translate('title_end_date', 'End Date'); ?></th>
+                <th style="width: 260px;"><?php echo settings::get('store_currency_code'); ?></th>
+               <!-- <?php foreach (array_keys(currency::$currencies) as $currency_code) {
+                    if ($currency_code == settings::get('store_currency_code')) continue;
+                    ?>
+                    <th style="width: 260px;"><?php echo $currency_code; ?></th>
+                <?php } ?> -->
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php if (!empty($_POST['guest_price_prices'])) foreach (array_keys($_POST['guest_price_prices']) as $key) { ?>
+                <tr>
+                <td style="width: 10px; padding: 15px;"><a class="remove" href="#" title="<?php echo htmlspecialchars(language::translate('title_remove', 'Remove')); ?>"><?php echo functions::draw_fonticon('fa-times-circle fa-lg', 'style="color: #ff6e6e;"'); ?></a></td>
+                    <td><?php echo functions::form_draw_hidden_field('guest_price_prices['.$key.'][id]', true) . functions::form_draw_guest_prices_list('guest_price_prices['.$key.'][guest_price_id]', true); ?></td>
+                    <td><?php echo functions::form_draw_datetime_field('guest_price_prices['.$key.'][start_date]', true, '','guest_price'); ?></td>
+                    <td><?php echo functions::form_draw_datetime_field('guest_price_prices['.$key.'][end_date]', true, '','guest_price'); ?></td>
+                    <td><?php echo functions::form_draw_currency_field(settings::get('store_currency_code'), 'guest_price_prices['.$key.']['. settings::get('store_currency_code') .']', true); ?></td><?php foreach (array_keys(currency::$currencies) as $currency_code) { if ($currency_code == settings::get('store_currency_code')) continue;?>
+                    <td style="display: none;"><?php echo functions::form_draw_currency_field($currency_code, 'guest_price_prices['.$key.']['. $currency_code. ']', isset($_POST['guest_price_prices'][$key][$currency_code]) ? number_format($_POST['guest_price_prices'][$key][$currency_code], 4, '.', '') : '', 'data-size="small"'); ?></td>
+                    <?php } ?>
+                </tr>
+            <?php } ?>
+            </tbody>
+            <tfoot>
+            
+            </tfoot>
+        </table>
+<script>
+
+$('body').on('keyup change', 'input[name="reset_guest_price_prices[<?php echo settings::get('store_currency_code'); ?>]"]', function() { 
+    $('input[name^="guest_price_prices"][name$="[<?php echo settings::get('store_currency_code'); ?>]"]').each(function(){
+         $(this).val($('input[name="reset_guest_price_prices[<?php echo settings::get('store_currency_code'); ?>]"]').val());
+         $(this).trigger('keyup');
+    });
+});
+
+  $('body').on('keyup change', 'input[name^="guest_price_prices"][name$="[<?php echo settings::get('store_currency_code'); ?>]"]', function() {
+    var parent = $(this).closest('tr');
+    var percentage = ($('input[name="prices[<?php echo settings::get('store_currency_code'); ?>]"]').val() - $(this).val()) / $('input[name="prices[<?php echo settings::get('store_currency_code'); ?>]"]').val() * 100;
+    percentage = Number(percentage).toFixed(2);
+    $(parent).find('input[name$="[percentage]"]').val(percentage);
+console.log(percentage);
+    <?php foreach (currency::$currencies as $currency) { ?>
+    var value = 0;
+    value = $(parent).find('input[name^="guest_price_prices"][name$="[<?php echo settings::get('store_currency_code'); ?>]"]').val() * <?php echo $currency['value']; ?>;
+    value = Number(value).toFixed(<?php echo $currency['decimals']; ?>);
+    $(parent).find('input[name^="guest_price_prices"][name$="[<?php echo $currency['code']; ?>]"]').attr('placeholder', value);
+    if ($(parent).find('input[name^="guest_price_prices"][name$="[<?php echo $currency['code']; ?>]"]').val() == 0) {
+        $(parent).find('input[name^="guest_price_prices"][name$="[<?php echo $currency['code']; ?>]"]').val('');
+    }
+    <?php } ?>
+});
+$('input[name^="guest_price_prices"][name$="[<?php echo settings::get('store_currency_code'); ?>]"]').trigger('keyup');
+
+$('#guest-price-prices').on('click', '.remove', function(e) {
+    e.preventDefault();
+    $(this).closest('tr').remove();
+});
+
+$('#guest-price-prices').on('click', '.delete', function(e) {
+    e.preventDefault();
+    $('#guest-price-prices tbody input[name^="guest_price_prices"]').val('');
+    $('#guest-price-prices tbody select[name^="guest_price_prices"]').prop('selectedIndex', 0).selectmenu('refresh', true);
+});
+
+
+$('#guest-price-prices').on('click', '.delete_all', function(e) {
+    e.preventDefault();
+    $('#guest-price-prices tbody tr').remove();
+});
+
+
+$('#guest-price-prices').on('click', '.hide_show', function(e) {
+    e.preventDefault();
+    $('#guest-price-prices tbody tr').toggle();
+});
+
+<!-- $('#guest-price-prices tbody tr').toggle(); -->
+
+var new_guest_price_price_i = 1;
+$('#guest-price-prices').on('click', '.add', function(e) {
+e.preventDefault();
+var output = '<tr>'
++ '<td class="text-right" style="width: 10px; padding: 15px;"><a class="remove" href="#" title="<?php echo htmlspecialchars(language::translate('title_remove', 'Remove')); ?>"><?php echo functions::draw_fonticon('fa-times-circle fa-lg', 'style="color: #ff6e6e;"'); ?></a></td>'
++ '<td><?php echo functions::general_escape_js(functions::form_draw_hidden_field('guest_price_prices[new_guest_price_price_i][id]', '') . functions::form_draw_guest_prices_list('guest_price_prices[new_guest_price_price_i][guest_price_id]', '1')); ?></td>'
++ '<td><?php echo functions::general_escape_js(functions::form_draw_datetime_field('guest_price_prices[new_guest_price_price_i][start_date]', true, '', 'guest_price_1')); ?></td>'
++ '<td><?php echo functions::general_escape_js(functions::form_draw_datetime_field('guest_price_prices[new_guest_price_price_i][end_date]', true, '' , 'guest_price_1')); ?></td>'
++ '<td><?php echo functions::general_escape_js(functions::form_draw_currency_field(settings::get('store_currency_code'), 'guest_price_prices[new_guest_price_price_i]['. settings::get("store_currency_code") .']', '', 'data-size="small"')); ?></td>'
+<?php foreach (array_keys(currency::$currencies) as $currency_code) {
+if ($currency_code == settings::get('store_currency_code')) continue;
+?>
++ ' <td style="display: none;"><?php echo functions::general_escape_js(functions::form_draw_currency_field($currency_code, 'guest_price_prices[new_guest_price_price_i]['. $currency_code .']', '', 'data-size="small"')); ?></td>'
+<?php } ?>
++ '</tr>';
+while ($('input[name="guest_price_prices[new_'+new_guest_price_price_i+']"]').length) new_guest_price_price_i++;
+output = output.replace(/new_guest_price_price_i/g, 'new_' + new_guest_price_price_i);
+$('#guest-price-prices tbody').append(output);
+new_guest_price_price_i++;
+});
+
+var new_guest_price_price_i = 2;
+$('#guest-price-prices').on('click', '.add', function(e) {
+e.preventDefault();
+var output = '<tr>'
++ '<td class="text-right" style="width: 10px; padding: 15px;"><a class="remove" href="#" title="<?php echo htmlspecialchars(language::translate('title_remove', 'Remove')); ?>"><?php echo functions::draw_fonticon('fa-times-circle fa-lg', 'style="color: #ff6e6e;"'); ?></a></td>'
++ '<td><?php echo functions::general_escape_js(functions::form_draw_hidden_field('guest_price_prices[new_guest_price_price_i][id]', '') . functions::form_draw_guest_prices_list('guest_price_prices[new_guest_price_price_i][guest_price_id]', '2')); ?></td>'
++ '<td><?php echo functions::general_escape_js(functions::form_draw_datetime_field('guest_price_prices[new_guest_price_price_i][start_date]', true, '', 'guest_price_2')); ?></td>'
++ '<td><?php echo functions::general_escape_js(functions::form_draw_datetime_field('guest_price_prices[new_guest_price_price_i][end_date]', true, '' , 'guest_price_2')); ?></td>'
++ '<td><?php echo functions::general_escape_js(functions::form_draw_currency_field(settings::get('store_currency_code'), 'guest_price_prices[new_guest_price_price_i]['. settings::get("store_currency_code") .']', '', 'data-size="small"')); ?></td>'
+<?php foreach (array_keys(currency::$currencies) as $currency_code) {
+if ($currency_code == settings::get('store_currency_code')) continue;
+?>
++ ' <td style="display: none;"><?php echo functions::general_escape_js(functions::form_draw_currency_field($currency_code, 'guest_price_prices[new_guest_price_price_i]['. $currency_code .']', '', 'data-size="small"')); ?></td>'
+<?php } ?>
++ '</tr>';
+while ($('input[name="guest_price_prices[new_'+new_guest_price_price_i+']"]').length) new_guest_price_price_i++;
+output = output.replace(/new_guest_price_price_i/g, 'new_' + new_guest_price_price_i);
+$('#guest-price-prices tbody').append(output);
+new_guest_price_price_i++;
+});
+
+var new_guest_price_price_i = 3;
+$('#guest-price-prices').on('click', '.add', function(e) {
+e.preventDefault();
+var output = '<tr>'
++ '<td class="text-right" style="width: 10px; padding: 15px;"><a class="remove" href="#" title="<?php echo htmlspecialchars(language::translate('title_remove', 'Remove')); ?>"><?php echo functions::draw_fonticon('fa-times-circle fa-lg', 'style="color: #ff6e6e;"'); ?></a></td>'
++ '<td><?php echo functions::general_escape_js(functions::form_draw_hidden_field('guest_price_prices[new_guest_price_price_i][id]', '') . functions::form_draw_guest_prices_list('guest_price_prices[new_guest_price_price_i][guest_price_id]', '3')); ?></td>'
++ '<td><?php echo functions::general_escape_js(functions::form_draw_datetime_field('guest_price_prices[new_guest_price_price_i][start_date]', true, '', 'guest_price_3')); ?></td>'
++ '<td><?php echo functions::general_escape_js(functions::form_draw_datetime_field('guest_price_prices[new_guest_price_price_i][end_date]', true, '' , 'guest_price_3')); ?></td>'
++ '<td><?php echo functions::general_escape_js(functions::form_draw_currency_field(settings::get('store_currency_code'), 'guest_price_prices[new_guest_price_price_i]['. settings::get("store_currency_code") .']', '', 'data-size="small"')); ?></td>'
+<?php foreach (array_keys(currency::$currencies) as $currency_code) {
+if ($currency_code == settings::get('store_currency_code')) continue;
+?>
++ ' <td style="display: none;"><?php echo functions::general_escape_js(functions::form_draw_currency_field($currency_code, 'guest_price_prices[new_guest_price_price_i]['. $currency_code .']', '', 'data-size="small"')); ?></td>'
+<?php } ?>
++ '</tr>';
+while ($('input[name="guest_price_prices[new_'+new_guest_price_price_i+']"]').length) new_guest_price_price_i++;
+output = output.replace(/new_guest_price_price_i/g, 'new_' + new_guest_price_price_i);
+$('#guest-price-prices tbody').append(output);
+new_guest_price_price_i++;
+});
+
+</script>
+
+      ]]></add>
+        </operation>
+        
+        <operation error="log">
+            <search position="before"><![CDATA[
+        <h2><?php echo language::translate('title_customer_group_prices', 'Customer Group Prices'); ?></h2>
+      ]]></search>
+            <add><![CDATA[
+     <style>
+            #wholesale-price-prices td:not(:last-child){
+                width: 260px;
+            }
+        </style>
+        <h2><?php echo language::translate('title_wholesale_price_prices', 'Wholesale Price Prices'); ?></h2>
+     
+        <table id="wholesale-price-prices" class="table table-striped data-table">
+            <thead>
+            
+            <tr>
+                <td colspan="5"><a class="add" href="#" title="<?php echo htmlspecialchars(language::translate('title_add', 'Add')); ?>"><?php echo functions::draw_fonticon('fa-plus-circle', 'style="color: #66cc66;"'); ?></a>
+                <a class="delete" style="margin-left: 20px;" href="#" title="<?php echo htmlspecialchars(language::translate('title_delete', 'Delete')); ?>"><?php echo functions::draw_fonticon('fa-trash-o', 'style="color: #ff6e6e;"'); ?></a>
+                <a class="hide_show" style="margin-left: 20px;" href="#" title="<?php echo htmlspecialchars(language::translate('title_toggle', 'Toggle')); ?>"><?php echo functions::draw_fonticon('fa-eye-slash', 'style="color: #6d6ff7;"'); ?></a>
+                <a class="delete_all" style="margin-left: 80px;" href="#" title="<?php echo htmlspecialchars(language::translate('title_delete', 'Delete')); ?>"><?php echo functions::draw_fonticon('fa-times-circle fa-lg', 'style="color: #ff6e6e;"'); ?></a>
+                </td>
+            </tr>
+            
+            </thead>
+            <thead>
+            
+            <tr>
+            <th style="width: 10px;"></th>
+                <th style="width: 260px;"><?php echo language::translate('title_wholesale_price', 'Wholesale Price'); ?></th>
+                <th style="width: 260px;"><?php echo language::translate('title_start_date', 'Start Date'); ?></th>
+                <th style="width: 260px;"><?php echo language::translate('title_end_date', 'End Date'); ?></th>
+                <th style="width: 260px;"><?php echo settings::get('store_currency_code'); ?></th>
+            <!--    <?php foreach (array_keys(currency::$currencies) as $currency_code) {
+                    if ($currency_code == settings::get('store_currency_code')) continue;
+                    ?>
+                    <th style="width: 260px;"><?php echo $currency_code; ?></th>
+                <?php } ?>  -->
+                <th></th>
+            </tr>
+            
+            </thead>
+            <tbody>
+            
+            <?php if (!empty($_POST['wholesale_price_prices'])) foreach (array_keys($_POST['wholesale_price_prices']) as $key) { ?>
+                <tr>
+                <td style="width: 10px; padding: 15px;"><a class="remove" href="#" title="<?php echo htmlspecialchars(language::translate('title_remove', 'Remove')); ?>"><?php echo functions::draw_fonticon('fa-times-circle fa-lg', 'style="color: #ff6e6e;"'); ?></a></td>
+                    <td><?php echo functions::form_draw_hidden_field('wholesale_price_prices['.$key.'][id]', true) . functions::form_draw_wholesale_prices_list('wholesale_price_prices['.$key.'][default_wholesale_price_id]', true); ?></td>
+                    <td><?php echo functions::form_draw_datetime_field('wholesale_price_prices['.$key.'][start_date]', true, '','wholesale_price'); ?></td>
+                    <td><?php echo functions::form_draw_datetime_field('wholesale_price_prices['.$key.'][end_date]', true, '','wholesale_price'); ?> </td>
+                    <td><?php echo functions::form_draw_currency_field(settings::get('store_currency_code'), 'wholesale_price_prices['.$key.']['. settings::get('store_currency_code') .']', true); ?></td>
+                    <?php foreach (array_keys(currency::$currencies) as $currency_code) { if ($currency_code == settings::get('store_currency_code')) continue;?>
+                    <td style="display: none;"><?php echo functions::form_draw_currency_field($currency_code, 'wholesale_price_prices['.$key.']['. $currency_code. ']', isset($_POST['wholesale_price_prices'][$key][$currency_code]) ? number_format($_POST['wholesale_price_prices'][$key][$currency_code], 4, '.', '') : '', 'data-size="small"'); ?></td>
+              <?php } ?>
+                </tr>
+            <?php } ?>
+            </tbody>
+            <tfoot>
+            
+            </tfoot>
+        </table>
+<script>
+
+$('body').on('keyup change', 'input[name="reset_wholesale_price_prices[<?php echo settings::get('store_currency_code'); ?>]"]', function() { 
+    $('input[name^="wholesale_price_prices"][name$="[<?php echo settings::get('store_currency_code'); ?>]"]').each(function(){
+         $(this).val($('input[name="reset_wholesale_price_prices[<?php echo settings::get('store_currency_code'); ?>]"]').val());
+         $(this).trigger('keyup');
+    });
+});
+
+  $('body').on('keyup change', 'input[name^="wholesale_price_prices"][name$="[<?php echo settings::get('store_currency_code'); ?>]"]', function() {
+    var parent = $(this).closest('tr');
+    var percentage = ($('input[name="prices[<?php echo settings::get('store_currency_code'); ?>]"]').val() - $(this).val()) / $('input[name="prices[<?php echo settings::get('store_currency_code'); ?>]"]').val() * 100;
+    percentage = Number(percentage).toFixed(2);
+    $(parent).find('input[name$="[percentage]"]').val(percentage);
+console.log(percentage);
+    <?php foreach (currency::$currencies as $currency) { ?>
+    var value = 0;
+    value = $(parent).find('input[name^="wholesale_price_prices"][name$="[<?php echo settings::get('store_currency_code'); ?>]"]').val() * <?php echo $currency['value']; ?>;
+    value = Number(value).toFixed(<?php echo $currency['decimals']; ?>);
+    $(parent).find('input[name^="wholesale_price_prices"][name$="[<?php echo $currency['code']; ?>]"]').attr('placeholder', value);
+    if ($(parent).find('input[name^="wholesale_price_prices"][name$="[<?php echo $currency['code']; ?>]"]').val() == 0) {
+        $(parent).find('input[name^="wholesale_price_prices"][name$="[<?php echo $currency['code']; ?>]"]').val('');
+    }
+    <?php } ?>
+});
+$('input[name^="wholesale_price_prices"][name$="[<?php echo settings::get('store_currency_code'); ?>]"]').trigger('keyup');
+
+$('#wholesale-price-prices').on('click', '.remove', function(e) {
+    e.preventDefault();
+    $(this).closest('tr').remove();
+});
+
+$('#wholesale-price-prices').on('click', '.delete', function(e) {
+    e.preventDefault();
+    $('#wholesale-price-prices tbody input[name^="wholesale_price_prices"]').val('');
+    $('#wholesale-price-prices tbody select[name^="wholesale_price_prices"]').prop('selectedIndex', 0).selectmenu('refresh', true);
+});
+
+$('#wholesale-price-prices').on('click', '.delete_all', function(e) {
+    e.preventDefault();
+    $('#wholesale-price-prices tbody tr').remove();
+});
+
+$('#wholesale-price-prices').on('click', '.hide_show', function(e) {
+    e.preventDefault();
+    $('#wholesale-price-prices tbody tr').toggle();
+});
+
+<!-- $('#wholesale-price-prices tbody tr').toggle(); -->
+
+
+var new_wholesale_price_price_i = 1;
+$('#wholesale-price-prices').on('click', '.add', function(e) {
+e.preventDefault();
+var output = '<tr>'
++ '<td class="text-right" style="width: 10px; padding: 15px;"><a class="remove" href="#" title="<?php echo htmlspecialchars(language::translate('title_remove', 'Remove')); ?>"><?php echo functions::draw_fonticon('fa-times-circle fa-lg', 'style="color: #ff6e6e;"'); ?></a></td>'
++ '<td><?php echo functions::general_escape_js(functions::form_draw_hidden_field('wholesale_price_prices[new_wholesale_price_price_i][id]', '') . functions::form_draw_wholesale_prices_list('wholesale_price_prices[new_wholesale_price_price_i][default_wholesale_price_id]', '1')); ?></td>'
++ '<td><?php echo functions::general_escape_js(functions::form_draw_datetime_field('wholesale_price_prices[new_wholesale_price_price_i][start_date]', true, '', 'wholesale_price_1')); ?></td>'
++ '<td><?php echo functions::general_escape_js(functions::form_draw_datetime_field('wholesale_price_prices[new_wholesale_price_price_i][end_date]', true, '' , 'wholesale_price_1')); ?></td>'
++ '<td><?php echo functions::general_escape_js(functions::form_draw_currency_field(settings::get('store_currency_code'), 'wholesale_price_prices[new_wholesale_price_price_i]['. settings::get("store_currency_code") .']', '', 'data-size="small"')); ?></td>'
+<?php foreach (array_keys(currency::$currencies) as $currency_code) {
+if ($currency_code == settings::get('store_currency_code')) continue;
+?>
++ ' <td style="display: none;"><?php echo functions::general_escape_js(functions::form_draw_currency_field($currency_code, 'wholesale_price_prices[new_wholesale_price_price_i]['. $currency_code .']', '', 'data-size="small"')); ?></td>'
+<?php } ?>
++ '</tr>';
+while ($('input[name="wholesale_price_prices[new_'+new_wholesale_price_price_i+']"]').length) new_wholesale_price_price_i++;
+output = output.replace(/new_wholesale_price_price_i/g, 'new_' + new_wholesale_price_price_i);
+$('#wholesale-price-prices tbody').append(output);
+new_wholesale_price_price_i++;
+});
+
+var new_wholesale_price_price_i = 2;
+$('#wholesale-price-prices').on('click', '.add', function(e) {
+e.preventDefault();
+var output = '<tr>'
++ '<td class="text-right" style="width: 10px; padding: 15px;"><a class="remove" href="#" title="<?php echo htmlspecialchars(language::translate('title_remove', 'Remove')); ?>"><?php echo functions::draw_fonticon('fa-times-circle fa-lg', 'style="color: #ff6e6e;"'); ?></a></td>'
++ '<td><?php echo functions::general_escape_js(functions::form_draw_hidden_field('wholesale_price_prices[new_wholesale_price_price_i][id]', '') . functions::form_draw_wholesale_prices_list('wholesale_price_prices[new_wholesale_price_price_i][default_wholesale_price_id]', '2')); ?></td>'
++ '<td><?php echo functions::general_escape_js(functions::form_draw_datetime_field('wholesale_price_prices[new_wholesale_price_price_i][start_date]', true, '', 'wholesale_price_2')); ?></td>'
++ '<td><?php echo functions::general_escape_js(functions::form_draw_datetime_field('wholesale_price_prices[new_wholesale_price_price_i][end_date]', true, '' , 'wholesale_price_2')); ?></td>'
++ '<td><?php echo functions::general_escape_js(functions::form_draw_currency_field(settings::get('store_currency_code'), 'wholesale_price_prices[new_wholesale_price_price_i]['. settings::get("store_currency_code") .']', '', 'data-size="small"')); ?></td>'
+<?php foreach (array_keys(currency::$currencies) as $currency_code) {
+if ($currency_code == settings::get('store_currency_code')) continue;
+?>
++ ' <td style="display: none;"><?php echo functions::general_escape_js(functions::form_draw_currency_field($currency_code, 'wholesale_price_prices[new_wholesale_price_price_i]['. $currency_code .']', '', 'data-size="small"')); ?></td>'
+<?php } ?>
++ '</tr>';
+while ($('input[name="wholesale_price_prices[new_'+new_wholesale_price_price_i+']"]').length) new_wholesale_price_price_i++;
+output = output.replace(/new_wholesale_price_price_i/g, 'new_' + new_wholesale_price_price_i);
+$('#wholesale-price-prices tbody').append(output);
+new_wholesale_price_price_i++;
+});
+
+</script>
+
+      ]]></add>
+        </operation>
+        
+        <operation error="log">
+            <search position="before"><![CDATA[
+        <h2><?php echo language::translate('title_customer_group_prices', 'Customer Group Prices'); ?></h2>
+      ]]></search>
+            <add><![CDATA[
+	          
+            
+<style>
+            #fake-sold-out-date-price-prices td:not(:last-child){
+                width: 260px;
+            }
+        </style>
+        <h2><?php echo language::translate('title_fake_sold_out_date_price_prices', 'Sold Out Date'); ?></h2>
+        
+
+
+        
+
+        <table id="fake-sold-out-date-price-prices" class="table table-striped data-table">
+            <thead>
+            <tr>
+                <td colspan="5">
+                <a class="add" href="#" title="<?php echo htmlspecialchars(language::translate('title_add', 'Add')); ?>"><?php echo functions::draw_fonticon('fa-plus-circle', 'style="color: #66cc66;"'); ?></a>
+                <a class="delete" style="margin-left: 20px;" href="#" title="<?php echo htmlspecialchars(language::translate('title_delete', 'Delete')); ?>"><?php echo functions::draw_fonticon('fa-trash-o', 'style="color: #ff6e6e;"'); ?></a>
+                <a class="hide_show" style="margin-left: 20px;" href="#" title="<?php echo htmlspecialchars(language::translate('title_toggle', 'Toggle')); ?>"><?php echo functions::draw_fonticon('fa-eye-slash', 'style="color: #6d6ff7;"'); ?></a>
+                <a class="delete_all" style="margin-left: 80px;" href="#" title="<?php echo htmlspecialchars(language::translate('title_delete', 'Delete')); ?>"><?php echo functions::draw_fonticon('fa-times-circle fa-lg', 'style="color: #ff6e6e;"'); ?></a>
+                </td>
+            </tr>                       
+            </thead>
+            <thead>
+            <tr>
+            <th style="width: 10px;"></th>
+                <th style="width: 260px;"><?php echo language::translate('title_fake_sold_out_date_price', 'Default Price'); ?></th>
+                <th style="width: 260px;"><?php echo language::translate('title_start_date', 'Start Date'); ?></th>
+                <th style="width: 260px;"><?php echo language::translate('title_end_date', 'End Date'); ?></th>
+                <th style="width: 260px;"><?php echo settings::get('store_currency_code'); ?></th>
+               <!-- <?php foreach (array_keys(currency::$currencies) as $currency_code) {
+                    if ($currency_code == settings::get('store_currency_code')) continue;
+                    ?>
+                    <th style="width: 260px;"><?php echo $currency_code; ?></th>
+                <?php } ?> -->
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php if (!empty($_POST['fake_sold_out_date_price_prices'])) foreach (array_keys($_POST['fake_sold_out_date_price_prices']) as $key) { ?>
+                <tr>
+                <td style="width: 10px; padding: 15px;"><a class="remove" href="#" title="<?php echo htmlspecialchars(language::translate('title_remove', 'Remove')); ?>"><?php echo functions::draw_fonticon('fa-times-circle fa-lg', 'style="color: #ff6e6e;"'); ?></a></td>
+                    <td><?php echo functions::form_draw_hidden_field('fake_sold_out_date_price_prices['.$key.'][id]', true) . functions::form_draw_fake_sold_out_date_prices_list('fake_sold_out_date_price_prices['.$key.'][fake_sold_out_date_price_id]', true); ?></td>
+                    <td><?php echo functions::form_draw_datetime_field('fake_sold_out_date_price_prices['.$key.'][start_date]', true, '','fake_sold_out_date_price'); ?></td>
+                    <td><?php echo functions::form_draw_datetime_field('fake_sold_out_date_price_prices['.$key.'][end_date]', true, '','fake_sold_out_date_price'); ?></td>
+                    <td><?php echo functions::form_draw_currency_field(settings::get('store_currency_code'), 'fake_sold_out_date_price_prices['.$key.']['. settings::get('store_currency_code') .']', true); ?></td><?php foreach (array_keys(currency::$currencies) as $currency_code) { if ($currency_code == settings::get('store_currency_code')) continue;?>
+                    <td style="display: none;"><?php echo functions::form_draw_currency_field($currency_code, 'fake_sold_out_date_price_prices['.$key.']['. $currency_code. ']', isset($_POST['fake_sold_out_date_price_prices'][$key][$currency_code]) ? number_format($_POST['fake_sold_out_date_price_prices'][$key][$currency_code], 4, '.', '') : '', 'data-size="small"'); ?></td>
+                    <?php } ?>
+                </tr>
+            <?php } ?>
+            </tbody>
+            <tfoot>
+            
+            </tfoot>
+        </table>
+<script>
+
+
+
+$('body').on('keyup change', 'input[name="reset_fake_sold_out_date_price_prices[<?php echo settings::get('store_currency_code'); ?>]"]', function() { 
+    $('input[name^="fake_sold_out_date_price_prices"][name$="[<?php echo settings::get('store_currency_code'); ?>]"]').each(function(){
+         $(this).val($('input[name="reset_fake_sold_out_date_price_prices[<?php echo settings::get('store_currency_code'); ?>]"]').val());
+         $(this).trigger('keyup');
+    });
+});
+
+  $('body').on('keyup change', 'input[name^="fake_sold_out_date_price_prices"][name$="[<?php echo settings::get('store_currency_code'); ?>]"]', function() {
+    var parent = $(this).closest('tr');
+    var percentage = ($('input[name="prices[<?php echo settings::get('store_currency_code'); ?>]"]').val() - $(this).val()) / $('input[name="prices[<?php echo settings::get('store_currency_code'); ?>]"]').val() * 100;
+    percentage = Number(percentage).toFixed(2);
+    $(parent).find('input[name$="[percentage]"]').val(percentage);
+console.log(percentage);
+    <?php foreach (currency::$currencies as $currency) { ?>
+    var value = 0;
+    value = $(parent).find('input[name^="fake_sold_out_date_price_prices"][name$="[<?php echo settings::get('store_currency_code'); ?>]"]').val() * <?php echo $currency['value']; ?>;
+    value = Number(value).toFixed(<?php echo $currency['decimals']; ?>);
+    $(parent).find('input[name^="fake_sold_out_date_price_prices"][name$="[<?php echo $currency['code']; ?>]"]').attr('placeholder', value);
+    if ($(parent).find('input[name^="fake_sold_out_date_price_prices"][name$="[<?php echo $currency['code']; ?>]"]').val() == 0) {
+        $(parent).find('input[name^="fake_sold_out_date_price_prices"][name$="[<?php echo $currency['code']; ?>]"]').val('');
+    }
+    <?php } ?>
+});
+$('input[name^="fake_sold_out_date_price_prices"][name$="[<?php echo settings::get('store_currency_code'); ?>]"]').trigger('keyup');
+
+$('#fake-sold-out-date-price-prices').on('click', '.remove', function(e) {
+    e.preventDefault();
+    $(this).closest('tr').remove();
+});
+
+$('#fake-sold-out-date-price-prices').on('click', '.delete', function(e) {
+    e.preventDefault();
+    $('#fake-sold-out-date-price-prices tbody input[name^="fake_sold_out_date_price_prices"]').val('');
+    $('#fake-sold-out-date-price-prices tbody select[name^="fake_sold_out_date_price_prices"]').prop('selectedIndex', 0).selectmenu('refresh', true);
+});
+
+
+$('#fake-sold-out-date-price-prices').on('click', '.delete_all', function(e) {
+    e.preventDefault();
+    $('#fake-sold-out-date-price-prices tbody tr').remove();
+});
+
+
+$('#fake-sold-out-date-price-prices').on('click', '.hide_show', function(e) {
+    e.preventDefault();
+    $('#fake-sold-out-date-price-prices tbody tr').toggle();
+});
+
+<!-- $('#fake-sold-out-date-price-prices tbody tr').toggle(); -->
+
+var new_fake_sold_out_date_price_price_i = 1;
+$('#fake-sold-out-date-price-prices').on('click', '.add', function(e) {
+e.preventDefault();
+var output = '<tr>'
++ '<td class="text-right" style="width: 10px; padding: 15px;"><a class="remove" href="#" title="<?php echo htmlspecialchars(language::translate('title_remove', 'Remove')); ?>"><?php echo functions::draw_fonticon('fa-times-circle fa-lg', 'style="color: #ff6e6e;"'); ?></a></td>'
++ ' <td><?php echo functions::general_escape_js(functions::form_draw_hidden_field('fake_sold_out_date_price_prices[new_fake_sold_out_date_price_price_i][id]', '') . functions::form_draw_fake_sold_out_date_prices_list('fake_sold_out_date_price_prices[new_fake_sold_out_date_price_price_i][fake_sold_out_date_price_id]', '1')); ?></td>'
++ '<td><?php echo functions::general_escape_js(functions::form_draw_datetime_field('fake_sold_out_date_price_prices[new_fake_sold_out_date_price_price_i][start_date]', true, '', 'fake_sold_out_date_price_1')); ?></td>'
++ '<td><?php echo functions::general_escape_js(functions::form_draw_datetime_field('fake_sold_out_date_price_prices[new_fake_sold_out_date_price_price_i][end_date]', true, '' , 'fake_sold_out_date_price_1')); ?></td>'
++ '<td><?php echo functions::general_escape_js(functions::form_draw_currency_field(settings::get('store_currency_code'), 'fake_sold_out_date_price_prices[new_fake_sold_out_date_price_price_i]['. settings::get("store_currency_code") .']', '', 'data-size="small"')); ?></td>'
+<?php foreach (array_keys(currency::$currencies) as $currency_code) {
+if ($currency_code == settings::get('store_currency_code')) continue;
+?>
++ ' <td style="display: none;"><?php echo functions::general_escape_js(functions::form_draw_currency_field($currency_code, 'fake_sold_out_date_price_prices[new_fake_sold_out_date_price_price_i]['. $currency_code .']', '', 'data-size="small"')); ?></td>'
+<?php } ?>
++ '</tr>';
+while ($('input[name="fake_sold_out_date_price_prices[new_'+new_fake_sold_out_date_price_price_i+']"]').length) new_fake_sold_out_date_price_price_i++;
+output = output.replace(/new_fake_sold_out_date_price_price_i/g, 'new_' + new_fake_sold_out_date_price_price_i);
+$('#fake-sold-out-date-price-prices tbody').append(output);
+new_fake_sold_out_date_price_price_i++;
+});
+
+var new_fake_sold_out_date_price_price_i = 2;
+$('#fake-sold-out-date-price-prices').on('click', '.add', function(e) {
+e.preventDefault();
+var output = '<tr>'
++ '<td class="text-right" style="width: 10px; padding: 15px;"><a class="remove" href="#" title="<?php echo htmlspecialchars(language::translate('title_remove', 'Remove')); ?>"><?php echo functions::draw_fonticon('fa-times-circle fa-lg', 'style="color: #ff6e6e;"'); ?></a></td>'
++ ' <td><?php echo functions::general_escape_js(functions::form_draw_hidden_field('fake_sold_out_date_price_prices[new_fake_sold_out_date_price_price_i][id]', '') . functions::form_draw_fake_sold_out_date_prices_list('fake_sold_out_date_price_prices[new_fake_sold_out_date_price_price_i][fake_sold_out_date_price_id]', '2')); ?></td>'
++ '<td><?php echo functions::general_escape_js(functions::form_draw_datetime_field('fake_sold_out_date_price_prices[new_fake_sold_out_date_price_price_i][start_date]', true, '', 'fake_sold_out_date_price_2')); ?></td>'
++ '<td><?php echo functions::general_escape_js(functions::form_draw_datetime_field('fake_sold_out_date_price_prices[new_fake_sold_out_date_price_price_i][end_date]', true, '' , 'fake_sold_out_date_price_2')); ?></td>'
++ '<td><?php echo functions::general_escape_js(functions::form_draw_currency_field(settings::get('store_currency_code'), 'fake_sold_out_date_price_prices[new_fake_sold_out_date_price_price_i]['. settings::get("store_currency_code") .']', '', 'data-size="small"')); ?></td>'
+<?php foreach (array_keys(currency::$currencies) as $currency_code) {
+if ($currency_code == settings::get('store_currency_code')) continue;
+?>
++ ' <td style="display: none;"><?php echo functions::general_escape_js(functions::form_draw_currency_field($currency_code, 'fake_sold_out_date_price_prices[new_fake_sold_out_date_price_price_i]['. $currency_code .']', '', 'data-size="small"')); ?></td>'
+<?php } ?>
++ '</tr>';
+while ($('input[name="fake_sold_out_date_price_prices[new_'+new_fake_sold_out_date_price_price_i+']"]').length) new_fake_sold_out_date_price_price_i++;
+output = output.replace(/new_fake_sold_out_date_price_price_i/g, 'new_' + new_fake_sold_out_date_price_price_i);
+$('#fake-sold-out-date-price-prices tbody').append(output);
+new_fake_sold_out_date_price_price_i++;
+});
+
+</script>
+
+      ]]></add>
+        </operation>        
+        
+    </file>
+
+    <file name="includes/entities/ent_currency.inc.php">
+        
+        
+        <operation error="log">
+
+            <search position="after" offset="1"><![CDATA[
+            throw new Exception('Cannot rename the store currency.');
+      ]]></search>
+            <add><![CDATA[
+            database::query(
+            "alter table ". DB_TABLE_PRODUCTS_STOCK_QUANTITY_GUEST_PRICES ."
+            change `". database::input($currency['code']) ."` `". database::input($this->data['code']) ."` decimal(11, 4) not null;"
+            );
+      ]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="after" offset="1"><![CDATA[
+        $this->data['id'] = database::insert_id();
+      ]]></search>
+            <add><![CDATA[
+        $products_stock_guest_prices_query = database::query(
+        "show fields from ". DB_TABLE_PRODUCTS_STOCK_QUANTITY_GUEST_PRICES ."
+        where `Field` = '". database::input($this->data['code']) ."';"
+        );
+        if (database::num_rows($products_stock_prices_query) == 0) {
+        database::query(
+        "alter table ". DB_TABLE_PRODUCTS_STOCK_QUANTITY_GUEST_PRICES ."
+        add `". database::input($this->data['code']) ."` decimal(11, 4) not null;"
+        );
+        }
+      ]]></add>
+        </operation>        
+        
+        
+        
+        
+        
+        <operation error="log">
+
+            <search position="after" offset="1"><![CDATA[
+            throw new Exception('Cannot rename the store currency.');
+      ]]></search>
+            <add><![CDATA[
+            database::query(
+            "alter table ". DB_TABLE_PRODUCTS_STOCK_QUANTITY_PRICES ."
+            change `". database::input($currency['code']) ."` `". database::input($this->data['code']) ."` decimal(11, 4) not null;"
+            );
+      ]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="after" offset="1"><![CDATA[
+        $this->data['id'] = database::insert_id();
+      ]]></search>
+            <add><![CDATA[
+        $products_stock_prices_query = database::query(
+        "show fields from ". DB_TABLE_PRODUCTS_STOCK_QUANTITY_PRICES ."
+        where `Field` = '". database::input($this->data['code']) ."';"
+        );
+        if (database::num_rows($products_stock_prices_query) == 0) {
+        database::query(
+        "alter table ". DB_TABLE_PRODUCTS_STOCK_QUANTITY_PRICES ."
+        add `". database::input($this->data['code']) ."` decimal(11, 4) not null;"
+        );
+        }
+      ]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="after" offset="1"><![CDATA[
+            throw new Exception('Cannot rename the store currency.');
+      ]]></search>
+            <add><![CDATA[
+            database::query(
+            "alter table ". DB_TABLE_PRODUCTS_PRICES_BY_DEFAULT_PRICE ."
+            change `". database::input($currency['code']) ."` `". database::input($this->data['code']) ."` decimal(11, 4) not null;"
+              );
+      ]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="after" offset="1"><![CDATA[
+        $this->data['id'] = database::insert_id();
+      ]]></search>
+            <add><![CDATA[
+
+      $products_default_price_query = database::query(
+        "show fields from ". DB_TABLE_PRODUCTS_PRICES_BY_DEFAULT_PRICE ."
+        where `Field` = '". database::input($this->data['code']) ."';"
+        );
+        if (database::num_rows($products_default_price_query) == 0) {
+        database::query(
+        "alter table ". DB_TABLE_PRODUCTS_PRICES_BY_DEFAULT_PRICE ."
+        add `". database::input($this->data['code']) ."` decimal(11, 4) not null;"
+        );
+        }
+      ]]></add>
+        </operation>
+		
+        <operation error="log">
+            <search position="after" offset="1"><![CDATA[
+            throw new Exception('Cannot rename the store currency.');
+      ]]></search>
+            <add><![CDATA[
+            database::query(
+            "alter table ". DB_TABLE_PRODUCTS_PRICES_BY_GUEST_PRICE ."
+            change `". database::input($currency['code']) ."` `". database::input($this->data['code']) ."` decimal(11, 4) not null;"
+              );
+      ]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="after" offset="1"><![CDATA[
+        $this->data['id'] = database::insert_id();
+      ]]></search>
+            <add><![CDATA[
+
+      $products_guest_price_query = database::query(
+        "show fields from ". DB_TABLE_PRODUCTS_PRICES_BY_GUEST_PRICE ."
+        where `Field` = '". database::input($this->data['code']) ."';"
+        );
+        if (database::num_rows($products_guest_price_query) == 0) {
+        database::query(
+        "alter table ". DB_TABLE_PRODUCTS_PRICES_BY_GUEST_PRICE ."
+        add `". database::input($this->data['code']) ."` decimal(11, 4) not null;"
+        );
+        }
+      ]]></add>
+        </operation>
+        
+ 
+        <operation error="log">
+            <search position="after" offset="1"><![CDATA[
+            throw new Exception('Cannot rename the store currency.');
+      ]]></search>
+            <add><![CDATA[
+            database::query(
+            "alter table ". DB_TABLE_PRODUCTS_PRICES_BY_FAKE_SOLD_OUT_DATE_PRICE ."
+            change `". database::input($currency['code']) ."` `". database::input($this->data['code']) ."` decimal(11, 4) not null;"
+              );
+      ]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="after" offset="1"><![CDATA[
+        $this->data['id'] = database::insert_id();
+      ]]></search>
+            <add><![CDATA[
+
+      $products_fake_sold_out_date_price_query = database::query(
+        "show fields from ". DB_TABLE_PRODUCTS_PRICES_BY_FAKE_SOLD_OUT_DATE_PRICE ."
+        where `Field` = '". database::input($this->data['code']) ."';"
+        );
+        if (database::num_rows($products_fake_sold_out_date_price_query) == 0) {
+        database::query(
+        "alter table ". DB_TABLE_PRODUCTS_PRICES_BY_FAKE_SOLD_OUT_DATE_PRICE ."
+        add `". database::input($this->data['code']) ."` decimal(11, 4) not null;"
+        );
+        }
+      ]]></add>
+        </operation>  
+        
+        
+        <operation error="log">
+            <search position="after" offset="1"><![CDATA[
+            throw new Exception('Cannot rename the store currency.');
+      ]]></search>
+            <add><![CDATA[
+            database::query(
+            "alter table ". DB_TABLE_PRODUCTS_PRICES_BY_SIGN_IN_DATE_PRICE ."
+            change `". database::input($currency['code']) ."` `". database::input($this->data['code']) ."` decimal(11, 4) not null;"
+              );
+      ]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="after" offset="1"><![CDATA[
+        $this->data['id'] = database::insert_id();
+      ]]></search>
+            <add><![CDATA[
+
+      $products_sign_in_date_price_query = database::query(
+        "show fields from ". DB_TABLE_PRODUCTS_PRICES_BY_SIGN_IN_DATE_PRICE ."
+        where `Field` = '". database::input($this->data['code']) ."';"
+        );
+        if (database::num_rows($products_sign_in_date_price_query) == 0) {
+        database::query(
+        "alter table ". DB_TABLE_PRODUCTS_PRICES_BY_SIGN_IN_DATE_PRICE ."
+        add `". database::input($this->data['code']) ."` decimal(11, 4) not null;"
+        );
+        }
+      ]]></add>
+        </operation>        
+        
+        
+        
+        
+		
+        <operation error="log">
+            <search position="after" offset="1"><![CDATA[
+            throw new Exception('Cannot rename the store currency.');
+      ]]></search>
+            <add><![CDATA[
+            database::query(
+            "alter table ". DB_TABLE_PRODUCTS_PRICES_BY_DEFAULT_WHOLESALE_PRICE ."
+            change `". database::input($currency['code']) ."` `". database::input($this->data['code']) ."` decimal(11, 4) not null;"
+              );
+      ]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="after" offset="1"><![CDATA[
+        $this->data['id'] = database::insert_id();
+      ]]></search>
+            <add><![CDATA[
+
+      $products_wholesale_price_query = database::query(
+        "show fields from ". DB_TABLE_PRODUCTS_PRICES_BY_DEFAULT_WHOLESALE_PRICE ."
+        where `Field` = '". database::input($this->data['code']) ."';"
+        );
+        if (database::num_rows($products_wholesale_price_query) == 0) {
+        database::query(
+        "alter table ". DB_TABLE_PRODUCTS_PRICES_BY_DEFAULT_WHOLESALE_PRICE ."
+        add `". database::input($this->data['code']) ."` decimal(11, 4) not null;"
+        );
+        }
+      ]]></add>
+        </operation>		
+		
+    </file>
+
+    <file name="includes/entities/ent_product.inc.php">
+        <operation error="log">
+            <search position="after"><![CDATA[
+      $this->data['prices'] = array();
+      ]]></search>
+            <add><![CDATA[
+      $this->data['stock_quantity_prices'] = array();
+      $this->data['stock_quantity_guest_prices'] = array();
+      ]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="before" offset="1"><![CDATA[
+      $product_campaigns_query = database::query(
+      ]]></search>
+            <add><![CDATA[
+      // Stock Quantity Prices
+       $product_stock_quantity_prices_query = database::query(
+        "select * from ". DB_TABLE_PRODUCTS_STOCK_QUANTITY_PRICES ."
+        where product_id = '". (int)$this->data['id'] ."'
+        order by stock_quantity;"
+        );
+        while ($product_stock_quantity_price = database::fetch($product_stock_quantity_prices_query)) {
+        $this->data['stock_quantity_prices'][$product_stock_quantity_price['id']] = $product_stock_quantity_price;
+        }
+        
+      // Stock Quantity Guest Prices
+       $product_stock_quantity_guest_prices_query = database::query(
+        "select * from ". DB_TABLE_PRODUCTS_STOCK_QUANTITY_GUEST_PRICES ."
+        where product_id = '". (int)$this->data['id'] ."'
+        order by stock_quantity;"
+        );
+        while ($product_stock_quantity_guest_price = database::fetch($product_stock_quantity_guest_prices_query)) {
+        $this->data['stock_quantity_guest_prices'][$product_stock_quantity_guest_price['id']] = $product_stock_quantity_guest_price;
+        }        
+
+      ]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="after" offset="5"><![CDATA[
+          "update ". DB_TABLE_PRODUCTS_PRICES ." set
+      ]]></search>
+            <add><![CDATA[
+
+      // delete stock quantity price
+      database::query(
+            "delete from ". DB_TABLE_PRODUCTS_STOCK_QUANTITY_PRICES ."
+        where product_id = '". (int)$this->data['id'] ."'
+        and id not in ('". @implode("', '", @array_keys($this->data['stock_quantity_prices'])) ."');"
+        );
+     // update stock quantity price
+        if (!empty($this->data['stock_quantity_prices'])) {
+            foreach (array_keys($this->data['stock_quantity_prices']) as $key) {
+                if (empty($this->data['stock_quantity_prices'][$key]['id'])) {
+                database::query(
+                "insert into ". DB_TABLE_PRODUCTS_STOCK_QUANTITY_PRICES ."
+                (product_id)
+                values ('". (int)$this->data['id'] ."');"
+                );
+                $this->data['stock_quantity_prices'][$key]['id'] = database::insert_id();
+                }
+                $sql_currency_stock_quantity_prices = "";
+                foreach (array_keys(currency::$currencies) as $currency_code) {
+                $sql_currency_stock_quantity_prices .= $currency_code ." = '". (float)$this->data['stock_quantity_prices'][$key][$currency_code] ."', ";
+                }
+                $sql_currency_stock_quantity_prices = rtrim($sql_currency_stock_quantity_prices, ', ');
+                database::query(
+                "update ". DB_TABLE_PRODUCTS_STOCK_QUANTITY_PRICES ." set
+            stock_quantity = ". (int)$this->data['stock_quantity_prices'][$key]['stock_quantity'] .",
+            $sql_currency_stock_quantity_prices
+            where product_id = '". (int)$this->data['id'] ."'
+            and id = '". (int)$this->data['stock_quantity_prices'][$key]['id'] ."'
+            limit 1;"
+                );
+            }
+        }
+        
+      // delete stock quantity guest price
+      database::query(
+            "delete from ". DB_TABLE_PRODUCTS_STOCK_QUANTITY_GUEST_PRICES ."
+        where product_id = '". (int)$this->data['id'] ."'
+        and id not in ('". @implode("', '", @array_keys($this->data['stock_quantity_guest_prices'])) ."');"
+        );
+     // update stock quantity guest price
+        if (!empty($this->data['stock_quantity_guest_prices'])) {
+            foreach (array_keys($this->data['stock_quantity_guest_prices']) as $key) {
+                if (empty($this->data['stock_quantity_guest_prices'][$key]['id'])) {
+                database::query(
+                "insert into ". DB_TABLE_PRODUCTS_STOCK_QUANTITY_GUEST_PRICES ."
+                (product_id)
+                values ('". (int)$this->data['id'] ."');"
+                );
+                $this->data['stock_quantity_guest_prices'][$key]['id'] = database::insert_id();
+                }
+                $sql_currency_stock_quantity_guest_prices = "";
+                foreach (array_keys(currency::$currencies) as $currency_code) {
+                $sql_currency_stock_quantity_guest_prices .= $currency_code ." = '". (float)$this->data['stock_quantity_guest_prices'][$key][$currency_code] ."', ";
+                }
+                $sql_currency_stock_quantity_guest_prices = rtrim($sql_currency_stock_quantity_guest_prices, ', ');
+                database::query(
+                "update ". DB_TABLE_PRODUCTS_STOCK_QUANTITY_GUEST_PRICES ." set
+            stock_quantity = ". (int)$this->data['stock_quantity_guest_prices'][$key]['stock_quantity'] .",
+            $sql_currency_stock_quantity_guest_prices
+            where product_id = '". (int)$this->data['id'] ."'
+            and id = '". (int)$this->data['stock_quantity_guest_prices'][$key]['id'] ."'
+            limit 1;"
+                );
+            }
+        }        
+      ]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="after" offset="2"><![CDATA[
+        "delete from ". DB_TABLE_PRODUCTS_PRICES ."
+      ]]></search>
+            <add><![CDATA[
+        database::query(
+        "delete from ". DB_TABLE_PRODUCTS_STOCK_QUANTITY_PRICES ."
+        where product_id = '". (int)$this->data['id'] ."';"
+        );
+        
+        database::query(
+        "delete from ". DB_TABLE_PRODUCTS_STOCK_QUANTITY_GUEST_PRICES ."
+        where product_id = '". (int)$this->data['id'] ."';"
+        );        
+        
+      ]]></add>
+        </operation>
+        
+        <operation error="log">
+            <search position="after"><![CDATA[
+      $this->data['prices'] = array();
+      ]]></search>
+            <add><![CDATA[
+      $this->data['default_price_prices'] = array();
+      $this->data['guest_price_prices'] = array();
+      $this->data['sign_in_date_price_prices'] = array();
+      $this->data['fake_sold_out_date_price_prices'] = array();
+	  $this->data['wholesale_price_prices'] = array();
+      ]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="before" offset="1"><![CDATA[
+      $product_campaigns_query = database::query(
+      ]]></search>
+            <add><![CDATA[
+       $product_default_price_prices_query = database::query(
+        "select * from ". DB_TABLE_PRODUCTS_PRICES_BY_DEFAULT_PRICE ."
+        where product_id = '". (int)$this->data['id'] ."'
+        order by default_price_id;"
+        );
+       while ($default_price_price = database::fetch($product_default_price_prices_query)) {
+        $this->data['default_price_prices'][$default_price_price['id']] = $default_price_price;
+        }
+		
+        $product_guest_price_prices_query = database::query(
+        "select * from ". DB_TABLE_PRODUCTS_PRICES_BY_GUEST_PRICE ."
+        where product_id = '". (int)$this->data['id'] ."'
+        order by guest_price_id;"
+        );
+       while ($guest_price_price = database::fetch($product_guest_price_prices_query)) {
+        $this->data['guest_price_prices'][$guest_price_price['id']] = $guest_price_price;
+        }
+
+        $product_fake_sold_out_date_price_prices_query = database::query(
+        "select * from ". DB_TABLE_PRODUCTS_PRICES_BY_FAKE_SOLD_OUT_DATE_PRICE ."
+        where product_id = '". (int)$this->data['id'] ."'
+        order by fake_sold_out_date_price_id;"
+        );
+       while ($fake_sold_out_date_price_price = database::fetch($product_fake_sold_out_date_price_prices_query)) {
+        $this->data['fake_sold_out_date_price_prices'][$fake_sold_out_date_price_price['id']] = $fake_sold_out_date_price_price;
+        }   
+        
+        $product_sign_in_date_price_prices_query = database::query(
+        "select * from ". DB_TABLE_PRODUCTS_PRICES_BY_SIGN_IN_DATE_PRICE ."
+        where product_id = '". (int)$this->data['id'] ."'
+        order by sign_in_date_price_id;"
+        );
+       while ($sign_in_date_price_price = database::fetch($product_sign_in_date_price_prices_query)) {
+        $this->data['sign_in_date_price_prices'][$sign_in_date_price_price['id']] = $sign_in_date_price_price;
+        }        
+        
+
+       $product_wholesale_price_prices_query = database::query(
+        "select * from ". DB_TABLE_PRODUCTS_PRICES_BY_DEFAULT_WHOLESALE_PRICE ."
+        where product_id = '". (int)$this->data['id'] ."'
+        order by default_wholesale_price_id;"
+        );
+       while ($wholesale_price_price = database::fetch($product_wholesale_price_prices_query)) {
+        $this->data['wholesale_price_prices'][$wholesale_price_price['id']] = $wholesale_price_price;
+        }
+		
+      ]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="after" offset="5"><![CDATA[
+          "update ". DB_TABLE_PRODUCTS_PRICES ." set
+      ]]></search>
+            <add><![CDATA[
+
+      // delete default price
+        database::query(
+            "delete from ". DB_TABLE_PRODUCTS_PRICES_BY_DEFAULT_PRICE ."
+        where product_id = '". (int)$this->data['id'] ."'
+        and id not in ('". @implode("', '", @array_keys($this->data['default_price_prices'])) ."');"
+        );
+      // update default price
+        if (!empty($this->data['default_price_prices'])) {
+            foreach (array_keys($this->data['default_price_prices']) as $key) {
+                if (empty($this->data['default_price_prices'][$key]['id'])) {
+                database::query(
+                "insert into ". DB_TABLE_PRODUCTS_PRICES_BY_DEFAULT_PRICE ."
+                (product_id)
+                 values ('". (int)$this->data['id'] ."');"
+                );
+                $this->data['default_price_prices'][$key]['id'] = database::insert_id();
+                }
+
+                $sql_currency_default_price_prices = "";
+                foreach (array_keys(currency::$currencies) as $currency_code) {
+                $sql_currency_default_price_prices .= $currency_code ." = '". (float)$this->data['default_price_prices'][$key][$currency_code] ."', ";
+                }
+                $sql_currency_default_price_prices = rtrim($sql_currency_default_price_prices, ', ');
+
+                database::query(
+                "update ". DB_TABLE_PRODUCTS_PRICES_BY_DEFAULT_PRICE ." set
+            default_price_id = ". (int)$this->data['default_price_prices'][$key]['default_price_id'] .",
+            start_date = ". (empty($this->data['default_price_prices'][$key]['start_date']) ? "NULL" : "'". date('Y-m-d H:i:s', strtotime($this->data['default_price_prices'][$key]['start_date'])) ."'") .",
+            end_date = ". (empty($this->data['default_price_prices'][$key]['end_date']) ? "NULL" : "'". date('Y-m-d H:i:s', strtotime($this->data['default_price_prices'][$key]['end_date'])) ."'") .",
+            $sql_currency_default_price_prices
+            where product_id = '". (int)$this->data['id'] ."'
+            and id = '". (int)$this->data['default_price_prices'][$key]['id'] ."'
+            limit 1;"
+                );
+            }
+        }
+		
+        // delete guest price
+        database::query(
+            "delete from ". DB_TABLE_PRODUCTS_PRICES_BY_GUEST_PRICE ."
+        where product_id = '". (int)$this->data['id'] ."'
+        and id not in ('". @implode("', '", @array_keys($this->data['guest_price_prices'])) ."');"
+        );
+      // update guest price
+        if (!empty($this->data['guest_price_prices'])) {
+            foreach (array_keys($this->data['guest_price_prices']) as $key) {
+                if (empty($this->data['guest_price_prices'][$key]['id'])) {
+                database::query(
+                "insert into ". DB_TABLE_PRODUCTS_PRICES_BY_GUEST_PRICE ."
+                (product_id)
+                 values ('". (int)$this->data['id'] ."');"
+                );
+                $this->data['guest_price_prices'][$key]['id'] = database::insert_id();
+                }
+
+                $sql_currency_guest_price_prices = "";
+                foreach (array_keys(currency::$currencies) as $currency_code) {
+                $sql_currency_guest_price_prices .= $currency_code ." = '". (float)$this->data['guest_price_prices'][$key][$currency_code] ."', ";
+                }
+                $sql_currency_guest_price_prices = rtrim($sql_currency_guest_price_prices, ', ');
+
+                database::query(
+                "update ". DB_TABLE_PRODUCTS_PRICES_BY_GUEST_PRICE ." set
+            guest_price_id = ". (int)$this->data['guest_price_prices'][$key]['guest_price_id'] .",
+            start_date = ". (empty($this->data['guest_price_prices'][$key]['start_date']) ? "NULL" : "'". date('Y-m-d H:i:s', strtotime($this->data['guest_price_prices'][$key]['start_date'])) ."'") .",
+            end_date = ". (empty($this->data['guest_price_prices'][$key]['end_date']) ? "NULL" : "'". date('Y-m-d H:i:s', strtotime($this->data['guest_price_prices'][$key]['end_date'])) ."'") .",
+            $sql_currency_guest_price_prices
+            where product_id = '". (int)$this->data['id'] ."'
+            and id = '". (int)$this->data['guest_price_prices'][$key]['id'] ."'
+            limit 1;"
+                );
+            }
+        }
+
+
+        // delete fake_sold_out_date price
+        database::query(
+            "delete from ". DB_TABLE_PRODUCTS_PRICES_BY_FAKE_SOLD_OUT_DATE_PRICE ."
+        where product_id = '". (int)$this->data['id'] ."'
+        and id not in ('". @implode("', '", @array_keys($this->data['fake_sold_out_date_price_prices'])) ."');"
+        );
+      // update fake_sold_out_date price
+        if (!empty($this->data['fake_sold_out_date_price_prices'])) {
+            foreach (array_keys($this->data['fake_sold_out_date_price_prices']) as $key) {
+                if (empty($this->data['fake_sold_out_date_price_prices'][$key]['id'])) {
+                database::query(
+                "insert into ". DB_TABLE_PRODUCTS_PRICES_BY_FAKE_SOLD_OUT_DATE_PRICE ."
+                (product_id)
+                 values ('". (int)$this->data['id'] ."');"
+                );
+                $this->data['fake_sold_out_date_price_prices'][$key]['id'] = database::insert_id();
+                }
+
+                $sql_currency_fake_sold_out_date_price_prices = "";
+                foreach (array_keys(currency::$currencies) as $currency_code) {
+                $sql_currency_fake_sold_out_date_price_prices .= $currency_code ." = '". (float)$this->data['fake_sold_out_date_price_prices'][$key][$currency_code] ."', ";
+                }
+                $sql_currency_fake_sold_out_date_price_prices = rtrim($sql_currency_fake_sold_out_date_price_prices, ', ');
+
+                database::query(
+                "update ". DB_TABLE_PRODUCTS_PRICES_BY_FAKE_SOLD_OUT_DATE_PRICE ." set
+            fake_sold_out_date_price_id = ". (int)$this->data['fake_sold_out_date_price_prices'][$key]['fake_sold_out_date_price_id'] .",
+            start_date = ". (empty($this->data['fake_sold_out_date_price_prices'][$key]['start_date']) ? "NULL" : "'". date('Y-m-d H:i:s', strtotime($this->data['fake_sold_out_date_price_prices'][$key]['start_date'])) ."'") .",
+            end_date = ". (empty($this->data['fake_sold_out_date_price_prices'][$key]['end_date']) ? "NULL" : "'". date('Y-m-d H:i:s', strtotime($this->data['fake_sold_out_date_price_prices'][$key]['end_date'])) ."'") .",
+            $sql_currency_fake_sold_out_date_price_prices
+            where product_id = '". (int)$this->data['id'] ."'
+            and id = '". (int)$this->data['fake_sold_out_date_price_prices'][$key]['id'] ."'
+            limit 1;"
+                );
+            }
+        }
+
+
+        // delete sign_in_date price
+        database::query(
+            "delete from ". DB_TABLE_PRODUCTS_PRICES_BY_SIGN_IN_DATE_PRICE ."
+        where product_id = '". (int)$this->data['id'] ."'
+        and id not in ('". @implode("', '", @array_keys($this->data['sign_in_date_price_prices'])) ."');"
+        );
+      // update sign_in_date price
+        if (!empty($this->data['sign_in_date_price_prices'])) {
+            foreach (array_keys($this->data['sign_in_date_price_prices']) as $key) {
+                if (empty($this->data['sign_in_date_price_prices'][$key]['id'])) {
+                database::query(
+                "insert into ". DB_TABLE_PRODUCTS_PRICES_BY_SIGN_IN_DATE_PRICE ."
+                (product_id)
+                 values ('". (int)$this->data['id'] ."');"
+                );
+                $this->data['sign_in_date_price_prices'][$key]['id'] = database::insert_id();
+                }
+
+                $sql_currency_sign_in_date_price_prices = "";
+                foreach (array_keys(currency::$currencies) as $currency_code) {
+                $sql_currency_sign_in_date_price_prices .= $currency_code ." = '". (float)$this->data['sign_in_date_price_prices'][$key][$currency_code] ."', ";
+                }
+                $sql_currency_sign_in_date_price_prices = rtrim($sql_currency_sign_in_date_price_prices, ', ');
+
+                database::query(
+                "update ". DB_TABLE_PRODUCTS_PRICES_BY_SIGN_IN_DATE_PRICE ." set
+            sign_in_date_price_id = ". (int)$this->data['sign_in_date_price_prices'][$key]['sign_in_date_price_id'] .",
+            start_date = ". (empty($this->data['sign_in_date_price_prices'][$key]['start_date']) ? "NULL" : "'". date('Y-m-d H:i:s', strtotime($this->data['sign_in_date_price_prices'][$key]['start_date'])) ."'") .",
+            end_date = ". (empty($this->data['sign_in_date_price_prices'][$key]['end_date']) ? "NULL" : "'". date('Y-m-d H:i:s', strtotime($this->data['sign_in_date_price_prices'][$key]['end_date'])) ."'") .",
+            $sql_currency_sign_in_date_price_prices
+            where product_id = '". (int)$this->data['id'] ."'
+            and id = '". (int)$this->data['sign_in_date_price_prices'][$key]['id'] ."'
+            limit 1;"
+                );
+            }
+        }
+
+
+		
+      // delete wholesale price
+        database::query(
+            "delete from ". DB_TABLE_PRODUCTS_PRICES_BY_DEFAULT_WHOLESALE_PRICE ."
+        where product_id = '". (int)$this->data['id'] ."'
+        and id not in ('". @implode("', '", @array_keys($this->data['wholesale_price_prices'])) ."');"
+        );
+      // update wholesale price
+        if (!empty($this->data['wholesale_price_prices'])) {
+            foreach (array_keys($this->data['wholesale_price_prices']) as $key) {
+                if (empty($this->data['wholesale_price_prices'][$key]['id'])) {
+                database::query(
+                "insert into ". DB_TABLE_PRODUCTS_PRICES_BY_DEFAULT_WHOLESALE_PRICE ."
+                (product_id)
+                 values ('". (int)$this->data['id'] ."');"
+                );
+                $this->data['wholesale_price_prices'][$key]['id'] = database::insert_id();
+                }
+
+                $sql_currency_wholesale_price_prices = "";
+                foreach (array_keys(currency::$currencies) as $currency_code) {
+                $sql_currency_wholesale_price_prices .= $currency_code ." = '". (float)$this->data['wholesale_price_prices'][$key][$currency_code] ."', ";
+                }
+                $sql_currency_wholesale_price_prices = rtrim($sql_currency_wholesale_price_prices, ', ');
+
+                database::query(
+                "update ". DB_TABLE_PRODUCTS_PRICES_BY_DEFAULT_WHOLESALE_PRICE ." set
+            default_wholesale_price_id = ". (int)$this->data['wholesale_price_prices'][$key]['default_wholesale_price_id'] .",
+            start_date = ". (empty($this->data['wholesale_price_prices'][$key]['start_date']) ? "NULL" : "'". date('Y-m-d H:i:s', strtotime($this->data['wholesale_price_prices'][$key]['start_date'])) ."'") .",
+            end_date = ". (empty($this->data['wholesale_price_prices'][$key]['end_date']) ? "NULL" : "'". date('Y-m-d H:i:s', strtotime($this->data['wholesale_price_prices'][$key]['end_date'])) ."'") .",
+            $sql_currency_wholesale_price_prices
+            where product_id = '". (int)$this->data['id'] ."'
+            and id = '". (int)$this->data['wholesale_price_prices'][$key]['id'] ."'
+            limit 1;"
+                );
+            }
+        }		
+		
+      ]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="after" offset="2"><![CDATA[
+        "delete from ". DB_TABLE_PRODUCTS_PRICES ."
+      ]]></search>
+            <add><![CDATA[
+        database::query(
+        "delete from ". DB_TABLE_PRODUCTS_PRICES_BY_DEFAULT_PRICE ."
+        where product_id = '". (int)$this->data['id'] ."';"
+        );
+		
+        database::query(
+        "delete from ". DB_TABLE_PRODUCTS_PRICES_BY_GUEST_PRICE ."
+        where product_id = '". (int)$this->data['id'] ."';"
+        );
+
+        database::query(
+        "delete from ". DB_TABLE_PRODUCTS_PRICES_BY_FAKE_SOLD_OUT_DATE_PRICE ."
+        where product_id = '". (int)$this->data['id'] ."';"
+        );
+
+
+        database::query(
+        "delete from ". DB_TABLE_PRODUCTS_PRICES_BY_SIGN_IN_DATE_PRICE ."
+        where product_id = '". (int)$this->data['id'] ."';"
+        );
+
+		
+        database::query(
+        "delete from ". DB_TABLE_PRODUCTS_PRICES_BY_DEFAULT_WHOLESALE_PRICE ."
+        where product_id = '". (int)$this->data['id'] ."';"
+        );
+		
+      ]]></add>
+        </operation>
+    </file>        
+
+    <file name="includes/functions/func_catalog.inc.php">
+        <operation error="log">
+            <search position="replace"><![CDATA[pp.price, ]]></search>
+            <add><![CDATA[pp.price, psqp.stock_quantity_price, psqgp.stock_quantity_guest_price,]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="after"><![CDATA[
+      ) pp on (pp.product_id = p.id)
+      ]]></search>
+            <add><![CDATA[
+      left join (
+        select product_id, stock_quantity ,if(`". database::input(currency::$selected['code']) ."`, `". database::input(currency::$selected['code']) ."` / ". (float)currency::$selected['value'] .", `". database::input(settings::get('store_currency_code')) ."`) as stock_quantity_price
+        from ". DB_TABLE_PRODUCTS_STOCK_QUANTITY_PRICES ."
+      ) psqp on (psqp.product_id = p.id and psqp.stock_quantity = p.quantity)
+      
+       left join (
+        select product_id, stock_quantity ,if(`". database::input(currency::$selected['code']) ."`, `". database::input(currency::$selected['code']) ."` / ". (float)currency::$selected['value'] .", `". database::input(settings::get('store_currency_code')) ."`) as stock_quantity_guest_price
+        from ". DB_TABLE_PRODUCTS_STOCK_QUANTITY_GUEST_PRICES ."
+      ) psqgp on (psqgp.product_id = p.id and psqgp.stock_quantity = p.quantity)     
+      
+      ]]></add>
+        </operation>
+        
+        <operation error="log">
+            <search position="replace"><![CDATA[pp.price, ]]></search>
+            <add><![CDATA[pp.price, ppbdp.default_price_price, ppbgp.guest_price_price, ppbwp.wholesale_price_price, ppsip.sign_in_date_price_price, ppfsp.fake_sold_out_date_price_price, ]]></add>
+        </operation>
+
+
+        <operation error="log">
+            <search position="after"><![CDATA[
+      ) pp on (pp.product_id = p.id)
+      ]]></search>
+            <add><![CDATA[
+      left join (
+        select product_id, if(`". database::input(currency::$selected['code']) ."`, `". database::input(currency::$selected['code']) ."` / ". (float)currency::$selected['value'] .", `". database::input(settings::get('store_currency_code')) ."`) as default_price_price
+        from ". DB_TABLE_PRODUCTS_PRICES_BY_DEFAULT_PRICE ."
+        where (start_date <= '". date('Y-m-d H:i:s') ."')
+        and (year(end_date) < '1971' or end_date >= '". date('Y-m-d H:i:s') ."')
+        order by end_date asc
+      ) ppbdp on (ppbdp.product_id = p.id)
+
+      left join (
+        select product_id, if(`". database::input(currency::$selected['code']) ."`, `". database::input(currency::$selected['code']) ."` / ". (float)currency::$selected['value'] .", `". database::input(settings::get('store_currency_code')) ."`) as fake_sold_out_date_price_price
+        from ". DB_TABLE_PRODUCTS_PRICES_BY_FAKE_SOLD_OUT_DATE_PRICE ."
+        where (start_date <= '". date('Y-m-d H:i:s') ."')
+        and (year(end_date) < '1971' or end_date >= '". date('Y-m-d H:i:s') ."')
+        order by end_date asc
+      ) ppfsp on (ppfsp.product_id = p.id)
+
+      left join (
+        select product_id, if(`". database::input(currency::$selected['code']) ."`, `". database::input(currency::$selected['code']) ."` / ". (float)currency::$selected['value'] .", `". database::input(settings::get('store_currency_code')) ."`) as sign_in_date_price_price
+        from ". DB_TABLE_PRODUCTS_PRICES_BY_SIGN_IN_DATE_PRICE ."
+        where (start_date <= '". date('Y-m-d H:i:s') ."')
+        and (year(end_date) < '1971' or end_date >= '". date('Y-m-d H:i:s') ."')
+        order by end_date asc
+      ) ppsip on (ppsip.product_id = p.id)
+
+      left join (
+        select product_id, if(`". database::input(currency::$selected['code']) ."`, `". database::input(currency::$selected['code']) ."` / ". (float)currency::$selected['value'] .", `". database::input(settings::get('store_currency_code')) ."`) as guest_price_price
+        from ". DB_TABLE_PRODUCTS_PRICES_BY_GUEST_PRICE ."
+        where (start_date <= '". date('Y-m-d H:i:s') ."')
+        and (year(end_date) < '1971' or end_date >= '". date('Y-m-d H:i:s') ."')
+        order by end_date asc
+      ) ppbgp on (ppbgp.product_id = p.id)
+
+      left join (
+        select product_id, if(`". database::input(currency::$selected['code']) ."`, `". database::input(currency::$selected['code']) ."` / ". (float)currency::$selected['value'] .", `". database::input(settings::get('store_currency_code')) ."`) as wholesale_price_price
+        from ". DB_TABLE_PRODUCTS_PRICES_BY_DEFAULT_WHOLESALE_PRICE ."
+        where (start_date <= '". date('Y-m-d H:i:s') ."')
+        and (year(end_date) < '1971' or end_date >= '". date('Y-m-d H:i:s') ."')
+        order by end_date asc
+      ) ppbwp on (ppbwp.product_id = p.id)	  
+	  
+      ]]></add>
+        </operation>
+    </file>        
+
+    <file name="pages/search.inc.php">
+        <operation error="log">
+            <search position="replace"><![CDATA[pp.price, ]]></search>
+            <add><![CDATA[pp.price, psqp.stock_quantity_price, psqgp.stock_quantity_guest_price, ]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="after"><![CDATA[
+      ) pp on (pp.product_id = p.id)
+      ]]></search>
+           <add><![CDATA[
+      left join (
+        select product_id, stock_quantity ,if(`". database::input(currency::$selected['code']) ."`, `". database::input(currency::$selected['code']) ."` / ". (float)currency::$selected['value'] .", `". database::input(settings::get('store_currency_code')) ."`) as stock_quantity_price
+        from ". DB_TABLE_PRODUCTS_STOCK_QUANTITY_PRICES ."
+      ) psqp on (psqp.product_id = p.id and psqp.stock_quantity = p.quantity)
+      
+      left join (
+        select product_id, stock_quantity ,if(`". database::input(currency::$selected['code']) ."`, `". database::input(currency::$selected['code']) ."` / ". (float)currency::$selected['value'] .", `". database::input(settings::get('store_currency_code')) ."`) as stock_quantity_guest_price
+        from ". DB_TABLE_PRODUCTS_STOCK_QUANTITY_GUEST_PRICES ."
+      ) psqgp on (psqgp.product_id = p.id and psqgp.stock_quantity = p.quantity)      
+      
+      ]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="replace"><![CDATA[pp.price, ]]></search>
+            <add><![CDATA[pp.price, ppbdp.default_price_price, ppbgp.guest_price_price, ppbwp.wholesale_price_price, ppsip.sign_in_date_price_price, ppfsp.fake_sold_out_date_price_price,]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="after"><![CDATA[
+      ) pp on (pp.product_id = p.id)
+      ]]></search>
+            <add><![CDATA[
+      left join (
+        select product_id, if(`". database::input(currency::$selected['code']) ."`, `". database::input(currency::$selected['code']) ."` / ". (float)currency::$selected['value'] .", `". database::input(settings::get('store_currency_code')) ."`) as default_price_price
+        from ". DB_TABLE_PRODUCTS_PRICES_BY_DEFAULT_PRICE ."
+        where (start_date <= '". date('Y-m-d H:i:s') ."')
+        and (year(end_date) < '1971' or end_date >= '". date('Y-m-d H:i:s') ."')
+        order by end_date asc
+      ) ppbdp on (ppbdp.product_id = p.id)
+
+      left join (
+        select product_id, if(`". database::input(currency::$selected['code']) ."`, `". database::input(currency::$selected['code']) ."` / ". (float)currency::$selected['value'] .", `". database::input(settings::get('store_currency_code')) ."`) as guest_price_price
+        from ". DB_TABLE_PRODUCTS_PRICES_BY_GUEST_PRICE ."
+        where (start_date <= '". date('Y-m-d H:i:s') ."')
+        and (year(end_date) < '1971' or end_date >= '". date('Y-m-d H:i:s') ."')
+        order by end_date asc
+      ) ppbgp on (ppbgp.product_id = p.id)
+
+      left join (
+        select product_id, if(`". database::input(currency::$selected['code']) ."`, `". database::input(currency::$selected['code']) ."` / ". (float)currency::$selected['value'] .", `". database::input(settings::get('store_currency_code')) ."`) as fake_sold_out_date_price_price
+        from ". DB_TABLE_PRODUCTS_PRICES_BY_FAKE_SOLD_OUT_DATE_PRICE ."
+        where (start_date <= '". date('Y-m-d H:i:s') ."')
+        and (year(end_date) < '1971' or end_date >= '". date('Y-m-d H:i:s') ."')
+        order by end_date asc
+      ) ppfsp on (ppfsp.product_id = p.id)
+
+      left join (
+        select product_id, if(`". database::input(currency::$selected['code']) ."`, `". database::input(currency::$selected['code']) ."` / ". (float)currency::$selected['value'] .", `". database::input(settings::get('store_currency_code')) ."`) as sign_in_date_price_price
+        from ". DB_TABLE_PRODUCTS_PRICES_BY_SIGN_IN_DATE_PRICE ."
+        where (start_date <= '". date('Y-m-d H:i:s') ."')
+        and (year(end_date) < '1971' or end_date >= '". date('Y-m-d H:i:s') ."')
+        order by end_date asc
+      ) ppsip on (ppsip.product_id = p.id)
+
+	  
+      left join (
+        select product_id, if(`". database::input(currency::$selected['code']) ."`, `". database::input(currency::$selected['code']) ."` / ". (float)currency::$selected['value'] .", `". database::input(settings::get('store_currency_code')) ."`) as wholesale_price_price
+        from ". DB_TABLE_PRODUCTS_PRICES_BY_DEFAULT_WHOLESALE_PRICE ."
+        where (start_date <= '". date('Y-m-d H:i:s') ."')
+        and (year(end_date) < '1971' or end_date >= '". date('Y-m-d H:i:s') ."')
+        order by end_date asc
+      ) ppbwp on (ppbwp.product_id = p.id)
+	  
+      ]]></add>
+        </operation>
+    </file>
+
+    <file name="includes/functions/func_draw.inc.php">
+        <operation error="log">
+            <search position="before"><![CDATA[
+    return $listing_product->stitch('views/listing_product_'.$listing_type);
+      ]]></search>
+            <add><![CDATA[
+    if (isset($product['stock_quantity_price']) && !empty(customer::$data['id']) && (float)$product['stock_quantity_price'] > 0) {
+        $listing_product->snippets['regular_price'] = tax::get_price($product['stock_quantity_price'], $product['tax_class_id']);
+    }
+      
+    if (isset($product['stock_quantity_guest_price']) && empty(customer::$data['id']) && (float)$product['stock_quantity_guest_price'] > 0) {
+        $listing_product->snippets['regular_price'] = tax::get_price($product['stock_quantity_guest_price'], $product['tax_class_id']);
+    }      
+      ]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="before"><![CDATA[
+    return $listing_product->stitch('views/listing_product_'.$listing_type);
+      ]]></search>
+            <add><![CDATA[
+    if (isset(reference::product($product['id'])->master_customer_special_price) && (isset(reference::product($product['id'])->customer_specialprice) && reference::product($product['id'])->price > 0 && !empty(customer::$data['id']) && (empty(customer::$data['code']) || (empty(customer::$data['disable_default_price']) )))) {
+        $listing_product->snippets['regular_price'] = tax::get_price(reference::product($product['id'])->price, $product['tax_class_id']);
+    }
+
+    else if (isset(reference::product($product['id'])->disable_master_customer_special_price)) {
+        $listing_product->snippets['regular_price'] = tax::get_price(reference::product($product['id'])->price, $product['tax_class_id']);
+    }
+
+    else if (isset(reference::product($product['id'])->disable_master_customer_special_price) && (isset(reference::product($product['id'])->customer_specialprice) && reference::product($product['id'])->price > 0 && !empty(customer::$data['id']) && (empty(customer::$data['code']) || (empty(customer::$data['disable_default_price']) )))) {
+        $listing_product->snippets['regular_price'] = tax::get_price(reference::product($product['id'])->price, $product['tax_class_id']);
+    }
+
+    else if (!isset(reference::product($product['id'])->disable_master_guest_special_price)) {
+        $listing_product->snippets['regular_price'] = tax::get_price(reference::product($product['id'])->price, $product['tax_class_id']);
+    }
+	  
+    else if (isset(reference::product($product['id'])->master_guest_special_price) && (isset(reference::product($product['id'])->specialprice) && reference::product($product['id'])->price > 0 && empty(customer::$data['id'])  && (empty(customer::$data['disable_guest_price'])))) {
+        $listing_product->snippets['regular_price'] = tax::get_price(reference::product($product['id'])->price, $product['tax_class_id']);
+    }
+    
+    else if (isset(reference::product($product['id'])->disable_master_guest_special_price) && (isset(reference::product($product['id'])->specialprice) && reference::product($product['id'])->price > 0 && empty(customer::$data['id'])  && (empty(customer::$data['disable_guest_price'])))) {
+        $listing_product->snippets['regular_price'] = tax::get_price(reference::product($product['id'])->price, $product['tax_class_id']);
+    }    
+	  
+    else if (isset(reference::product($product['id'])->master_wholesale_special_price) && (isset(reference::product($product['id'])->wholesale_specialprice) && (isset($product['wholesale_price_price']) && (float)$product['wholesale_price_price'] > 0 && !empty(customer::$data['id']) && (empty(customer::$data['code']) || (!empty(customer::$data['disable_guest_price']) || (!empty(customer::$data['disable_default_price']) || (empty(customer::$data['disable_wholesale_price']) || (!empty(customer::$data['enable_wholesale_price']))))))))) {
+        if (empty(customer::$data['disable_wholesale_price'])) {
+          $listing_product->snippets['regular_price'] = tax::get_price($product['wholesale_price_price'], $product['tax_class_id']);
+        }
+	}
+
+    else if (isset(reference::product($product['id'])->disable_wholesale_special_price) && (isset(reference::product($product['id'])->wholesale_specialprice) && (isset($product['wholesale_price_price']) && (float)$product['wholesale_price_price'] > 0 && !empty(customer::$data['id']) && (empty(customer::$data['code']) || (!empty(customer::$data['disable_guest_price']) || (!empty(customer::$data['disable_default_price']) || (empty(customer::$data['disable_wholesale_price']) || (!empty(customer::$data['enable_wholesale_price']))))))))) {
+        if (empty(customer::$data['disable_wholesale_price'])) {
+          $listing_product->snippets['regular_price'] = tax::get_price($product['wholesale_price_price'], $product['tax_class_id']);
+        }
+	}
+
+    else if ((isset(reference::product($product['id'])->wholesale_specialprice) || (!isset(reference::product($product['id'])->wholesale_specialprice))) && (isset($product['wholesale_price_price']) && (float)$product['wholesale_price_price'] > 0 && !empty(customer::$data['id']) && (empty(customer::$data['code']) || (!empty(customer::$data['disable_guest_price']) || (!empty(customer::$data['disable_default_price']) || (empty(customer::$data['disable_wholesale_price']) || (!empty(customer::$data['enable_wholesale_price'])))))))) {
+        if (empty(customer::$data['disable_wholesale_price'])) {
+          $listing_product->snippets['regular_price'] = tax::get_price(reference::product($product['id'])->price, $product['tax_class_id']);
+        }
+	}
+	
+	
+      ]]></add>
+        </operation>
+    </file>
+
+    <file name="includes/references/ref_product.inc.php">
+        <operation error="log">
+            <search position="replace" offset="18"><![CDATA[
+
+            case 'campaign':
+
+      ]]></search>
+            <add><![CDATA[        
+
+      case 'campaign':
+  if (!empty(reference::product($this->_id)->master_insane_deal_price)) {       
+    if (empty(reference::product($this->_id)->no_customer_group_prices)) {   
+        if (!empty(reference::product($this->_id)->insaneprice)) { 
+            if (((!empty(customer::$data['code']) && (!empty(reference::product($this->_id)->sign_in_deal)))) || ((!empty(customer::$data['code']) && (!empty(reference::product($this->_id)->signin)))))   {
+            $this->_data['campaign'] = array();
+            break;
+    }
+
+        $this->_data['campaign'] = array();
+
+    if (!empty(customer::$data['id']) || (empty(customer::$data['id']))) {
+        if (empty(customer::$data['disable_wholesale_price'])) {    
+            $products_campaigns_query = database::query(
+            "select * from ". DB_TABLE_PRODUCTS_CAMPAIGNS ."
+            where product_id = ". (int)$this->_id ."
+            and (year(start_date) < '1971' or start_date <= '". date('Y-m-d H:i:s') ."')
+            and (year(end_date) < '1971' or end_date >= '". date('Y-m-d H:i:s') ."')
+            order by end_date asc
+            limit 1;"
+          );
+
+
+
+    if ($products_campaign = database::fetch($products_campaigns_query)) {
+            $this->_data['campaign'] = $products_campaign;
+            if ($products_campaign[$this->_currency_code] > 0) {
+              $this->_data['campaign']['price'] = (float)currency::convert($products_campaign[$this->_currency_code], $this->_currency_code, settings::get('store_currency_code'));
+            } else {
+              $this->_data['campaign']['price'] = (float)$products_campaign[settings::get('store_currency_code')];
+            }
+           }
+          }
+         }
+        }
+    }
+    }
+
+
+    if (empty(reference::product($this->_id)->no_customer_group_prices)) {   
+        if (!empty(reference::product($this->_id)->disable_master_insane_deal_price)) { 
+            if (((!empty(customer::$data['code']) && (!empty(reference::product($this->_id)->sign_in_deal)))) || ((!empty(customer::$data['code']) && (!empty(reference::product($this->_id)->signin)))))   {
+            $this->_data['campaign'] = array();
+            break;
+    }
+
+        $this->_data['campaign'] = array();
+
+    if (!empty(customer::$data['id']) || (empty(customer::$data['id']))) {
+        if (empty(customer::$data['disable_wholesale_price'])) {    
+            $products_campaigns_query = database::query(
+            "select * from ". DB_TABLE_PRODUCTS_CAMPAIGNS ."
+            where product_id = ". (int)$this->_id ."
+            and (year(start_date) < '1971' or start_date <= '". date('Y-m-d H:i:s') ."')
+            and (year(end_date) < '1971' or end_date >= '". date('Y-m-d H:i:s') ."')
+            order by end_date asc
+            limit 1;"
+          );
+
+
+
+    if ($products_campaign = database::fetch($products_campaigns_query)) {
+            $this->_data['campaign'] = $products_campaign;
+            if ($products_campaign[$this->_currency_code] > 0) {
+              $this->_data['campaign']['price'] = (float)currency::convert($products_campaign[$this->_currency_code], $this->_currency_code, settings::get('store_currency_code'));
+            } else {
+              $this->_data['campaign']['price'] = (float)$products_campaign[settings::get('store_currency_code')];
+            }
+           }
+          }
+         }
+        }
+    } 
+
+          break;
+        
+      ]]></add>
+        </operation>        
+        
+        <operation error="log">
+            <search position="before" offset="2"><![CDATA[
+            case 'quantity_unit':
+      ]]></search>
+            <add><![CDATA[
+
+
+            
+    if(!empty(customer::$data['id']) ) {
+            $products_query = database::query(
+                "select quantity from ". DB_TABLE_PRODUCTS ."
+            where id = ". (int)$this->_id ."
+            limit 1;"
+            );
+            $product_info = database::fetch($products_query);
+            if(isset($product_info['quantity'])){
+            $product_stock_quantity_prices_query = database::query(
+                "select * from ". DB_TABLE_PRODUCTS_STOCK_QUANTITY_PRICES ."
+                  where product_id = ". (int)$this->_id ."
+                  and stock_quantity = ".$product_info['quantity']."
+                  order by id desc
+                  limit 1;"
+            );
+
+            while ($stock_quantity_price = database::fetch($product_stock_quantity_prices_query)) {
+                if (isset($stock_quantity_price[$this->_currency_code]) && $stock_quantity_price[$this->_currency_code] != 0) {
+                    $this->_data['price'] = currency::convert($stock_quantity_price[$this->_currency_code], $this->_currency_code, settings::get('store_currency_code'));
+                } else {
+                    $this->_data['price'] = $stock_quantity_price[settings::get('store_currency_code')];
+                }
+            }
+        }
+    }
+            
+            
+    if(empty(customer::$data['id']) ) {  
+            $products_query = database::query(
+                "select quantity from ". DB_TABLE_PRODUCTS ."
+            where id = ". (int)$this->_id ."
+            limit 1;"
+            );
+            $product_info = database::fetch($products_query);
+            if(isset($product_info['quantity'])){
+            $product_stock_quantity_guest_prices_query = database::query(
+                "select * from ". DB_TABLE_PRODUCTS_STOCK_QUANTITY_GUEST_PRICES ."
+                  where product_id = ". (int)$this->_id ."
+                  and stock_quantity = ".$product_info['quantity']."
+                  order by id desc
+                  limit 1;"
+            );
+
+            while ($stock_quantity_guest_price = database::fetch($product_stock_quantity_guest_prices_query)) {
+                if (isset($stock_quantity_guest_price[$this->_currency_code]) && $stock_quantity_guest_price[$this->_currency_code] != 0) {
+                    $this->_data['price'] = currency::convert($stock_quantity_guest_price[$this->_currency_code], $this->_currency_code, settings::get('store_currency_code'));
+                } else {
+                    $this->_data['price'] = $stock_quantity_guest_price[settings::get('store_currency_code')];
+                }
+            }
+        }
+    }
+      ]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="before" offset="2"><![CDATA[
+            case 'quantity_unit':
+      ]]></search>
+            <add><![CDATA[
+         
+    if (!empty(reference::product($this->_id)->master_customer_special_price)) {       
+        if (empty(reference::product($this->_id)->no_customer_group_prices)) { 
+          if (empty(customer::$data['enable_wholesale_price'])) {
+            if (!empty(customer::$data['id'])  && (empty(customer::$data['code']) && (empty(customer::$data['disable_default_price'])) )) {
+                if (!empty(reference::product($this->_id)->customer_specialprice)) {  
+                    $product_default_price_prices_query = database::query(
+                        "select * from ". DB_TABLE_PRODUCTS_PRICES_BY_DEFAULT_PRICE ."
+                          where product_id = ". (int)$this->_id ."
+                          and (year(start_date) < '1971' or start_date <= '". date('Y-m-d H:i:s') ."')
+                          and (year(end_date) < '1971' or end_date >= '". date('Y-m-d H:i:s') ."')
+                          order by id desc
+                          limit 1;"
+                    );
+
+                    while ($default_price_price = database::fetch($product_default_price_prices_query)) {
+                        if (isset($default_price_price[$this->_currency_code]) && $default_price_price[$this->_currency_code] != 0) {
+                            $this->_data['price'] = currency::convert($default_price_price[$this->_currency_code], $this->_currency_code, settings::get('store_currency_code'));
+                        } else {
+                            $this->_data['price'] = $default_price_price[settings::get('store_currency_code')];
+                        }
+                    }
+                }
+            }
+        }
+      }
+    }
+
+            if (!empty(customer::$data['id']) && (!empty(customer::$data['vip']) && (empty(reference::product($this->_id)->no_customer_group_prices)))) {
+                 if (!empty(customer::$data['id'])  && (empty(customer::$data['code']) && ( (!empty(customer::$data['disable_default_price'])) || (empty(customer::$data['disable_default_price'])) ))) {
+                    $product_fake_sold_out_date_price_prices_query = database::query(
+                        "select * from ". DB_TABLE_PRODUCTS_PRICES_BY_FAKE_SOLD_OUT_DATE_PRICE ."
+                          where product_id = ". (int)$this->_id ."
+                          and (year(start_date) < '1971' or start_date <= '". date('Y-m-d H:i:s') ."')
+                          and (year(end_date) < '1971' or end_date >= '". date('Y-m-d H:i:s') ."')
+                          order by id desc
+                          limit 1;"
+                    );
+
+                    while ($fake_sold_out_date_price_price = database::fetch($product_fake_sold_out_date_price_prices_query)) {
+                        if (isset($fake_sold_out_date_price_price[$this->_currency_code]) && $fake_sold_out_date_price_price[$this->_currency_code] != 0) {
+                            $this->_data['price'] = currency::convert($fake_sold_out_date_price_price[$this->_currency_code], $this->_currency_code, settings::get('store_currency_code'));
+                        } else {
+                            $this->_data['price'] = $fake_sold_out_date_price_price[settings::get('store_currency_code')];
+                        }$this->_data['vip_price_standing'] = true ;
+                    }
+                }
+            }
+            
+
+    if (!empty(reference::product($this->_id)->disable_master_customer_special_price)) {       
+        if (empty(reference::product($this->_id)->no_customer_group_prices)) { 
+            if (empty(customer::$data['enable_wholesale_price'])) {
+                if (!empty(customer::$data['id'])  && (empty(customer::$data['code']) && (empty(customer::$data['disable_default_price'])) )) {
+                     
+                        $product_default_price_prices_query = database::query(
+                       "select * from ". DB_TABLE_PRODUCTS_PRICES_BY_DEFAULT_PRICE ."
+                         where product_id = ". (int)$this->_id ."
+                         and (year(start_date) < '1971' or start_date <= '". date('Y-m-d H:i:s') ."')
+                         and (year(end_date) < '1971' or end_date >= '". date('Y-m-d H:i:s') ."')
+                         order by id desc
+                         limit 1;"
+                        );
+
+                        while ($default_price_price = database::fetch($product_default_price_prices_query)) {
+                           if (isset($default_price_price[$this->_currency_code]) && $default_price_price[$this->_currency_code] != 0) {
+                              $this->_data['price'] = currency::convert($default_price_price[$this->_currency_code], $this->_currency_code, settings::get('store_currency_code'));
+                            } else {
+                               $this->_data['price'] = $default_price_price[settings::get('store_currency_code')];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    
+
+  if (!empty(reference::product($this->_id)->disable_master_guest_special_price)) {
+        if (empty(reference::product($this->_id)->no_customer_group_prices)) {  
+          if (empty(customer::$data['enable_wholesale_price'])) {
+            if (empty(customer::$data['id']) || ((!empty(customer::$data['code']) && (empty(reference::product($this->_id)->sign_in_deal))) && (empty(customer::$data['disable_guest_price'])))) {
+                    $product_guest_price_prices_query = database::query(
+                        "select * from ". DB_TABLE_PRODUCTS_PRICES_BY_GUEST_PRICE ."
+                          where product_id = ". (int)$this->_id ."
+                          and (year(start_date) < '1971' or start_date <= '". date('Y-m-d H:i:s') ."')
+                           and (year(end_date) < '1971' or end_date >= '". date('Y-m-d H:i:s') ."')
+                          order by id desc
+                          limit 1;"
+                    );
+
+                    while ($guest_price_price = database::fetch($product_guest_price_prices_query)) {
+                        if (isset($guest_price_price[$this->_currency_code]) && $guest_price_price[$this->_currency_code] != 0) {
+                            $this->_data['price'] = currency::convert($guest_price_price[$this->_currency_code], $this->_currency_code, settings::get('store_currency_code'));
+                        } else {
+                            $this->_data['price'] = $guest_price_price[settings::get('store_currency_code')];
+                        }
+                    }
+                }
+            }
+        } 
+    }
+
+
+        if (empty(reference::product($this->_id)->no_customer_group_prices)) {
+          if (!empty(reference::product($this->_id)->master_guest_special_price)) {
+            if (!empty(customer::$data['id']) && (empty(reference::product($this->_id)->customer_group_prices) && (!empty(reference::product($this->_id)->specialprice) && (empty(reference::product($this->_id)->customer_specialprice) )))) {
+                  if (!empty(customer::$data['id']) && (empty(customer::$data['enable_wholesale_price']))) { 
+                    $product_guest_price_prices_query = database::query(
+                        "select * from ". DB_TABLE_PRODUCTS_PRICES_BY_GUEST_PRICE ."
+                          where product_id = ". (int)$this->_id ."
+                          and (year(start_date) < '1971' or start_date <= '". date('Y-m-d H:i:s') ."')
+                          and (year(end_date) < '1971' or end_date >= '". date('Y-m-d H:i:s') ."')
+                          order by id desc
+                          limit 1;"
+                    );
+
+                    while ($guest_price_price = database::fetch($product_guest_price_prices_query)) {
+                        if (isset($guest_price_price[$this->_currency_code]) && $guest_price_price[$this->_currency_code] != 0) {
+                            $this->_data['price'] = currency::convert($guest_price_price[$this->_currency_code], $this->_currency_code, settings::get('store_currency_code'));
+                        } else {
+                            $this->_data['price'] = $guest_price_price[settings::get('store_currency_code')];
+                        }
+                    }
+                }
+            } 
+          }
+        }
+
+  if (!empty(reference::product($this->_id)->master_guest_special_price)) {
+    if (!empty(reference::product($this->_id)->specialprice)) {  
+        if (empty(reference::product($this->_id)->no_customer_group_prices)) {  
+          if (empty(customer::$data['enable_wholesale_price'])) {
+            if (empty(customer::$data['id']) || ((!empty(customer::$data['code']) && (empty(reference::product($this->_id)->sign_in_deal))) && (empty(customer::$data['disable_guest_price'])))) {
+                    $product_guest_price_prices_query = database::query(
+                        "select * from ". DB_TABLE_PRODUCTS_PRICES_BY_GUEST_PRICE ."
+                          where product_id = ". (int)$this->_id ."
+                          and (year(start_date) < '1971' or start_date <= '". date('Y-m-d H:i:s') ."')
+                           and (year(end_date) < '1971' or end_date >= '". date('Y-m-d H:i:s') ."')
+                          order by id desc
+                          limit 1;"
+                    );
+
+                    while ($guest_price_price = database::fetch($product_guest_price_prices_query)) {
+                        if (isset($guest_price_price[$this->_currency_code]) && $guest_price_price[$this->_currency_code] != 0) {
+                            $this->_data['price'] = currency::convert($guest_price_price[$this->_currency_code], $this->_currency_code, settings::get('store_currency_code'));
+                        } else {
+                            $this->_data['price'] = $guest_price_price[settings::get('store_currency_code')];
+                        }
+                    }
+                }
+            }
+        } 
+    }
+}
+
+
+    if (!empty(reference::product($this->_id)->specialprice) && (!empty(reference::product($this->_id)->disable_master_guest_special_price))) {  
+        if (empty(reference::product($this->_id)->no_customer_group_prices)) {  
+          if (empty(customer::$data['enable_wholesale_price'])) {
+            if (empty(customer::$data['id']) || ((!empty(customer::$data['code']) && (empty(reference::product($this->_id)->sign_in_deal))) && (empty(customer::$data['disable_guest_price'])))) {
+                    $product_guest_price_prices_query = database::query(
+                        "select * from ". DB_TABLE_PRODUCTS_PRICES_BY_GUEST_PRICE ."
+                          where product_id = ". (int)$this->_id ."
+                          and (year(start_date) < '1971' or start_date <= '". date('Y-m-d H:i:s') ."')
+                           and (year(end_date) < '1971' or end_date >= '". date('Y-m-d H:i:s') ."')
+                          order by id desc
+                          limit 1;"
+                    );
+
+                    while ($guest_price_price = database::fetch($product_guest_price_prices_query)) {
+                        if (isset($guest_price_price[$this->_currency_code]) && $guest_price_price[$this->_currency_code] != 0) {
+                            $this->_data['price'] = currency::convert($guest_price_price[$this->_currency_code], $this->_currency_code, settings::get('store_currency_code'));
+                        } else {
+                            $this->_data['price'] = $guest_price_price[settings::get('store_currency_code')];
+                        }
+                    }
+                }
+            }
+        } 
+    }
+
+
+    if (!empty(reference::product($this->_id)->master_wholesale_special_price)) {
+        if (empty(reference::product($this->_id)->no_customer_group_prices)) {		   
+            if (!empty(customer::$data['id']) && (!empty(customer::$data['enable_wholesale_price']) && (!empty(reference::product($this->_id)->wholesale_specialprice) ))) {  
+                if (!empty(customer::$data['enable_wholesale_price'])) {   
+                     $product_wholesale_price_prices_query = database::query(
+                     "select * from ". DB_TABLE_PRODUCTS_PRICES_BY_DEFAULT_WHOLESALE_PRICE ."
+                     where product_id = ". (int)$this->_id ."
+                     and (year(start_date) < '1971' or start_date <= '". date('Y-m-d H:i:s') ."')
+                     and (year(end_date) < '1971' or end_date >= '". date('Y-m-d H:i:s') ."')
+                     order by id desc
+                     limit 1;"
+                     );
+
+                    while ($wholesale_price_price = database::fetch($product_wholesale_price_prices_query)) {
+                       if (isset($wholesale_price_price[$this->_currency_code]) && $wholesale_price_price[$this->_currency_code] != 0) {
+                           $this->_data['price'] = currency::convert($wholesale_price_price[$this->_currency_code], $this->_currency_code, settings::get('store_currency_code'));
+                       } else {
+                           $this->_data['price'] = $wholesale_price_price[settings::get('store_currency_code')];
+                       }
+                    }    
+                }
+            }
+        }		
+    }
+    
+    if (!empty(reference::product($this->_id)->disable_master_wholesale_special_price)) {
+        if (empty(reference::product($this->_id)->no_customer_group_prices)) {		   
+            if (!empty(customer::$data['id']) && (!empty(customer::$data['enable_wholesale_price']) )) {  
+                if (!empty(customer::$data['enable_wholesale_price'])) {   
+                     $product_wholesale_price_prices_query = database::query(
+                     "select * from ". DB_TABLE_PRODUCTS_PRICES_BY_DEFAULT_WHOLESALE_PRICE ."
+                     where product_id = ". (int)$this->_id ."
+                     and (year(start_date) < '1971' or start_date <= '". date('Y-m-d H:i:s') ."')
+                     and (year(end_date) < '1971' or end_date >= '". date('Y-m-d H:i:s') ."')
+                     order by id desc
+                     limit 1;"
+                     );
+
+                    while ($wholesale_price_price = database::fetch($product_wholesale_price_prices_query)) {
+                       if (isset($wholesale_price_price[$this->_currency_code]) && $wholesale_price_price[$this->_currency_code] != 0) {
+                           $this->_data['price'] = currency::convert($wholesale_price_price[$this->_currency_code], $this->_currency_code, settings::get('store_currency_code'));
+                       } else {
+                           $this->_data['price'] = $wholesale_price_price[settings::get('store_currency_code')];
+                       }
+                    }    
+                }
+            }
+        }		
+    }    
+    
+      ]]></add>
+        </operation>
+    </file>
+
+</modification>
+
+

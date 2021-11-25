@@ -1,0 +1,33 @@
+#eycandy_products_result_list
+{
+	z-index:20000;
+	position:absolute;
+	left:-1px;
+	overflow: hidden;
+}
+
+#eycandy_products_result_list .search-item
+{
+	border-top: 1px solid #B19865;
+}
+
+#eycandy_products_result_list div h3
+{
+	white-space: nowrap;
+	font-size:small;
+	font-weight:bold;
+	color: #7a0000;
+	border-bottom: 0px;
+}
+
+#eycandy_products_result_list div p
+{
+	font-size:smaller;
+	color: #7a0000;
+}
+
+#eycandy_products_result_list .transparent {
+	zoom: 1;
+	filter: alpha(opacity=50);
+	opacity: 0.5;
+}

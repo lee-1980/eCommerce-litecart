@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Customer Sales By Product</id>
+	<version>1.0</version>
+	<vqmver required="true">2.4.0</vqmver>
+	<author>tim-international.net</author>
+
+	<file path="admin/reports.app/" name="config.inc.php">
+		<operation error="log">
+			<search position="after" offset="2"><![CDATA[
+      'doc' => 'monthly_sales',
+      ]]></search>
+			<add><![CDATA[
+    array(
+      'title' => language::translate('title_customer_sales_by_product', 'Customer Sales By Product'),
+      'doc' => 'customer_sales_by_product',
+      'params' => array(),
+    ),
+      ]]></add>
+		</operation>
+
+		<operation error="log">
+			<search position="after"><![CDATA[
+    'monthly_sales' => 'monthly_sales.inc.php',
+      ]]></search>
+			<add><![CDATA[
+    'customer_sales_by_product' => 'customer_sales_by_product.inc.php',
+      ]]></add>
+		</operation>
+	</file>
+
+</modification>

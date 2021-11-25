@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification
+    xmlns="https://github.com/vqmod/vqmod"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://github.com/vqmod/vqmod https://raw.githubusercontent.com/vqmod/vqmod/master/vqmod.xsd"
+>
+    <id>Admin Duplicate Items In Catalog Widget</id>
+    <version>1.1</version>
+    <vqmver>2.X</vqmver>
+    <author>Skipper Hosting</author>
+    
+    <file name="admin/catalog.app/edit_product.inc.php">
+        <operation info="add duplicate item link" error="skip">
+            <search position="after"><![CDATA[
+    $product = new ent_product($_GET['product_id']);
+            ]]></search>
+            <add><![CDATA[
+  } elseif (!empty($_GET['clone_id'])) {
+    $product = new ent_product($_GET['clone_id']);
+    unset($_GET['clone_id']); //cleanup
+    $product->data['campaigns'] = null;
+    $product->data['categories'] = null;
+    $product->data['customer_insaneprice'] = null;    
+    $product->data['customer_specialprice'] = null;
+    $product->data['description'] = null;
+    $product->data['disable_master_customer_special_price'] = null;
+    $product->data['disable_master_guest_special_price'] = null;
+    $product->data['disable_master_insane_deal_price'] = null;
+    $product->data['disable_master_wholesale_special_price'] = null;
+    $product->data['disable_wholesale_soldout'] = null;
+    $product->data['free_shipping'] = null;
+    $product->data['guest_insaneprice'] = null;
+    $product->data['head_title'] = null;
+    $product->data['id'] = null;
+    $product->data['image'] = null;
+    $product->data['images'] = null;
+    $product->data['insanedeal'] = null;
+    $product->data['insaneprice'] = null;
+    $product->data['master_customer_special_price'] = null;
+    $product->data['master_guest_special_price'] = null;
+    $product->data['master_insane_deal_price'] = null;
+    $product->data['master_wholesale_special_price'] = null;
+    $product->data['meta_description'] = null;
+    $product->data['no_customer_group_prices'] = null;
+    $product->data['no_free_shipping'] = null;
+    $product->data['purchase_price'] = null;
+    $product->data['sign_in'] = null;
+    $product->data['sign_in'] = null;
+    $product->data['sign_in_deal'] = null;
+    $product->data['sign_in_deal'] = null;
+    $product->data['sku'] = null;
+    $product->data['specialprice'] = null;
+    $product->data['wholesale_soldout'] = null;
+    $product->data['wholesale_specialprice'] = null;
+    $product->data['shopee'] = null;
+    $product->data['shopee_backend'] = null;
+    $product->data['lazada'] = null;
+    $product->data['lazada_backend'] = null;
+    $product->data['short_description'] = null;
+
+    
+    
+
+    
+    
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/catalog.app/catalog.inc.php">
+        <operation info="add duplicate button to catalog" error="skip">
+            <search position="replace"><![CDATA[
+        . '  <td class="text-right"><a href="'. document::href_link('', array('app' => $_GET['app'], 'doc' => 'edit_product', 'category_id' => $category_id, 'product_id' => $product['id'])) .'" title="'. language::translate('title_edit', 'Edit') .'">'. functions::draw_fonticon('fa-pencil').'</a></td>' . PHP_EOL
+            ]]></search>
+            <add><![CDATA[
+        . '  <td class="text-right"><a href="'. document::href_link('', array('app' => $_GET['app'], 'doc' => 'edit_product', 'category_id' => $category_id, 'clone_id' => $product['id'])) .'" title="'. language::translate('title_duplicate', 'Duplicate') .'">'. functions::draw_fonticon('fa-copy').'</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="'. document::href_link('', array('app' => $_GET['app'], 'doc' => 'edit_product', 'category_id' => $category_id, 'product_id' => $product['id'])) .'" title="'. language::translate('title_edit', 'Edit') .'">'. functions::draw_fonticon('fa-pencil').'</a></td>' . PHP_EOL
+            ]]></add>
+        </operation>
+    </file>
+</modification>
+
+<!--
+
+    $product->data['guest_price_prices'] = null;
+    $product->data['default_price_prices'] = null;
+    $product->data['wholesale_price_prices'] = null;
+    
+    -->

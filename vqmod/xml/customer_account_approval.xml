@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+  <id>Customer Account Approval</id>
+  <version>2.1.1</version>
+  <vqmver required="true">2.4.0</vqmver>
+  <author>tim-international.net</author>
+
+    <file name="pages/create_account.inc.php">
+    <operation error="log">
+      <search position="replace"><![CDATA[
+      $customer->data['status'] = 1;
+      ]]></search>
+      <add><![CDATA[
+      $customer->data['status'] = 0;
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+      <search position="replace"><![CDATA[
+      $message = strtr(language::translate('email_account_created', "Welcome %customer_firstname %customer_lastname to %store_name!\r\n\r\nYour account has been created. You can now make purchases in our online store and keep track of history.\r\n\r\nLogin using your email address %customer_email.\r\n\r\n%store_name\r\n\r\n%store_link"), $aliases);
+      ]]></search>
+      <add><![CDATA[
+      $message = strtr(language::translate('text_new_customer_account_created', "A customer by the name %customer_firstname %customer_lastname has created an account with id %customer_id."), $aliases);
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+      <search position="replace" offset="4"><![CDATA[
+      $email = new ent_email();
+      ]]></search>
+      <add><![CDATA[
+      $email = new ent_email();
+      $email->add_recipient(settings::get('store_email'))
+            ->set_subject($subject)
+            ->add_body($message)
+            ->send();
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+      <search position="replace"><![CDATA[
+      customer::load($customer->data['id']);
+      ]]></search>
+      <add></add>
+    </operation>
+
+    <operation error="log">
+      <search position="replace"><![CDATA[
+      notices::add('success', language::translate('success_your_customer_account_has_been_created', 'Your customer account has been created.'));
+      ]]></search>
+      <add><![CDATA[
+      notices::add('success', language::translate('notice_customer_account_awaiting_approval', 'Your account is awaiting approval before it can be used'));
+      ]]></add>
+    </operation>
+  </file>
+
+  <file name="includes/entities/ent_customer.inc.php">
+    <operation error="log">
+      <search position="after"><![CDATA[
+    public function save() {
+      ]]></search>
+      <add><![CDATA[
+      if (!empty($this->data['id'])) {
+        $old_customer = new ent_customer($this->data['id']);
+      }
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+      <search position="before" offset="1"><![CDATA[
+      $customer_modules->update($this->data);
+      ]]></search>
+      <add><![CDATA[
+      if (isset($old_customer->data['status']) && empty($old_customer->data['status']) && !empty($this->data['status'])) {
+        $aliases = array(
+          '%customer_id' => $this->data['id'],
+          '%customer_email' => $this->data['email'],
+          '%customer_name' => !empty($this->data['company']) ? $this->data['company'] : $this->data['firstname'] .' '. $this->data['lastname'],
+        );
+
+        $message = strtr(language::translate('email_body_customer_account_enabled', 'Your customer account has been enabled. Please sign in using your email %customer_email and the password you provided during registration.'), $aliases);
+
+        $email = new email();
+        $email->add_recipient($this->data['email'])
+              ->set_subject(language::translate('email_subject_customer_account_enabled', 'Customer Account Enabled'))
+              ->add_body($message)
+              ->send();
+      }
+      ]]></add>
+    </operation>
+  </file>
+
+</modification>

@@ -1,0 +1,687 @@
+Connecting to ssl://smtp.gmail.com:465 ...
+< 220 smtp.gmail.com ESMTP g17sm13796263pfu.22 - gsmtp
+> EHLO localhost
+< 250-smtp.gmail.com at your service, [211.75.74.223]
+< 250-SIZE 35882577
+< 250-8BITMIME
+< 250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+< 250-ENHANCEDSTATUSCODES
+< 250-PIPELINING
+< 250-CHUNKING
+< 250 SMTPUTF8
+> AUTH LOGIN
+< 334 VXNlcm5hbWU6
+> bmFnYXRvMzI2Z0BnbWFpbC5jb20=
+< 334 UGFzc3dvcmQ6
+> d2VAcmV0aGV3b3JsZDIwMDAx
+< 235 2.7.0 Accepted
+> MAIL FROM: <ljsitsolution@gmail.com>
+< 250 2.1.0 OK g17sm13796263pfu.22 - gsmtp
+> RCPT TO: <ljsitsolution@gmail.com>
+< 250 2.1.5 OK g17sm13796263pfu.22 - gsmtp
+> RCPT TO: <ljsitsolution@gmail.com>
+< 250 2.1.5 OK, duplicate recipients will be consolidated. g17sm13796263pfu.22 - gsmtp
+> DATA
+< 354  Go ahead g17sm13796263pfu.22 - gsmtp
+> From: =?utf-8?b?SVQgVG95cw==?= <ljsitsolution@gmail.com>
+Reply-To: =?utf-8?b?SVQgVG95cw==?= <ljsitsolution@gmail.com>
+Return-Path: =?utf-8?b?SVQgVG95cw==?= <ljsitsolution@gmail.com>
+MIME-Version: 1.0
+X-Mailer: LiteCart/2.2.2
+To: =?utf-8?b?bGpzaXRzb2x1dGlvbkBnbWFpbC5jb20=?= <ljsitsolution@gmail.com>
+Subject: =?utf-8?b?W09yZGVycyBObzogMTEzOTRdIE9yZGVyIFJlY2VpdmVk?=
+Content-Type: multipart/mixed; boundary="==Multipart_Boundary_x6006bab4801163537e61b4f4f72eb001x"
+
+--==Multipart_Boundary_x6006bab4801163537e61b4f4f72eb001x
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+<table border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100.0%;background:white">
+    <tbody>
+    <tr>
+        <td width="100%" style="width:100.0%;padding:0in 0in 0in 0in">
+            <div align="center">
+                <table border="0" cellspacing="0" cellpadding="0" width="660" style="width:495.0pt">
+                    <tbody>
+                    <tr>
+                        <td width="660" style="width:495.0pt;padding:0in 0in 0in 0in">
+                            <table border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100.0%">
+                                <tbody>
+                                <tr>
+                                    <td style="padding:21.0pt 0in 21.0pt 0in">
+                                        <table border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100.0%">
+                                            <tbody>
+                                            <tr>
+                                       
+                                                <td style="padding:0in 0in 0in 0in">
+                                                    <div align="center">
+                                                        <table border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100.0%">
+                                                            <tbody>
+                                                            <tr>
+                                                                <td style="padding:0in 0in 0in 0in">
+                                                                    <div align="center">
+                                                                        <img border="0" width="360" src="https://ittoysline.com/images/logotype.png"><table border="0" cellspacing="0" cellpadding="0">
+                                                                            <tbody>
+                                                                            <tr>
+                                                                                <td style="padding:0in 0in 0in 0in"></td>
+                                                                            </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td width="100%" style="width:100.0%;padding:0in 0in 0in 0in;min-width:660px">
+            <div align="center">
+                <table border="0" cellspacing="0" cellpadding="0" width="660" style="width:495.0pt">
+                    <tbody>
+                    <tr style="min-width:660px">
+                        <td width="660" style="width:495.0pt;padding:0in 0in 0in 0in;border-radius:8px 8px 0 0;background:linear-gradient(135deg,#705bf9 0%,#384dfb 50%,#0386df 100%)">
+                            <table border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100.0%">
+                                <tbody>
+                                <tr>
+                                    <td style="background-image: url(https://ittoysline.com/images/background/Brown%20Copper%202.jpg); border-radius: 6px 6px 6px 6px; padding:0in 0in 0in 0in;min-width:auto!important">
+                                        <table border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100.0%">
+                                            <tbody>
+                                            <tr>
+                                                <td style="padding:21.0pt 37.5pt 21.0pt 37.5pt">
+                                                    <div>
+                                                        <p class="" align="center" style="text-align:center; line-height:18.0pt">
+                                                            <span style="font-size:15.0pt;font-family:Arial,sans-serif; text-align:center; color:white">
+															[Orders No: 11394] Order Received</span>
+                                                        </p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td width="100%" style="width:100.0%;background:white; padding:0in 0in 0in 0in;min-width:660px">
+            <div align="center">
+                <table border="0" cellspacing="0" cellpadding="0" width="660" style="width:495.0pt">
+                    <tbody>
+                    <tr style="min-width:660px">
+                        <td width="660" style="width:495.0pt;padding:0in 0in 0in 0in;border-radius:8px 8px 0 0">
+                            <table border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100.0%">
+                                <tbody>
+                                <tr>
+                                    <td style="padding:0in 0in .5in 0in">
+                                        <table border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100.0%">
+                                            <tbody>
+                                            <tr>
+                                                <td style="background:#0385df;padding:0in 0in 0in 0in">
+                                                    <table border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100.0%">
+                                                        <tbody>
+                                                        <tr style="height:25.5pt">
+                                                            <td style="background:white;padding:0in 0in 0in 0in;height:25.5pt">
+                                                                <p class=""><span style="font-size:1.0pt;color:black">&nbsp;</span><span style="font-size:1.0pt"><u></u><u></u></span>
+                                                                </p>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="background-image: url(https://ittoysline.com/images/customize/Background%20Email.jpg); background-repeat:no-repeat; background-size: cover;  padding:0in 37.5pt 21.0pt 37.5pt;border-radius: 6px 6px 6px 6px">
+                                                    <table border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100.0%">
+                                                        <tbody>
+                                                        <tr style="min-width:auto!important">
+                                                            <td style="padding:0in 0in 0in 0in">
+                                                                <table border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100.0%">
+                                                                    <tbody>
+                                                                    <tr>
+                                                                        <td style="padding:0in 0in 15.0pt 0in">
+                                                                            <div>
+                                                                                <p class="" style="line-height:19.5pt">
+                                                                                    <b><span style="font-size:12.0pt;font-family:Arial,sans-serif;color:#000000">
+																					Dear test test
+                                                                                    </span>
+                                                                                </b></p>
+
+                                                                                <p class="" style="line-height:19.5pt">
+                                                                                    <b><span style="font-size:12.0pt;font-family:Arial,sans-serif;color:#000000">
+																					Thank you for ordering with IT Toys online.
+                                                                                    </span>
+                                                                                </b></p>
+                                                                                <p class="" style="line-height:19.5pt">
+                                                                                    <span style="font-size:12.0pt;font-family:Arial,sans-serif;color:#000000"><b>
+																					Order No: 11394 has successfully been received with the following ordered items:</b></span></p>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td style="padding:0in 0in 15.0pt 0in; text-align:center; border=" 0""="">
+                                                                            <div><b>
+                                                                                <table border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100.0%; background-color: #e8c48675;">
+                    <thead>
+                    <tr style="background-image: url(https://ittoysline.com/images/customize/Gold%20Brush%20Table.png);" >
+                        <th style="color:black; padding: 10px 12px; border-left: 1px solid; border-right: 1px solid; border-top: 1px solid; border-bottom: 1px solid #000000;">Product Image</th>
+                        <th style="color:black; padding: 10px 12px; border-left: 0px solid; border-right: 1px solid; border-top: 1px solid; border-bottom: 1px solid #000000;">Description / Information</th>
+                    </tr>
+                    </thead><tbody>
+                <tr>
+                  <td style="padding: 0px 0px; text-align: center; color: #000000; border-left: 1px solid; border-right: 1px solid; border-top: 0px solid; border-bottom: 1px solid" ><img src="http://localhost:8092/cache/1107d3ece96f68daed948482d8ff1def245e5e03_180x180_fwb.webp" /></td>
+                  <td style="padding: 1px 0px 26px; border-right: 1px solid; border-top: 0px solid; border-bottom: 1px solid; color:black ">
+                
+                    <table auto="" border="0" cellpadding="1" cellspacing="1" style="background-color: transparent;  text-align: left;">
+                      <tbody>
+                       <tr align="left">
+                         <td width="auto">
+                            <div class="separator" style="clear: both; text-align: left; ">
+                               <span style="color: black; font-size:11pt">&nbsp;Name</span>
+                         </td>
+                        
+                         <td><span style="color: black; font-size:11pt">:&nbsp;</span></td>
+                         <td valign="top">
+                            <span style="color: black; font-size:11pt"> Option Armor
+For Spy Drone </span>
+                         </td>    
+                       </tr>
+                       <tr align="left">
+                        <td valign="top">
+                           <span style="color: black; font-size:11pt">&nbsp;Barcode</span>
+                           </td>
+                        <td valign="top">
+                            <span style="color: black; font-size:11pt">:&nbsp;</span>
+                        </td>
+                        <td valign="top" width="max" style="color: black; font-size:11pt"> 4573102607522 
+                        </td>
+                      </tr>                
+
+                      <tr align="left">
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">&nbsp;Price</span>
+                        </td>
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">:&nbsp;</span>
+                        </td>
+                        <td valign="top" width="max" style="color: black; font-size:11pt"> RM 13.60 
+                        </td>
+                      </tr>    
+
+                     <tr align="left">
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">&nbsp;Quantity</span>
+                        </td>
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">:&nbsp;</span>
+                        </td>
+                        <td valign="top" width="max" style="color: black; font-size:11pt"> 1 pcs 
+                        </td>
+                     </tr>
+                     <br>
+                
+                     <tr align="left">
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">&nbsp;Total</span>
+                        </td>
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">:&nbsp;</span>
+                        </td>
+                        <td valign="top" width="max" style="color: black; font-size:10pt"> RM 13.60 </td>
+                     </tr>                
+                
+                     <tr align="left">
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">&nbsp;Status</span>
+                        </td>
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">:&nbsp;</span>
+                        </td>
+                        <td valign="top" width="max" style="color: black; font-size:10pt"> Ready Stock </td>
+                     </tr>
+                     </tbody>
+                     </table>
+                </td>
+                </tr>
+                <tr>
+                  <td style="padding: 0px 0px; text-align: center; color: #000000; border-left: 1px solid; border-right: 1px solid; border-top: 0px solid; border-bottom: 1px solid" ><img src="http://localhost:8092/cache/92207c5d7c67877bccd6bd8499f320968abb8848_180x180_fwb.webp" /></td>
+                  <td style="padding: 1px 0px 26px; border-right: 1px solid; border-top: 0px solid; border-bottom: 1px solid; color:black ">
+                
+                    <table auto="" border="0" cellpadding="1" cellspacing="1" style="background-color: transparent;  text-align: left;">
+                      <tbody>
+                       <tr align="left">
+                         <td width="auto">
+                            <div class="separator" style="clear: both; text-align: left; ">
+                               <span style="color: black; font-size:11pt">&nbsp;Name</span>
+                         </td>
+                        
+                         <td><span style="color: black; font-size:11pt">:&nbsp;</span></td>
+                         <td valign="top">
+                            <span style="color: black; font-size:11pt"> MS-06R
+Multiuse 1 </span>
+                         </td>    
+                       </tr>
+                       <tr align="left">
+                        <td valign="top">
+                           <span style="color: black; font-size:11pt">&nbsp;Barcode</span>
+                           </td>
+                        <td valign="top">
+                            <span style="color: black; font-size:11pt">:&nbsp;</span>
+                        </td>
+                        <td valign="top" width="max" style="color: black; font-size:11pt"> 4549660249153 
+                        </td>
+                      </tr>                
+
+                      <tr align="left">
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">&nbsp;Price</span>
+                        </td>
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">:&nbsp;</span>
+                        </td>
+                        <td valign="top" width="max" style="color: black; font-size:11pt"> RM 14.50 
+                        </td>
+                      </tr>    
+
+                     <tr align="left">
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">&nbsp;Quantity</span>
+                        </td>
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">:&nbsp;</span>
+                        </td>
+                        <td valign="top" width="max" style="color: black; font-size:11pt"> 1 pcs 
+                        </td>
+                     </tr>
+                     <br>
+                
+                     <tr align="left">
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">&nbsp;Total</span>
+                        </td>
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">:&nbsp;</span>
+                        </td>
+                        <td valign="top" width="max" style="color: black; font-size:10pt"> RM 14.50 </td>
+                     </tr>                
+                
+                     <tr align="left">
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">&nbsp;Status</span>
+                        </td>
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">:&nbsp;</span>
+                        </td>
+                        <td valign="top" width="max" style="color: black; font-size:10pt"> Ready Stock </td>
+                     </tr>
+                     </tbody>
+                     </table>
+                </td>
+                </tr>
+                <tr>
+                  <td style="padding: 0px 0px; text-align: center; color: #000000; border-left: 1px solid; border-right: 1px solid; border-top: 0px solid; border-bottom: 1px solid" ><img src="http://localhost:8092/cache/d55aedc069aa4751442ff131ba7d871cfa285797_180x180_fwb.webp" /></td>
+                  <td style="padding: 1px 0px 26px; border-right: 1px solid; border-top: 0px solid; border-bottom: 1px solid; color:black ">
+                
+                    <table auto="" border="0" cellpadding="1" cellspacing="1" style="background-color: transparent;  text-align: left;">
+                      <tbody>
+                       <tr align="left">
+                         <td width="auto">
+                            <div class="separator" style="clear: both; text-align: left; ">
+                               <span style="color: black; font-size:11pt">&nbsp;Name</span>
+                         </td>
+                        
+                         <td><span style="color: black; font-size:11pt">:&nbsp;</span></td>
+                         <td valign="top">
+                            <span style="color: black; font-size:11pt"> Decal No.115
+Sinanju </span>
+                         </td>    
+                       </tr>
+                       <tr align="left">
+                        <td valign="top">
+                           <span style="color: black; font-size:11pt">&nbsp;Barcode</span>
+                           </td>
+                        <td valign="top">
+                            <span style="color: black; font-size:11pt">:&nbsp;</span>
+                        </td>
+                        <td valign="top" width="max" style="color: black; font-size:11pt"> 4549660249146 
+                        </td>
+                      </tr>                
+
+                      <tr align="left">
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">&nbsp;Price</span>
+                        </td>
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">:&nbsp;</span>
+                        </td>
+                        <td valign="top" width="max" style="color: black; font-size:11pt"> RM 4.50 
+                        </td>
+                      </tr>    
+
+                     <tr align="left">
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">&nbsp;Quantity</span>
+                        </td>
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">:&nbsp;</span>
+                        </td>
+                        <td valign="top" width="max" style="color: black; font-size:11pt"> 1 pcs 
+                        </td>
+                     </tr>
+                     <br>
+                
+                     <tr align="left">
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">&nbsp;Total</span>
+                        </td>
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">:&nbsp;</span>
+                        </td>
+                        <td valign="top" width="max" style="color: black; font-size:10pt"> RM 4.50 </td>
+                     </tr>                
+                
+                     <tr align="left">
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">&nbsp;Status</span>
+                        </td>
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">:&nbsp;</span>
+                        </td>
+                        <td valign="top" width="max" style="color: black; font-size:10pt"> Ready Stock </td>
+                     </tr>
+                     </tbody>
+                     </table>
+                </td>
+                </tr>
+                <tr>
+                  <td style="padding: 0px 0px; text-align: center; color: #000000; border-left: 1px solid; border-right: 1px solid; border-top: 0px solid; border-bottom: 1px solid" ><img src="http://localhost:8092/cache/516af906f13f9be573405e79513ee154f20b136b_180x180_fwb.webp" /></td>
+                  <td style="padding: 1px 0px 26px; border-right: 1px solid; border-top: 0px solid; border-bottom: 1px solid; color:black ">
+                
+                    <table auto="" border="0" cellpadding="1" cellspacing="1" style="background-color: transparent;  text-align: left;">
+                      <tbody>
+                       <tr align="left">
+                         <td width="auto">
+                            <div class="separator" style="clear: both; text-align: left; ">
+                               <span style="color: black; font-size:11pt">&nbsp;Name</span>
+                         </td>
+                        
+                         <td><span style="color: black; font-size:11pt">:&nbsp;</span></td>
+                         <td valign="top">
+                            <span style="color: black; font-size:11pt"> Option Armor
+Long Distance Sniper </span>
+                         </td>    
+                       </tr>
+                       <tr align="left">
+                        <td valign="top">
+                           <span style="color: black; font-size:11pt">&nbsp;Barcode</span>
+                           </td>
+                        <td valign="top">
+                            <span style="color: black; font-size:11pt">:&nbsp;</span>
+                        </td>
+                        <td valign="top" width="max" style="color: black; font-size:11pt"> 4573102577832 
+                        </td>
+                      </tr>                
+
+                      <tr align="left">
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">&nbsp;Price</span>
+                        </td>
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">:&nbsp;</span>
+                        </td>
+                        <td valign="top" width="max" style="color: black; font-size:11pt"> RM 10.00 
+                        </td>
+                      </tr>    
+
+                     <tr align="left">
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">&nbsp;Quantity</span>
+                        </td>
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">:&nbsp;</span>
+                        </td>
+                        <td valign="top" width="max" style="color: black; font-size:11pt"> 1 pcs 
+                        </td>
+                     </tr>
+                     <br>
+                
+                     <tr align="left">
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">&nbsp;Total</span>
+                        </td>
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">:&nbsp;</span>
+                        </td>
+                        <td valign="top" width="max" style="color: black; font-size:10pt"> RM 10.00 </td>
+                     </tr>                
+                
+                     <tr align="left">
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">&nbsp;Status</span>
+                        </td>
+                        <td valign="top">
+                          <span style="color: black; font-size:11pt">:&nbsp;</span>
+                        </td>
+                        <td valign="top" width="max" style="color: black; font-size:10pt"> Ready Stock </td>
+                     </tr>
+                     </tbody>
+                     </table>
+                </td>
+                </tr>
+                </tbody>
+                </table>
+                <table style="width:100%; border-left: 1px solid; border-right: 1px solid; border-top: 0px solid; border-bottom: 1px solid; background-image: url(https://ittoysline.com/images/customize/Gold%20Brush%20Table.png); text-align:left">
+                <tbody>
+                <tr align="left">
+                  <td width="100px">
+                     <div class="separator" style="clear: both; text-align: left; ">
+                     <span style="color: black; font-size:11pt">Subtotal</span>
+                  </td>
+                  <td max-width="1px">
+                     <span style="color: black; font-size:11pt">:</span>
+                  </td>
+                  <td valign="top"; text-align: left; max-width="80px">
+                     <span style="color: black; text-align: left; font-size:11pt"> RM 42.60 </span>
+                  </td>     
+                </tr>
+                <tr align="left">
+                  <td valign="top"; width="100px">
+                  <span style="color: black; font-size:11pt">Shipping</span>
+                  </td>
+                  <td valign="top"; max-width="1px">
+                     <span style="color: black; font-size:11pt">:</span>
+                  </td>
+                  <td valign="top" max-width="80px"; style="color: black; text-align: left; font-size:11pt"> RM -1.00 
+                  </td>
+                </tr>                
+
+                <tr align="left">
+                  <td valign="top"; width="100px">
+                    <span style="color: black; font-size:11pt">Discount</span></td>
+                  <td valign="top"; max-width="1px">
+                    <span style="color: black; font-size:11pt">:</span></td>
+                  <td valign="top" max-width="80px"; style="color: black; text-align: left; font-size:11pt"> RM 0.00 
+                  </td>
+                </tr>    
+
+                <tr align="left">
+                   <td valign="top"; width="100px">
+                     <span style="color: black; font-size:11pt">Grand Total</span></td>
+                   <td valign="top"; max-width="1px">
+                     <span style="color: black; font-size:11pt">:</span></td>
+                   <td valign="top" max-width="80px"; style="color: black; text-align: left; font-size:11pt"> RM 41.60 </td>
+                </tr>
+                </tbody>
+                </table>
+                
+                                                                            </b></div>
+																			
+                                                                        </td>
+                                                                    </tr>
+																	
+                                                                    <tr>
+                                                                        <td style="padding:0in 0in 30.0pt 0in;min-width:auto!important">
+                                                                            <div>
+                                                                                <p style="line-height:19.5pt"><span style="font-size:12.0pt;font-family:Arial,sans-serif;color:#000000"><b>For Bank Transfer</b></span></p><p style="line-height:19.5pt"><span style="font-size:12.0pt;font-family:Arial,sans-serif;color:#000000">Do not pay first, we will check availability and get back to you by 
+																				<span style="color:#ff0000"><strong>Email&nbsp;</strong></span>as soon as possible. Kindly check your junk or spam inbox. An email notification on <strong>Payment Request</strong> will be send shorty. Thank you for your patience.</span></p><strong><strong>
+                                                                            </strong></strong></div><strong><strong>
+                                                                        </strong></strong></td>
+                                                                    </tr>
+
+                                                                    </tbody>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            
+                                                                    </tr><tr style="min-width:auto!important">
+                                                                        <td style="padding:0in 0in 6.0pt 0in">
+                                                                            <table border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100.0%">
+                                                                                <tbody>
+                                                                                <tr>
+                                                                                    <td style=" padding:0in 0in 0in 0in; min-width:auto!important; background-image: url(https://ittoysline.com/images/background/Brown%20Copper%202.jpg); border-radius: 6px 6px 6px 6px">
+                                                                                        <div>
+                                                                                            <p class="" style="line-height:16.5pt">
+                                                                                                <strong>
+                                                                                                    <span style=" font-size:12.5pt;font-family:Arial,sans-serif;color:#fff">
+																									  &nbsp;&nbsp;&nbsp;You can check and download your invoice here :</span>
+                                                                                                </strong>
+                                                                                                <span style="font-size:13.5pt;font-family:Arial,sans-serif;color:#000000">
+                                                                                                    <u></u><u></u></span>
+                                                                                            </p>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                </tr>
+																				<tr>
+                                                                                                <td valign="top" style="padding:0in 0in 0in 0in; min-width:auto!important">
+                                                                                                    <div>
+                                                                                                        <p style="line-height:19.5pt">
+                                                                                                                    </p><div class="separator" style="clear: both; text-align: center;">
+                                                                                                                    <a href="http://localhost:8092/order?order_id=11394&public_key=b3wrkn2i18xwyeg7hsqyg122rkl4yksu" target="_blank" src="https://ittoysline.com/images/emailinvoice2.png">
+                                                                                                                    <img border="0" width="99" src="https://ittoysline.com/images/emailinvoice2.png">
+                                                                                                                    </a>
+																													</div>
+                                                                                                            
+                                                                                                        <p></p>
+                                                                                                    </div>
+                                                                                                </td>
+																							</tr>
+                                                                                
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td style="padding:0in 0in 6.0pt 0in">
+                                                                            <table border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100.0%">
+                                                                                <tbody>
+                                                                                <tr>
+                                                                                    <td style=" padding:0in 0in 0in 0in; min-width:auto!important; background-image: url(https://ittoysline.com/images/background/Brown%20Copper%202.jpg); border-radius: 6px 6px 6px 6px">
+                                                                                        <div>
+                                                                                            <p class="" style="line-height:16.5pt">
+                                                                                                <strong>
+                                                                                                    <span style=" font-size:12.5pt;font-family:Arial,sans-serif;color:#fff">
+																									  &nbsp;&nbsp;&nbsp;Important Notice :</span>
+                                                                                                </strong>
+                                                                                                <span style="font-size:13.5pt;font-family:Arial,sans-serif;color:#000000">
+                                                                                                    <u></u><u></u></span>
+                                                                                            </p>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                </tr>
+																				
+																				<tr>
+                                                                                    <td style="padding:0in 0in 21.0pt 0in;min-width:auto!important">
+                                                                                        <div>
+                                                                                            <p class="" style="line-height:19.5pt">
+                                                                                                <span style="font-size:12.0pt;font-family:Arial,sans-serif;color:#000000">
+																		                        • Please inspect the products you wish to purchase for any defects upon collection from the premises of IT Toys. All products purchased are assumed to be in good condition and have been inspected and accepted by the customer. Refunds or exchanges are not possible after this point</span><br>
+																		                        <br>
+																		                        <span style="font-size:12.0pt;font-family:Arial,sans-serif;color:#000000">
+																		                        • If purchased online: please request IT toy to be inspected for defects or missing parts before shipping. If you request a like-new product in a sealed box, we will not open the box and cannot inspect the products before shipping. We do not accept liability for defects or missing parts. Any claims for exchange or refund will not be considered.</span><br>
+																		                        <br>
+																								<span style="font-size:12.0pt;font-family:Arial,sans-serif;color:#000000">
+																								• IT Toys does not guarantee how couriers will handle your package, the product packaging of the item is for delivery purpose only. There will be no return or refund provided for situations that were related to cosmetic issues including wear, box dent, or similar issues found on original packaging.</span></p>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                </tr>
+																				
+																				<tr>
+														                           <td style="padding:0in 0in 21.0pt 0in;min-width:auto!important">
+                                                                                    <div>
+                                                                                    <p class="" style="line-height:19.5pt">
+                                                                                    <span style="font-size:12.0pt;color:#000000">Thank you and have a nice day</span>															            
+																		            <br>
+																		            <br>
+																		            <span style="font-size:12.0pt; color:#000000">Regards,</span>
+																		            <br>
+																		            <br>
+																					<span style="font-size:12.0pt; color:#000000">IT Toys</span><br>																		            
+																					<span style="font-size:12.0pt; color:#000000">B5-03 Pusat Perindustrian K.L,</span><br>
+																					<span style="font-size:12.0pt; color:#000000">Jalan Kelang Lama BT 5,</span><br>
+																					<span style="font-size:12.0pt; color:#000000">58200 Kuala Lumpur,</span><br>
+																					<span style="font-size:12.0pt; color:#000000">W.Persekutuan</span><br>
+																					<span style="font-size:12.0pt; color:#000000">Malaysia</span><br>
+																					<span style="font-size:12.0pt; color:#000000">Tel : +603 7773 1228</span><br>
+																					<span style="font-size:12.0pt; color:#000000">email : ittoys116@gmail.com</span><br>
+																					<span style="font-size:12.0pt; color:#000000">email : ittoysline@gmail.com</span><br>
+																		            <span style="font-size:12.0pt; color:#000000">Website : http://localhost:8092/</span>																		
+                                                                                    
+                                                                                    </p>
+                                                                                    </div>
+                                                                                   </td>
+														                        </tr>
+																				
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            
+                                                        </td></tr>
+    
+                                                     
+             
+
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+
+> .
+< 250 2.0.0 OK  1634586768 g17sm13796263pfu.22 - gsmtp
+> QUIT
+

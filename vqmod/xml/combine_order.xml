@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+    <id>Combine Order</id>
+    <version>1.0</version>
+    <vqmver required="true">2.4.0</vqmver>
+    <author>Olaf</author>
+
+    <file name="includes/entities/ent_order_status.inc.php">
+        <operation error="log">
+            <search position="after"><![CDATA[
+            is_archived = '". (empty($this->data['is_archived']) ? '0' : '1') ."',
+      ]]></search>
+            <add><![CDATA[
+            is_combine = '". (empty($this->data['is_combine']) ? '0' : '1') ."',
+            is_paid = '". (empty($this->data['is_paid']) ? '0' : '1') ."',
+      ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/orders.app/edit_order_status.inc.php">
+        <operation error="log">
+            <search position="after"><![CDATA[
+              if (empty($_POST['is_archived'])) $_POST['is_archived'] = 0;
+      ]]></search>
+            <add><![CDATA[
+              if (empty($_POST['is_combine'])) $_POST['is_combine'] = 0;
+              if (empty($_POST['is_paid'])) $_POST['is_paid'] = 0;
+      ]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="replace"><![CDATA[
+              'email_message',
+      ]]></search>
+            <add><![CDATA[
+              'is_combine',
+              'is_paid',
+      ]]></add>
+        </operation>
+
+        <operation error="log">
+            <search position="after" offset="1"><![CDATA[
+              <?php echo language::translate('order_status:description_is_archived', 'Exclude from the default list of orders'); ?></label>
+      ]]></search>
+            <add><![CDATA[
+              <div class="checkbox">
+                <label><?php echo functions::form_draw_checkbox('is_combine', '1', empty($_POST['is_combine']) ? '0' : '1'); ?> <?php echo language::translate('text_is_combine_order', 'Is combine order'); ?><br />
+                <?php echo language::translate('order_status:description_is_combine', 'Combine orders'); ?></label>
+              </div>
+              <div class="checkbox">
+                <label><?php echo functions::form_draw_checkbox('is_paid', '1', empty($_POST['is_paid']) ? '0' : '1'); ?> <?php echo language::translate('text_is_paid', 'Is paid'); ?><br />
+                <?php echo language::translate('order_status:description_is_paid', 'determine order is paid or not'); ?></label>
+              </div>
+      ]]></add>
+        </operation>
+    </file>
+
+</modification>

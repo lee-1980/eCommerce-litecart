@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+  <id>Custom Box Site Menu</id>
+  <version>2.0</version>
+  <vqmver required="true">2.4.0</vqmver>
+  <author>ittoysline</author>
+
+  <file name="includes/templates/*.catalog/views/box_site_menu.inc.php">
+    <operation error="log">
+      <search position="replace" offset="3"><![CDATA[
+       <?php echo functions::form_draw_form_begin('search_form', 'get', document::ilink('search'), false, 'class="navbar-form"'); ?>
+      ]]></search>
+      <add><![CDATA[
+      <div class="col-xs-auto text-center">
+        <?php include vmod::check(FS_DIR_APP . 'includes/boxes/box_google_translate.inc.php'); ?>
+      </div>      
+      
+       <div class="col-xs-auto text-center">
+           <?php include vmod::check(FS_DIR_APP . 'includes/boxes/box_region.inc.php'); ?>
+       </div>
+      ]]></add>
+    </operation>
+
+	<operation error="log">
+      <search position="replace"><![CDATA[     
+      <a href="#" data-toggle="dropdown" class="dropdown-toggle"><?php echo language::translate('title_categories', 'Categories'); ?> <b class="caret"></b></a>
+      ]]></search>
+      <add><![CDATA[ 
+      
+      ]]></add>
+    </operation>
+
+
+	<operation error="log">
+      <search position="replace"><![CDATA[     
+      <a href="<?php echo document::href_ilink('create_account'); ?>"><?php echo language::translate('text_new_customers_click_here', 'New customers click here'); ?></a>
+      ]]></search>
+      <add><![CDATA[ 
+      </br>
+      <div class="strokeme"> 
+      <strong><a href="<?php echo document::href_ilink('create_account'); ?>"><span style="color: black;"><?php echo language::translate('text_new_customers_click_here', 'New customers click here'); ?></strong></span></a></div>
+      </br>
+      ]]></add>
+    </operation>
+
+	<operation error="log">
+      <search position="replace"><![CDATA[
+      <a href="<?php echo document::href_ilink('reset_password'); ?>"><?php echo language::translate('text_lost_your_password', 'Lost your password?'); ?></a>
+      ]]></search>
+      <add><![CDATA[ 
+      <div class="strokeme"> 
+      <strong><a href="<?php echo document::href_ilink('reset_password'); ?>"><span style="color: black;"><?php echo language::translate('text_lost_your_password', 'Lost your password?'); ?></a></strong></span></a>  
+      </br>
+       </div>
+      </br>
+      ]]></add>
+    </operation>
+  
+    <operation error="log">
+      <search position="replace"><![CDATA[
+       <div class="btn-group btn-block">
+      ]]></search>
+      <add><![CDATA[
+       <div class="btn-group_signin">
+      ]]></add>
+    </operation>  
+    
+    <operation error="log">
+      <search position="replace"><![CDATA[
+       <a href="<?php echo document::href_ilink('customer_service'); ?>"><?php echo language::translate('title_customer_service', 'Customer Service'); ?></a>
+      ]]></search>
+      <add><![CDATA[
+       
+      ]]></add>
+    </operation>     
+  </file>
+  
+</modification>
+
+<!-- <li><a href="<?php echo document::href_ilink('category', array('category_id' => 466)); ?>"><?php echo reference::category(466)->name; ?></a></li> -->

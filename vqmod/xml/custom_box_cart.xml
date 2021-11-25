@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+  <id>Custom Box Cart</id>
+  <version>2.0</version>
+  <vqmver required="true">2.4.0</vqmver>
+  <author>ittoysline</author>
+
+  <file name="includes/templates/*.catalog/views/box_cart.inc.php">
+    <operation error="log">
+      <search position="replace" offset="6"><![CDATA[
+      <div id="cart">
+      ]]></search>
+      <add><![CDATA[
+</footer>
+<div id="sticky">
+<div class="col-xs-auto col-left">
+<table border="0" cellpadding="0" cellspacing="0" text-align: right; width: 100px;"><tbody>
+<tr height="20" style="height: 15.0pt;">
+  <td height="20" style="height: 15.0pt; width: 100%;" width="100%">
+      <div class="col-xs-auto col-right">
+     <div id="search">
+       <?php echo functions::form_draw_form_begin('search_form', 'get', document::ilink('search'), false, 'class="navbar-form"'); ?>
+       <?php echo functions::form_draw_search_field('query', true, 'placeholder="' . language::translate('text_search_products', 'Search products') . ' &hellip;"', true); ?>
+       <?php echo functions::form_draw_form_end(); ?>
+     </div>
+      </div>
+      </td>
+  <td style="width: 0pt;" width="0">      
+<div id="cart">
+  <a href="<?php echo htmlspecialchars($link); ?>">
+    <img class="image" src="{snippet:template_path}images/<?php echo !empty($num_items) ? 'cart_filled.svg' : 'cart.png'; ?>" alt="" />
+    <div class="badge quantity"><?php echo $num_items ? $num_items : ''; ?></div>
+  </a>
+</div>
+</div>
+</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+      ]]></add>
+    </operation>
+  </file>
+  
+</modification>

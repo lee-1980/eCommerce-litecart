@@ -1,0 +1,31 @@
+[11-Nov-2021 19:19:19 Asia/Kuala_Lumpur] Notice: Undefined variable: json in ~/pages/order_process.inc.php on line 93
+ ← ~/index.php on line 40 in process()
+Request: POST /order_process HTTP/1.1
+Host: localhost:8092
+Client: 127.0.0.1 (DESKTOP-9GJL9D4)
+User Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36
+Referer: http://localhost:8092/checkout
+
+[11-Nov-2021 19:19:19 Asia/Kuala_Lumpur] 
+[11-Nov-2021 19:19:47 Asia/Kuala_Lumpur] <div class="text-center">Loading...</div>
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+  var stripe = Stripe('pk_test_7sZ5VTJoOlCjRPCZNVRzS8Sg');
+  stripe.redirectToCheckout({
+    sessionId: 'cs_test_b16yAqRBK1Akwz6raykASlbgXCw3toR5HqFjVUu0YVFL9TjUjkGMwQvxkE'
+  }).then(function(result){});
+</script>
+[11-Nov-2021 19:20:16 Asia/Kuala_Lumpur] <div class="text-center">Loading...sd.</div>
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+  var stripe = Stripe('pk_test_7sZ5VTJoOlCjRPCZNVRzS8Sg');
+  stripe.redirectToCheckout({
+    sessionId: 'cs_test_b1EQlqnNtXqhoSqfHVz4Yo1GYgVJa77M45r9Yb9PxDV5Y4rT5NasF2wCZe'
+  }).then(function(result){});
+</script>
+[11-Nov-2021 21:32:15 Asia/Kuala_Lumpur] PHP Parse error:  syntax error, unexpected '<' in G:\myworks\myworks\litecart\liteCart\vqmod\vqcache\vq2-includes_library_lib_document.inc.php on line 50
+[11-Nov-2021 21:33:21 Asia/Kuala_Lumpur] PHP Parse error:  syntax error, unexpected '<' in G:\myworks\myworks\litecart\liteCart\vqmod\vqcache\vq2-includes_library_lib_document.inc.php on line 50
+[11-Nov-2021 21:34:21 Asia/Kuala_Lumpur] PHP Parse error:  syntax error, unexpected '<' in G:\myworks\myworks\litecart\liteCart\vqmod\vqcache\vq2-includes_library_lib_document.inc.php on line 50
+[11-Nov-2021 21:35:21 Asia/Kuala_Lumpur] PHP Parse error:  syntax error, unexpected '<' in G:\myworks\myworks\litecart\liteCart\vqmod\vqcache\vq2-includes_library_lib_document.inc.php on line 50
+[11-Nov-2021 21:36:21 Asia/Kuala_Lumpur] PHP Parse error:  syntax error, unexpected '<' in G:\myworks\myworks\litecart\liteCart\vqmod\vqcache\vq2-includes_library_lib_document.inc.php on line 50
+[11-Nov-2021 21:37:21 Asia/Kuala_Lumpur] PHP Parse error:  syntax error, unexpected '<' in G:\myworks\myworks\litecart\liteCart\vqmod\vqcache\vq2-includes_library_lib_document.inc.php on line 50

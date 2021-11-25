@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Multiple Desciption</id>
+	<version>1.0</version>
+	<vqmver required="true">2.4.0</vqmver>
+	<author>tim-international.net</author>
+
+	<file name="admin/catalog.app/edit_product.inc.php">
+		<operation error="log">
+			<search position="after"><![CDATA[
+        'short_description',
+      ]]></search>
+			<add><![CDATA[
+        'date_valid_from_closing',
+        'date_valid_to_closing',
+        'medium_description',
+        'costing_information',
+        'small_parcel',
+        'oversize_parcel',
+        'opening_quantity',
+        'medium_parcel',
+        'listing_info',
+        'box_conditions',
+        'guess_price',
+        'shopee',
+        'lazada',
+        'shopee_backend',
+        'lazada_backend',
+      ]]></add>
+		</operation>
+
+		<operation error="log">
+			<search position="after" offset="2"><![CDATA[
+        <?php echo functions::form_draw_date_field('date_valid_from', true); ?>
+      ]]></search>
+			<add><![CDATA[
+      <div class="form-group">
+        <label><?php echo language::translate('title_date_valid_from_closing', 'Date Valid From Closing'); ?></label>
+        <?php foreach (array_keys(language::$languages) as $language_code) echo functions::form_draw_regional_textarea($language_code, 'date_valid_from_closing['. $language_code .']', true, 'style="height: 32px;"'); ?>
+      </div>
+
+      ]]></add>
+		</operation>
+		
+		<operation error="log">
+			<search position="after" offset="2"><![CDATA[
+        <?php echo functions::form_draw_date_field('date_valid_to', true); ?>
+      ]]></search>
+			<add><![CDATA[
+      <div class="form-group">
+        <label><?php echo language::translate('title_date_valid_to_closing', 'Date Valid To Closing'); ?></label>
+        <?php foreach (array_keys(language::$languages) as $language_code) echo functions::form_draw_regional_textarea($language_code, 'date_valid_to_closing['. $language_code .']', true, 'style="height: 32px;"'); ?>
+      </div>
+      ]]></add>
+		</operation>
+
+		<operation error="log">
+			<search position="before" offset="2"><![CDATA[
+        <label><?php echo language::translate('title_code', 'Code'); ?></label>
+      ]]></search>
+			<add><![CDATA[
+      <div class="form-group">
+        <label><?php echo language::translate('title_listing_info', 'Listing Info'); ?></label>
+        <?php foreach (array_keys(language::$languages) as $language_code) echo functions::form_draw_regional_textarea($language_code, 'listing_info['. $language_code .']', true, 'style="height: 32px;"'); ?>
+      </div>
+      ]]></add>
+		</operation>
+
+		<operation error="log">
+			<search position="before" offset="2"><![CDATA[
+        <label><?php echo language::translate('title_description', 'Description'); ?></label>
+      ]]></search>
+			<add><![CDATA[
+      <div class="form-group">
+        <label><?php echo language::translate('title_medium_description', 'Medium Description'); ?></label>
+        <?php foreach (array_keys(language::$languages) as $language_code) echo functions::form_draw_regional_textarea($language_code, 'medium_description['. $language_code .']', true, 'style="height: 120px;"'); ?>
+      </div>
+      
+ 
+
+       <div class="form-group">
+        <label><?php echo language::translate('title_box_conditions', 'Condition:'); ?></label>
+        <?php foreach (array_keys(language::$languages) as $language_code) echo functions::form_draw_regional_textarea($language_code, 'box_conditions['. $language_code .']', true, 'style="height: 32px;"'); ?>
+      </div>
+      
+      ]]></add>
+		</operation>
+		
+		<operation error="log">
+			<search position="after" ><![CDATA[
+      <div id="prices" style="max-width: 640px;">
+      ]]></search>
+			<add><![CDATA[
+      <div class="form-group">
+        <label><?php echo language::translate('title_costing_information', 'Costing Information'); ?></label>
+        <?php foreach (array_keys(language::$languages) as $language_code) echo functions::form_draw_regional_textarea($language_code, 'costing_information['. $language_code .']', true, 'style="height: 32px;"'); ?>
+      </div>
+      
+      <div class="form-group">
+        <label><?php echo language::translate('title_guess_price', 'Guess Price'); ?></label>
+        <?php foreach (array_keys(language::$languages) as $language_code) echo functions::form_draw_regional_textarea($language_code, 'guess_price['. $language_code .']', true, 'style="height: 32px;"'); ?>
+      </div>      
+      ]]></add>
+		</operation>		
+
+		<operation error="log">
+			<search position="replace" offset="2"><![CDATA[
+      <?php foreach (array_keys(language::$languages) as $language_code) echo functions::form_draw_regional_textarea($language_code, 'opening_quantity['. $language_code .']', true, 'style="height: 32px;"'); ?>
+      ]]></search>
+			<add><![CDATA[
+      <?php foreach (array_keys(language::$languages) as $language_code) echo functions::form_draw_regional_textarea($language_code, 'opening_quantity['. $language_code .']', true, 'style="height: 32px;"'); ?>
+          </div> 
+          </div>
+         <div class="row" style="max-width: 960px;">
+      <div class="form-group col-md-4">
+      <label><?php echo language::translate('title_small_parcel', 'Small Size Parcel'); ?></label>
+        <?php foreach (array_keys(language::$languages) as $language_code) echo functions::form_draw_regional_textarea($language_code, 'small_parcel['. $language_code .']', true, 'style="height: 32px;"'); ?>      
+      </div>           
+         
+         
+      <div class="form-group col-md-4">
+      <label><?php echo language::translate('title_medium_parcel', 'Medium Size Parcel'); ?></label>
+        <?php foreach (array_keys(language::$languages) as $language_code) echo functions::form_draw_regional_textarea($language_code, 'medium_parcel['. $language_code .']', true, 'style="height: 32px;"'); ?>      
+      </div>         
+         
+         
+          <div class="form-group col-md-4">
+      <label><?php echo language::translate('title_oversize_parcel', 'Oversize Parcel'); ?></label>
+        <?php foreach (array_keys(language::$languages) as $language_code) echo functions::form_draw_regional_textarea($language_code, 'oversize_parcel['. $language_code .']', true, 'style="height: 32px;"'); ?>
+      </div>
+      
+
+      </div>
+      ]]></add>
+		</operation>
+	</file>
+
+	<file name="admin/catalog.app/csv.inc.php">
+		<operation error="log">
+			<search position="after"><![CDATA[
+          'short_description' => $product->short_description,
+      ]]></search>
+			<add><![CDATA[
+          'date_valid_from_closing' => $product->date_valid_to_closing,
+          'date_valid_to_closing' => $product->date_valid_to_closing,
+          'medium_description' => $product->medium_description,
+          'box_conditions' => $product->box_conditions,
+          'costing_information' => $product->costing_information,
+          'small_parcel' => $product->small_parcel,
+          'oversize_parcel' => $product->oversize_parcel,
+          'medium_parcel' => $product->medium_parcel,
+          'opening_quantity' => $product->opening_quantity,
+          'listing_info' => $product->listing_info,
+          'guess_price' => $product->guess_price,
+          'shopee' => $product->shopee,
+          'lazada' => $product->lazada,
+          'shopee_backend' => $product->shopee_backend,
+          'lazada_backend' => $product->lazada_backend,
+          
+      ]]></add>
+		</operation>
+
+		<operation error="log">
+			<search position="replace"><![CDATA[
+          foreach (array('name', 'short_description', 'description', 'attributes', 'head_title', 'meta_description') as $field) {
+      ]]></search>
+			<add><![CDATA[
+          foreach (array('name', 'short_description', 'date_valid_from_closing', 'date_valid_to_closing', 'listing_info', 'medium_description', 'box_conditions', 'costing_information', 'small_parcel', 'oversize_parcel', 'medium_parcel', 'shopee', 'lazada', 'shopee_backend', 'lazada_backend', 'description', 'opening_quantity', 'attributes', 'head_title', 'meta_description') as $field) {
+      ]]></add>
+		</operation>
+	</file>
+
+	<file name="includes/functions/func_catalog.inc.php">
+		<operation error="log">
+			<search position="iafter"><![CDATA[
+			pi.short_description, 
+			]]></search>
+			<add><![CDATA[
+			pi.date_valid_from_closing, pi.date_valid_to_closing, pi.medium_description, pi.costing_information, pi.small_parcel, pi.oversize_parcel, pi.medium_parcel, pi.opening_quantity, pi.listing_info, pi.box_conditions, pi.guess_price, pi.shopee, pi.lazada, pi.shopee_backend, pi.lazada_backend,
+			]]></add>
+		</operation>
+	</file>
+
+	<file name="includes/functions/func_draw.inc.php">
+		<operation error="log">
+			<search position="after"><![CDATA[
+      'short_description' => $product['short_description'],
+      ]]></search>
+			<add><![CDATA[
+      'date_valid_from_closing' => $product['date_valid_from_closing'],
+      'date_valid_to_closing' => $product['date_valid_to_closing'],
+      'medium_description' => $product['medium_description'],
+      'costing_information' => $product['costing_information'],
+      'oversize_parcel' => $product['oversize_parcel'],
+      'medium_parcel' => $product['medium_parcel'],
+      'small_parcel' => $product['small_parcel'],
+      'opening_quantity' => $product['opening_quantity'],
+      'listing_info' => $product['listing_info'],
+      'box_conditions' => $product['box_conditions'],
+      'guess_price' => $product['guess_price'],
+      'shopee' => $product['shopee'],
+      'lazada' => $product['lazada'],
+      'shopee_backend' => $product['shopee_backend'],
+      'lazada_backend' => $product['lazada_backend'],      
+      
+      ]]></add>
+		</operation>
+  </file>
+
+	<file name="includes/references/ref_product.inc.php">
+		<operation error="log">
+			<search position="after"><![CDATA[
+        case 'short_description':
+      ]]></search>
+			<add><![CDATA[
+        case 'date_valid_from_closing':
+        case 'date_valid_to_closing':
+        case 'medium_description':
+        case 'costing_information':
+        case 'oversize_parcel':
+        case 'opening_quantity':
+        case 'medium_parcel':
+        case 'small_parcel':
+        case 'listing_info':
+        case 'box_conditions':
+        case 'guess_price':
+        case 'shopee':
+        case 'lazada':
+        case 'shopee_backend':
+        case 'lazada_backend':        
+        
+      ]]></add>
+		</operation>
+	</file>
+
+	<file name="includes/entities/ent_product.inc.php">
+		<operation error="log">
+			<search position="after"><![CDATA[
+          short_description = '". database::input($this->data['short_description'][$language_code]) ."',
+      ]]></search>
+			<add><![CDATA[
+          date_valid_from_closing = '". database::input($this->data['date_valid_from_closing'][$language_code]) ."',
+          date_valid_to_closing = '". database::input($this->data['date_valid_to_closing'][$language_code]) ."',
+          medium_description = '". database::input($this->data['medium_description'][$language_code]) ."',
+          costing_information = '". database::input($this->data['costing_information'][$language_code]) ."',
+          oversize_parcel = '". database::input($this->data['oversize_parcel'][$language_code]) ."',
+          medium_parcel = '". database::input($this->data['medium_parcel'][$language_code]) ."',
+          small_parcel = '". database::input($this->data['small_parcel'][$language_code]) ."',
+          opening_quantity = '". database::input($this->data['opening_quantity'][$language_code]) ."',
+          listing_info = '". database::input($this->data['listing_info'][$language_code]) ."',
+          box_conditions = '". database::input($this->data['box_conditions'][$language_code]) ."',
+          guess_price = '". database::input($this->data['guess_price'][$language_code]) ."',
+          shopee = '". database::input($this->data['shopee'][$language_code]) ."',
+          lazada = '". database::input($this->data['lazada'][$language_code]) ."',
+          shopee_backend = '". database::input($this->data['shopee_backend'][$language_code]) ."',
+          lazada_backend = '". database::input($this->data['lazada_backend'][$language_code]) ."',          
+          
+      ]]></add>
+		</operation>
+	</file>
+
+	<file name="pages/product.inc.php">
+		<operation error="log">
+			<search position="after"><![CDATA[
+    'short_description' => !empty($product->short_description) ? $product->short_description : '',
+      ]]></search>
+			<add><![CDATA[
+    'date_valid_from_closing' => !empty($product->date_valid_from_closing) ? $product->date_valid_from_closing : '',
+    'date_valid_to_closing' => !empty($product->date_valid_to_closing) ? $product->date_valid_to_closing : '',
+    'medium_description' => !empty($product->medium_description) ? $product->medium_description : '',
+    'costing_information' => !empty($product->costing_information) ? $product->costing_information : '',
+    'oversize_parcel' => !empty($product->oversize_parcel) ? $product->oversize_parcel : '',
+    'medium_parcel' => !empty($product->medium_parcel) ? $product->medium_parcel : '',
+    'small_parcel' => !empty($product->small_parcel) ? $product->small_parcel : '',
+    'opening_quantity' => !empty($product->opening_quantity) ? $product->opening_quantity : '',
+    'listing_info' => !empty($product->listing_info) ? $product->listing_info : '',
+    'box_conditions' => !empty($product->box_conditions) ? $product->box_conditions : '',
+    'guess_price' => !empty($product->guess_price) ? $product->guess_price : '',
+    'shopee' => !empty($product->shopee) ? $product->shopee : '',
+    'lazada' => !empty($product->lazada) ? $product->lazada : '',
+    'shopee_backend' => !empty($product->shopee_backend) ? $product->shopee_backend : '',
+    'lazada_backend' => !empty($product->lazada_backend) ? $product->lazada_backend : '',    
+      ]]></add>
+		</operation>
+	</file>
+
+	<file name="pages/search.inc.php">
+		<operation error="log">
+			<search position="replace"><![CDATA[
+			pi.short_description, 
+			]]></search>
+			<add><![CDATA[pi.short_description, pi.date_valid_from_closing, pi.date_valid_to_closing, pi.medium_description, pi.costing_information, pi.oversize_parcel, pi.medium_parcel, pi.small_parcel, pi.opening_quantity, pi.listing_info, pi.box_conditions, pi.guess_price, pi.shopee, pi.lazada,
+			]]></add>
+		</operation>
+	</file>
+
+  <file name="includes/templates/*.catalog/pages/regional_settings.inc.php">
+      <operation error="log">
+        <search position="replace" ><![CDATA[
+         <label><?php echo language::translate('title_display_prices_including_tax', 'Display Prices Including Tax'); ?></label>
+        ]]></search>
+        <add><![CDATA[
+         
+        ]]></add>
+      </operation>        
+       
+      <operation error="log">
+        <search position="replace"><![CDATA[
+         <p class="btn-group btn-block">
+        ]]></search>
+        <add><![CDATA[
+         <div class="btn-group_signin">
+        ]]></add>
+      </operation>  
+  </file>
+  
+
+
+</modification>
+
+
+<!--
+	<file name="includes/templates/*.catalog/views/box_product.inc.php">
+		<operation error="skip">
+			<search position="after" offset="1"><![CDATA[
+        <?php echo functions::form_draw_form_end(); ?>
+      ]]></search>
+			<add><![CDATA[
+      <?php if ($date_valid_from_closing) { ?>
+      <p class="date_valid_from_closing">
+        <?php echo nl2br($date_valid_from_closing); ?>
+      </p>
+      <?php } ?>
+      ]]></add>
+		</operation>
+	</file>
+	
+	<file name="includes/templates/*.catalog/views/box_product.inc.php">
+		<operation error="skip">
+			<search position="after" offset="1"><![CDATA[
+        <?php echo functions::form_draw_form_end(); ?>
+      ]]></search>
+			<add><![CDATA[
+      <?php if ($date_valid_to_closing) { ?>
+      <p class="date_valid_to_closing">
+        <?php echo nl2br($date_valid_to_closing); ?>
+      </p>
+      <?php } ?>
+      ]]></add>
+		</operation>
+	</file>
+
+	<file name="includes/templates/*.catalog/views/box_product.inc.php">
+		<operation error="skip">
+			<search position="after" offset="1"><![CDATA[
+        <?php echo functions::form_draw_form_end(); ?>
+      ]]></search>
+			<add><![CDATA[
+      <?php if ($medium_description) { ?>
+      <p class="medium-description">
+        <?php echo nl2br($medium_description); ?>
+      </p>
+      <?php } ?>
+      ]]></add>
+		</operation>
+	</file>
+	
+	<file name="includes/templates/*.catalog/views/box_product.inc.php">
+		<operation error="skip">
+			<search position="after" offset="1"><![CDATA[
+        <?php echo functions::form_draw_form_end(); ?>
+      ]]></search>
+			<add><![CDATA[
+      <?php if ($costing_information) { ?>
+      <p class="costing_information">
+        <?php echo nl2br($costing_information); ?>
+      </p>
+      <?php } ?>
+      ]]></add>
+		</operation>
+	</file>	
+	
+	<file name="includes/templates/*.catalog/views/box_product.inc.php">
+		<operation error="skip">
+			<search position="after" offset="1"><![CDATA[
+        <?php echo functions::form_draw_form_end(); ?>
+      ]]></search>
+			<add><![CDATA[
+      <?php if ($oversize_parcel) { ?>
+      <p class="oversize_parcel">
+        <?php echo nl2br($oversize_parcel); ?>
+      </p>
+      <?php } ?>
+      ]]></add>
+		</operation>
+	</file>	
+	
+	<file name="includes/templates/*.catalog/views/box_product.inc.php">
+		<operation error="skip">
+			<search position="after" offset="1"><![CDATA[
+        <?php echo functions::form_draw_form_end(); ?>
+      ]]></search>
+			<add><![CDATA[
+      <?php if (listing_info) { ?>
+      <p class="listing_info">
+        <?php echo nl2br(listing_info); ?>
+      </p>
+      <?php } ?>
+      ]]></add>
+		</operation>
+	</file>		
+-->

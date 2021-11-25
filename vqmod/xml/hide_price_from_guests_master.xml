@@ -1,0 +1,534 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+  <id>Hide Prices From Guests</id>
+  <version>2.0</version>
+  <vqmver required="true">2.4.0</vqmver>
+  <author>tim-international.net</author>
+
+  <file name="includes/templates/*.catalog/views/box_product.inc.php">
+ 		<operation error="log">
+			<search position="replace" offset="14"><![CDATA[
+      <a class="main-image thumbnail" href="<?php echo document::href_link(WS_DIR_APP . $image['original']); ?>" data-toggle="lightbox" data-gallery="product">
+      ]]></search>
+			<add><![CDATA[
+      <?php if (empty(customer::$data['forbidden'] == 0) || (empty(reference::product($product_id)->forbidden))) { ?>
+          <a class="main-image thumbnail" href="<?php echo document::href_link(WS_DIR_APP . $image['original']); ?>" data-toggle="lightbox" data-gallery="product">
+            <img class="img-responsive" src="<?php echo document::href_link(WS_DIR_APP . $image['thumbnail']); ?>" srcset="<?php echo document::href_link(WS_DIR_APP . $image['thumbnail']); ?> 1x, <?php echo document::href_link(WS_DIR_APP . $image['thumbnail_2x']); ?> 2x" alt="" title="<?php echo htmlspecialchars($name); ?>" />
+          </a>
+        </div>
+        
+        <?php } else { ?>
+        <?php if (empty(customer::$data['forbidden'] == 1) || (!empty(customer::$data['id'])) || (empty(reference::product($product_id)->forbidden))) { ?>
+        <div class="image-wrapper">
+          <img class="image img-responsive" src="<?php echo WS_DIR_IMAGES; ?>logotype hidden.png" srcset="" alt="<?php echo WS_DIR_IMAGES; ?>logotype hidden.png" />
+        </div>
+        </div>        
+        <?php } ?>
+        <?php } ?>
+
+	  <div class="col-xs-12">
+      <div style="text-align: center;">
+      <?php echo language::translate('title_photos_are_of', 'Photos are of a prototype and the actual product may differ'); ?>
+      </div>
+      </div>
+
+        <?php foreach ($extra_images as $image) { ?>
+        <div class="col-xs-4">
+            <?php if (empty(customer::$data['forbidden'] == 0) || (empty(reference::product($product_id)->forbidden))) { ?>
+          <a class="extra-image thumbnail" href="<?php echo document::href_link(WS_DIR_APP . $image['original']); ?>" data-toggle="lightbox" data-gallery="product">
+            <img class="img-responsive" src="<?php echo document::href_link(WS_DIR_APP . $image['thumbnail']); ?>" srcset="<?php echo document::href_link(WS_DIR_APP . $image['thumbnail']); ?> 1x, <?php echo document::href_link(WS_DIR_APP . $image['thumbnail_2x']); ?> 2x" alt="" title="<?php echo htmlspecialchars($name); ?>" />
+          </a>
+        <?php } else { ?>
+        <?php if (empty(customer::$data['forbidden'] == 1) || (!empty(customer::$data['id'])) || (empty(reference::product($product_id)->forbidden))) { ?>
+        <div class="extra-image">
+		<img class="img-responsive" src="<?php echo WS_DIR_IMAGES; ?>logotype hidden.png" srcset="<?php echo WS_DIR_IMAGES; ?>logotype hidden.png" alt="<?php echo WS_DIR_IMAGES; ?>logotype hidden.png" title="<?php echo WS_DIR_IMAGES; ?>logotype hidden.png" />
+        </div>
+        <?php } ?>
+        <?php } ?>
+        </div>
+        <?php } ?>
+      </div>
+
+      ]]></add>
+		</operation> 
+
+
+<!--      
+    <operation error="log">
+      <search position="replace" offset="6"><![CDATA[
+        <div class="price-wrapper">
+      ]]></search>
+      <add><![CDATA[
+            <div class="price-wrapper">
+            <?php if (!empty($campaign_price) && (empty(reference::product($product_id)->signin))) { ?> 
+            <del class="regular-price"><?php echo currency::format($regular_price); ?></del> <strong class="campaign-price2"><?php echo currency::format($campaign_price); ?></strong>
+            <?php } else { ?>
+            <?php if (empty(customer::$data['id']) && (!empty($campaign_price) || (!empty(reference::product($product_id)->signin)))) { ?> 
+            <span style="font-size: 19px;">
+            <a href="<?php echo document::href_link('login', array('redirect_url' => document::link())); ?>"><?php echo language::translate('text_Kindly_sign_in_to_see_price_&_picture_/_order_this_item', 'Kindly sign in to see price & picture / order this item'); ?></span></a>
+            <?php } else if (customer::$data['code'] == 1) { ?>
+            <span class="price"><?php echo currency::format($regular_price); ?></span>
+            <?php } else if ($campaign_price) { ?>
+            <del class="regular-price"><?php echo currency::format($regular_price); ?></del> <strong class="campaign-price"><?php echo currency::format($campaign_price); ?></strong>
+            <?php } else { ?>
+            <span class="price"><?php echo currency::format($regular_price); ?></span>
+            <?php } ?>            
+            <?php } ?>
+            </div>
+      ]]></add>
+    </operation>
+--> 
+ 
+		<operation error="log">
+			<search position="replace" offset="1"><![CDATA[
+      <div style="flex: 1 0 auto; padding-left: 1em;">
+      ]]></search>
+			<add><![CDATA[
+	 <div style="flex: 1 0 auto; padding-left: 1em;">
+	 	 
+	 <?php if (!empty(customer::$data['id']) && 
+	 (!empty(reference::product($product_id)->guest_price_prices)) && (!empty(reference::product($product_id)->sign_in))
+	 || (empty(customer::$data['id']) && (!empty(reference::product($product_id)->disable_sign_in)))
+	 ) { ?> 
+	 <?php echo '<button class="btn btn-success" name="add_cart_product" value="true" type="submit"'. (($quantity <= 0 && !$orderable) ? ' disabled="disabled"' : '') .'>'. language::translate('title_add_to_cart', 'Add To Cart') .'</button>'; ?>
+
+	 <?php } else if ((empty(customer::$data['id']) && ((!empty($campaign_price)) && (!empty(reference::product($product_id)->sign_in_deal))) 
+	 || (!empty(reference::product($product_id)->guest_price_prices)) && (!empty(reference::product($product_id)->sign_in))) 
+	 || (empty(customer::$data['id']) && (!empty(reference::product($product_id)->sign_in_date_price_prices)))
+	 || (empty(customer::$data['id']) && (!empty(reference::product($product_id)->sign_in_date_price_prices)) && (!empty(reference::product($product_id)->fake_sold_out_date_price_prices)))
+	 ) { ?> 
+	 
+     <?php } else if (!empty(customer::$data['id']) 
+      
+     || (empty(reference::product($product_id)->signin) && (empty(reference::product($product_id)->date_valid_to > date('Y-m-d H:i:s'))) )) { ?>
+     <?php echo '<button class="btn btn-success" name="add_cart_product" value="true" type="submit"'. (($quantity <= 0 && !$orderable) ? ' disabled="disabled"' : '') .'>'. language::translate('title_add_to_cart', 'Add To Cart') .'</button>'; ?>
+                
+     <?php } ?>
+      ]]></add>
+		</operation> 
+ 
+</file> 
+ 
+<!-- ORIGINAL
+    
+		<operation error="log">
+			<search position="replace" offset="1"><![CDATA[
+      <div style="flex: 1 0 auto; padding-left: 1em;">
+      ]]></search>
+			<add><![CDATA[
+	 <div style="flex: 1 0 auto; padding-left: 1em;">
+	 	 
+	 <?php if (!empty(customer::$data['id']) && 
+	 (!empty(reference::product($product_id)->guest_price_prices)) && (!empty(reference::product($product_id)->sign_in))) { ?> 
+	 <?php echo '<button class="btn btn-success" name="add_cart_product" value="true" type="submit"'. (($quantity <= 0 && !$orderable) ? ' disabled="disabled"' : '') .'>'. language::translate('title_add_to_cart', 'Add To Cart') .'</button>'; ?>
+
+	 <?php  } else if (empty(customer::$data['id']) && ((!empty($campaign_price)) && (!empty(reference::product($product_id)->sign_in_deal))) 
+	 || (!empty(reference::product($product_id)->guest_price_prices)) && (!empty(reference::product($product_id)->sign_in))) { ?> 
+	 
+     <?php } else if (empty(customer::$data['id']) && (!empty(reference::product($product_id)->sign_in_date_price_prices))) { ?> 
+     
+     <?php } else if (empty(customer::$data['id']) && (!empty(reference::product($product_id)->sign_in_date_price_prices)) && (!empty(reference::product($product_id)->fake_sold_out_date_price_prices))) { ?> 
+	 
+     <?php } else if (!empty(customer::$data['id']) 
+      
+     || (empty(reference::product($product_id)->signin) && (empty(reference::product($product_id)->date_valid_to > date('Y-m-d H:i:s'))) )) { ?>
+     <?php echo '<button class="btn btn-success" name="add_cart_product" value="true" type="submit"'. (($quantity <= 0 && !$orderable) ? ' disabled="disabled"' : '') .'>'. language::translate('title_add_to_cart', 'Add To Cart') .'</button>'; ?>
+                
+     <?php } ?>
+      ]]></add>
+		</operation>
+				
+</file>	
+-->
+<!--
+145
+          <operation error="log">
+		  <search position="replace">
+			  <![CDATA[<button]]>
+		  </search>
+		  <add>
+			  <![CDATA[<button <?php echo !empty(customer::$data['id']) 
+			  || ((!empty(reference::product($product_id)->signin) && (!empty(reference::product($product_id)->date_valid_to < date('Y-m-d H:i:s'))))
+			  || (( empty(reference::product($product_id)->signin) && (!empty(reference::product($product_id)->date_valid_to < date('Y-m-d H:i:s')))))
+			  
+			  ) ? '':'disabled="disabled"' ?>
+			  ]]>
+		  </add>
+	  </operation>	
+	  
+	  -->
+
+  <file name="includes/templates/*.catalog/views/listing_product_column.inc.php">
+		<operation error="skip">
+			<search position="replace"><![CDATA[
+        <div class="manufacturer-name"><?php echo !empty($manufacturer) ? $manufacturer['name'] : '&nbsp;'; ?></div>
+      ]]></search>
+			<add><![CDATA[
+<!--      <?php if (!empty($manufacturer)) { ?>
+      <div class="manufacturer-name">
+        <a href="<?php echo document::ilink('manufacturer', array('manufacturer_id' =>$manufacturer['id'])); ?>">
+          <?php echo $manufacturer['name']; ?>
+        </a>
+      </div>
+      <?php } ?>
+       
+      <?php if (!empty($listing_link)) { ?>
+      <div class="listing_link-name">
+        <a href="<?php echo document::ilink('listing_link', array('listing_link_id' =>$listing_link['id'])); ?>">
+          <?php echo $listing_link['name']; ?>
+        </a>
+      </div>
+      <?php } ?>
+-->       
+        <div class="manufacturer-name"><?php echo !empty($listing_info) ? nl2br($listing_info) : '&nbsp;'; ?></div>
+      ]]></add>
+		</operation>      
+      
+      
+          <operation error="log">
+		  <search position="replace">
+			  <![CDATA[<button]]>
+		  </search>
+		  <add>
+			  <![CDATA[<button <?php echo !empty(customer::$data['id']) 
+			  || (empty(reference::product($product_id)->signin))
+			  || (!empty(reference::product($product_id)->signin) && (!empty(reference::product($product_id)->disable_sign_in)))
+			   ? '':'disabled="disabled"' ?>
+			  ]]>
+		  </add>
+	  </operation>		
+		
+		<operation error="log">
+			<search position="replace" offset="3"><![CDATA[
+      <div class="image-wrapper">
+      ]]></search>
+			<add><![CDATA[
+      <?php if (empty(customer::$data['forbidden'] == 0) || (empty(reference::product($product_id)->forbidden))) { ?>
+        <div class="image-wrapper">
+          <img class="image img-responsive" src="<?php echo document::href_link(WS_DIR_APP . $image['thumbnail']); ?>" srcset="<?php echo document::href_link(WS_DIR_APP . $image['thumbnail']); ?> 1x, <?php echo document::href_link(WS_DIR_APP . $image['thumbnail_2x']); ?> 2x" alt="<?php echo htmlspecialchars($name); ?>" />         
+        </div> 
+        
+        <?php } else { ?>
+        <?php if (empty(customer::$data['forbidden'] == 1) || (!empty(customer::$data['id'])) || (empty(reference::product($product_id)->forbidden))) { ?>
+        <div class="image-wrapper">
+          <img class="image img-responsive" style="max-width: 320px; max-height: 320px;" src="<?php echo WS_DIR_IMAGES; ?>logotype hidden.png" srcset="" alt="<?php echo WS_DIR_IMAGES; ?>logotype hidden.png" />
+        </div>
+        <?php } ?>
+        <?php } ?>
+      
+      ]]></add>
+		</operation>
+
+
+<!--
+204
+            <?php if (empty(customer::$data['id'])  && (!empty(reference::product($product_id)->signin) && (!empty(reference::product($product_id)->date_valid_to > date('Y-m-d H:i:s'))) 
+            || (!empty(reference::product($product_id)->guest_price_prices)) && (!empty(reference::product($product_id)->sign_in)) 
+            || (!empty(reference::product($product_id)->sign_in_date_price_prices))
+            || (!empty(reference::product($product_id)->disable_master_insane_deal_price) && (!empty(reference::product($product_id)->sign_in_deal))
+           
+            || (!empty(reference::product($product_id)->insaneprice) && (!empty(reference::product($product_id)->master_insane_deal_price) && (!empty(reference::product($product_id)->sign_in_deal))
+            || ((!empty($campaign_price)) && (!empty(reference::product($product_id)->sign_in_deal))) 
+            
+            ))))) { ?> 
+            
+            --> 
+            
+		<operation error="log">
+			<search position="replace" offset="6"><![CDATA[
+      <div class="price-wrapper">
+      ]]></search>
+			<add><![CDATA[
+
+			<?php if (!empty(customer::$data['id']) || (empty(reference::product($product_id)->signin)) || (!empty(reference::product($product_id)->signin)) 
+			|| (empty(reference::product($product_id)->addtocart)) || (!empty(reference::product($product_id)->addtocart))
+			|| (empty(reference::product($product_id)->preorderable)) || (!empty(reference::product($product_id)->preorderable))
+			|| (!empty(reference::product($product_id)->prebackorder))
+			){ ?>
+			
+            <div class="price-wrapper">
+            <?php if (empty(customer::$data['id'])  && (!empty(reference::product($product_id)->signin) && (empty(reference::product($product_id)->disable_sign_in)) 
+            || (!empty(reference::product($product_id)->guest_price_prices)) && (!empty(reference::product($product_id)->sign_in)) 
+            || (!empty(reference::product($product_id)->sign_in_date_price_prices))
+            || (!empty(reference::product($product_id)->sign_in_date_price_prices) && (!empty(reference::product($product_id)->addtocart) && (!empty(reference::product($product_id)->newarrival)))
+            || (!empty(reference::product($product_id)->disable_master_insane_deal_price) && (!empty(reference::product($product_id)->sign_in_deal))           
+            || (!empty(reference::product($product_id)->insaneprice) && (!empty(reference::product($product_id)->master_insane_deal_price) && (!empty(reference::product($product_id)->sign_in_deal))
+            || ((!empty($campaign_price)) && (!empty(reference::product($product_id)->sign_in_deal)))             
+            )))))) { ?> 
+            </br>
+            <span class="price"><strong class="regular-price"><strong><a href="<?php echo document::href_link('login', array('redirect_url' => document::link())); ?>">
+            <?php echo "See Price"; ?></strong></strong></span></span>
+            
+
+
+            <?php } else if (!empty(customer::$data['id']== 4640)) { ?>            
+            </br><strong><span class="price"><?php echo currency::format (reference::product($product_id)->purchase_price); ?></strong>  
+            
+            <?php } else if (!empty(customer::$data['id']== 4785)) { ?>
+            <span class="price"><?php echo currency::format($regular_price); ?></span>
+            
+
+
+            <?php } else if (empty(customer::$data['international']) && (!empty(reference::product($product_id)->guess_price))) { ?>  
+            </br><strong><span class="price">  $ <?php echo nl2br($guess_price); ?></strong>            
+
+            <?php } else if ((!empty(customer::$data['id']) || (empty(customer::$data['id'])))  && (!empty(reference::product($product_id)->no_customer_group_prices))) { ?>
+            </br><strong><?php echo currency::format (reference::product($product_id)->original_price); ?></strong></span>
+            
+            <?php } else if (!empty(customer::$data['id']) && (!empty(customer::$data['vip']) && (!empty(reference::product($product_id)->fake_sold_out_date_price_prices)))) { ?> 
+            <s class="regular-price"><?php echo currency::format (reference::product($product_id)->original_price); ?></s> <strong><span style="color: red;"></br><?php echo currency::format (reference::product($product_id)->fake_sold_out_date_price_prices); ?></strong></span>            
+          
+            <?php } else if ((!empty($quantity_price)) && (!empty(customer::$data['id'])) && (empty(customer::$data['enable_quantity_price'])) && (reference::product($product_id)->date_valid_to >= date('Y-m-d H:i:s'))) { ?>
+            <s class="regular-price"><?php echo currency::format (reference::product($product_id)->original_price); ?></s></br><span class="regular-price"><strong><span style=" font-size: 13.8px;"><?php echo currency::format($quantity_price); ?> - <?php echo currency::format($regular_price); ?></strong> </span>              
+
+            <?php } else if (empty(customer::$data['id']) && (!empty(reference::product($product_id)->stock_quantity_guest_prices)))  { ?>
+            <s class="regular-price"><?php echo currency::format (reference::product($product_id)->original_price); ?></s> <strong><span style="color: red;"></br><?php echo currency::format($regular_price); ?></strong></span>
+
+            <?php } else if (!empty(customer::$data['id']) && (!empty(reference::product($product_id)->stock_quantity_prices)))  { ?>
+            <s class="regular-price"><?php echo currency::format (reference::product($product_id)->original_price); ?></s> <strong><span style="color: red;"></br><?php echo currency::format($regular_price); ?></strong></span>
+
+            <?php } else if (empty(customer::$data['code']) && (!empty(reference::product($product_id)->insaneprice) && (!empty($campaign_price) && (!empty(reference::product($product_id)->sign_in_deal)) && (!empty(customer::$data['code'])) ))) { ?> 
+            <s class="regular-price"><?php echo currency::format($regular_price); ?></s> <strong class="campaign-price"></br></br><?php echo currency::format($campaign_price); ?></strong> 
+
+            <?php } else if (!empty(customer::$data['id']) && (!empty(customer::$data['code']) && ((!empty($campaign_price) && (!empty(reference::product($product_id)->sign_in_deal)) || (!empty(reference::product($product_id)->specialprice) && (empty(reference::product($product_id)->guest_price_prices)) )) )) ) { ?>
+            </br><strong><span class="price"><?php echo currency::format (reference::product($product_id)->original_price); ?></strong>
+
+            <?php } else if (!empty(customer::$data['id']) && (empty(customer::$data['code']) && (empty($campaign_price) && (!empty(reference::product($product_id)->master_customer_special_price) && (!empty(reference::product($product_id)->customer_specialprice) && (empty(customer::$data['enable_wholesale_price']) && (!empty(reference::product($product_id)->default_price_price) ))))))) { ?>
+            <s class="regular-price"><?php echo currency::format (reference::product($product_id)->original_price); ?></s> <strong><span style="color: red;"></br><?php echo currency::format (reference::product($product_id)->default_price_price); ?></strong></span>
+
+            <?php } else if (!empty(customer::$data['id']) && (empty(customer::$data['code']) && (empty($campaign_price) && (!empty(reference::product($product_id)->specialprice) && (empty(reference::product($product_id)->customer_group_prices) && (!empty(reference::product($product_id)->guest_price_prices)  )))))) { ?>
+            <s class="regular-price"><?php echo currency::format (reference::product($product_id)->original_price); ?></s> <strong><span style="color: red;"></br><?php echo currency::format (reference::product($product_id)->guest_price_prices); ?></strong></span>
+
+            <?php } else { ?>
+
+            <?php if ((!empty(reference::product($product_id)->master_insane_deal_price) && (!empty(reference::product($product_id)->insaneprice) && (!empty($campaign_price) && (empty(reference::product($product_id)->signin))))) 
+            || (!empty(reference::product($product_id)->disable_master_insane_deal_price) && (!empty(reference::product($product_id)->insaneprice) && (!empty($campaign_price) && (empty(reference::product($product_id)->signin)))))
+            || (!empty(reference::product($product_id)->disable_master_insane_deal_price) && (!empty($campaign_price) && (empty(reference::product($product_id)->signin))))
+            || (!empty(reference::product($product_id)->disable_master_insane_deal_price) && (!empty(reference::product($product_id)->insaneprice) && (!empty($campaign_price) && (empty(reference::product($product_id)->signin)))))            
+            ) { ?> 
+            <s class="regular-price"><?php echo currency::format (reference::product($product_id)->original_price); ?></s> <strong class="campaign-price"></br><?php echo currency::format($campaign_price); ?></strong>
+
+            <?php } else if (!empty(customer::$data['code']) && (!empty(reference::product($product_id)->insaneprice) && (!empty($campaign_price)) && (!empty(reference::product($product_id)->sign_in_deal)) )) {?>
+            <s class="regular-price"><?php echo currency::format (reference::product($product_id)->original_price); ?></s></br><span class="price"><span style="color: red;"><?php echo currency::format (reference::product($product_id)->guest_price_prices); ?></br></span>
+          
+            <?php } else if (((!empty($quantity_price)) && (!empty(customer::$data['id'])) && (empty(customer::$data['enable_quantity_price'])) && (reference::product($product_id)->date_valid_to >= date('Y-m-d H:i:s'))) 
+            || (!empty(customer::$data['code']) && (!empty(reference::product($product_id)->master_guest_special_price || disable_master_guest_special_price) && (!empty(reference::product($product_id)->specialprice) && (!empty(reference::product($product_id)->guest_price_prices)))))
+            || (!empty(customer::$data['id']) && (!empty(customer::$data['code']) && (!empty(customer::$data['vip']) && (!empty(reference::product($product_id)->disable_master_guest_special_price) && (!empty(reference::product($product_id)->specialprice) && (!empty(reference::product($product_id)->guest_price_prices)))))))
+            ) { ?>
+            <s class="regular-price"><?php echo currency::format (reference::product($product_id)->original_price); ?></s></br><strong><span style="color: red;"><?php echo currency::format (reference::product($product_id)->guest_price_prices); ?></strong></span>
+
+            <?php } else if (!empty(customer::$data['code']) && (!empty(reference::product($product_id)->master_guest_special_price) && (!empty(reference::product($product_id)->specialprice) && (empty(reference::product($product_id)->guest_price_prices))))) { ?>
+            </br><strong><span class="price"><?php echo currency::format (reference::product($product_id)->original_price); ?></strong>
+          
+            <?php } else if (!empty(customer::$data['code'])) { ?>
+            </br><strong><span class="price"><?php echo currency::format (reference::product($product_id)->original_price); ?></strong>
+          
+            <?php } else if (!empty(reference::product($product_id)->master_insane_deal_price) && (!empty(reference::product($product_id)->insaneprice) && ($campaign_price))) { ?>
+            <s class="regular-price"><?php echo currency::format (reference::product($product_id)->original_price); ?></s></br> <strong class="campaign-price"><?php echo currency::format($campaign_price); ?></strong>
+
+            <?php } else if ((empty(customer::$data['id']) && (!empty(reference::product($product_id)->master_guest_special_price) && (!empty(reference::product($product_id)->specialprice) && (!empty(reference::product($product_id)->guest_price_prices)))))             
+            || (empty(customer::$data['id']) && (!empty(reference::product($product_id)->disable_master_guest_special_price) && (!empty(reference::product($product_id)->specialprice) && (!empty(reference::product($product_id)->guest_price_prices)))))
+            || (empty(customer::$data['id']) && (!empty(reference::product($product_id)->disable_master_guest_special_price)) && (!empty(reference::product($product_id)->guest_price_prices)))
+            ) { ?>
+            <s class="regular-price"><?php echo currency::format (reference::product($product_id)->original_price); ?></s> <strong><span style="color: red;"></br><?php echo currency::format (reference::product($product_id)->guest_price_prices); ?></strong></span>
+
+            <?php } else if ((!empty(customer::$data['id']) && (empty(reference::product($product_id)->disable_master_customer_special_price) && (empty(reference::product($product_id)->disable_master_guest_special_price)))) 
+            || (!empty(customer::$data['id']) && (empty(reference::product($product_id)->master_insane_deal_price) && (!empty(reference::product($product_id)->insaneprice) && (!empty($campaign_price) && (empty(reference::product($product_id)->signin))))))
+            ) { ?>
+            <s class="regular-price"><?php echo currency::format (reference::product($product_id)->original_price); ?></s> <strong><span style="color: red;"></br><?php echo currency::format($regular_price); ?></strong></span>
+
+            <?php } else if (empty(customer::$data['id']) && (empty(reference::product($product_id)->master_insane_deal_price) && (!empty(reference::product($product_id)->insaneprice) && (!empty($campaign_price) && (empty(reference::product($product_id)->signin)) )))) { ?> 
+            </br><strong><?php echo currency::format (reference::product($product_id)->original_price); ?></strong></span>
+
+            <?php } else if (!empty(customer::$data['id']) && (!empty(customer::$data['enable_wholesale_price']) && (!empty(customer::$data['disable_default_price']) ))) { ?>
+            <s class="regular-price"><?php echo currency::format (reference::product($product_id)->original_price); ?></s> <strong><span style="color: red;"></br><?php echo currency::format($regular_price); ?></strong></span>
+
+            <?php } else if (!empty(customer::$data['id']) && (!empty(customer::$data['code']) && (!empty(reference::product($product_id)->master_guest_special_price) && (!empty(reference::product($product_id)->specialprice) && (!empty(reference::product($product_id)->guest_price_prices)) )))) { ?>
+            <s class="regular-price"><?php echo currency::format (reference::product($product_id)->original_price); ?></s> <strong><span style="color: red;"></br><?php echo currency::format (reference::product($product_id)->guest_price_prices); ?></strong></span>
+
+            <?php } else if (((!empty(customer::$data['id']) &&  (!empty(reference::product($product_id)->master_wholesale_special_price) &&  (!empty(reference::product($product_id)->wholesale_price_price) && (!empty(reference::product($product_id)->wholesale_specialprice) && (!empty(customer::$data['enable_wholesale_price']) )))) && (!empty(customer::$data['disable_default_price'])))) 
+            || ((!empty(customer::$data['id']) &&  (!empty(reference::product($product_id)->disable_master_wholesale_special_price) &&  (!empty(reference::product($product_id)->wholesale_price_price) && (!empty(reference::product($product_id)->wholesale_specialprice) && (!empty(customer::$data['enable_wholesale_price']) )))) && (!empty(customer::$data['disable_default_price']))))
+            ) { ?>
+            <s class="regular-price"><?php echo currency::format (reference::product($product_id)->original_price); ?></s> <strong><span style="color: red;"></br><?php echo currency::format($regular_price); ?></strong></span>
+
+            <?php } else if ((!empty(customer::$data['id']) && (empty(customer::$data['code']) && (!empty(reference::product($product_id)->master_customer_special_price) && (!empty(reference::product($product_id)->customer_specialprice))))) && (!empty(reference::product($product_id)->master_customer_special_price) && (!empty(reference::product($product_id)->customer_specialprice) && (!empty(reference::product($product_id)->default_price_price) )))) { ?>
+            <s class="regular-price"><?php echo currency::format (reference::product($product_id)->original_price); ?></s> <strong><span style="color: red;"></br><?php echo currency::format (reference::product($product_id)->default_price_price); ?></strong></span>
+
+            <?php } else if (!empty(customer::$data['id']) && (empty(reference::product($product_id)->customer_group_prices) && (!empty(reference::product($product_id)->master_guest_special_price) && (!empty(reference::product($product_id)->specialprice) && (!empty(reference::product($product_id)->guest_price_prices)) )))) { ?>
+            <s class="regular-price"><?php echo currency::format (reference::product($product_id)->original_price); ?></s> <strong><span style="color: red;"></br><?php echo currency::format (reference::product($product_id)->guest_price_prices); ?></strong></span>
+
+            <?php } else if ((!empty(customer::$data['id']) && (!empty(reference::product($product_id)->master_guest_special_price) && (!empty(reference::product($product_id)->specialprice) && (!empty(reference::product($product_id)->guest_price_prices))))) 
+            || (!empty(customer::$data['id']) && (!empty(reference::product($product_id)->master_guest_special_price) && (!empty(reference::product($product_id)->specialprice) && (empty(reference::product($product_id)->guest_price_prices)))))
+            || (!empty(customer::$data['id']) && (empty(reference::product($product_id)->specialprice) && (empty(reference::product($product_id)->guest_price_prices))))
+            ) { ?>
+            <s class="regular-price"><?php echo currency::format (reference::product($product_id)->original_price); ?></s> <strong><span style="color: red;"></br><?php echo currency::format($regular_price); ?></strong></span>
+        
+            <?php } else if (((!empty(customer::$data['id']) && (empty(reference::product($product_id)->customer_specialprice))) && (!empty(reference::product($product_id)->default_price_price))) 
+            || (!empty(customer::$data['id']) && (!empty(reference::product($product_id)->master_guest_special_price) && (!empty(reference::product($product_id)->specialprice) && (!empty(reference::product($product_id)->guest_price_prices)))))
+            ) { ?>
+            <s class="regular-price"><?php echo currency::format (reference::product($product_id)->original_price); ?></s> <strong><span style="color: red;"></br><?php echo currency::format (reference::product($product_id)->guest_price_prices); ?></strong></span>
+
+            <?php } else if ((empty(customer::$data['id']) && ($campaign_price)) 
+            || (empty(customer::$data['id']) || (!empty(customer::$data['code']) && ($campaign_price)))
+            ) { ?>
+            </br><span class="price"><?php echo currency::format($regular_price); ?></span>
+         
+	        <?php } else if (!empty(reference::product($product_id)->master_guest_special_price) && (!empty(reference::product($product_id)->specialprice) && (!empty(reference::product($product_id)->guest_price_prices)) )) { ?>
+	        <s class="regular-price"><?php echo currency::format (reference::product($product_id)->guest_price_prices); ?></s> <strong><span style="color: red;"></br><?php echo currency::format($regular_price); ?></strong></span>
+
+	        <?php } else if (!empty(reference::product($product_id)->master_customer_special_price) && (!empty(reference::product($product_id)->specialprice) && (!empty(reference::product($product_id)->default_price_price)) )) { ?>
+	        <s class="regular-price"><?php echo currency::format (reference::product($product_id)->original_price); ?></s> <strong><span style="color: red;"></br><?php echo currency::format($regular_price); ?></strong></span>
+
+            <?php } else if (!empty(customer::$data['id']) && (empty($campaign_price) && (!empty(reference::product($product_id)->customer_group_prices)))) { ?>
+
+            <?php if (empty(reference::product($product_id)->no_customer_group_prices)) { ?>
+            <s class="regular-price"><?php echo currency::format (reference::product($product_id)->original_price); ?></s> <strong><span style="color: red;">
+
+            <?php } ?> 
+            </br>
+
+            <?php if (!empty(reference::product($product_id)->no_customer_group_prices)) { ?>
+            <strong>
+            <?php } ?> 
+            <?php echo currency::format($regular_price); ?></strong></span>
+            <?php } else { ?>
+         
+            <?php if (!empty(reference::product($product_id)->guest_price_prices)) { ?>
+            <s class="regular-price"><?php echo currency::format (reference::product($product_id)->guest_price_prices); ?></s>
+          
+            <?php } else if (!empty(reference::product($product_id)->default_price_price)) { ?>
+            <s class="regular-price"><?php echo currency::format (reference::product($product_id)->original_price); ?></s>
+
+            <?php } else if (empty(reference::product($product_id)->customer_group_prices)) { ?>
+            <s class="regular-price"><?php echo currency::format (reference::product($product_id)->original_price); ?></s>
+            <?php } ?> 
+
+            </br><span class="price"><?php echo currency::format($regular_price); ?></span>
+
+            <?php } ?>            
+            <?php } ?>
+            </div>
+            <?php } ?>             
+
+		<?php if (!empty(reference::product($product_id)->preorderable) && (reference::product($product_id)->date_valid_from > date('Y-m-d H:i:s'))) { ?>
+		<span style=" font-size: 11px;"> <?php echo language::translate('title_closing_dates', 'Closing :'); ?> <?php echo language::strftime(language::$selected['format_date'], strtotime('-1 day', strtotime(reference::product($product_id)->date_valid_from))); ?></span></br>
+        <?php } else if (!empty(reference::product($product_id)->preorderable) && (reference::product($product_id)->date_valid_from < date('Y-m-d H:i:s'))) { ?>
+        </br>
+        <?php } else if (empty(reference::product($product_id)->preorderable)) { ?>
+        </br>
+        <?php } ?>
+
+		<?php if (reference::product($product_id)->quantity > 0 || reference::product($product_id)->sold_out_status['orderable']) { ?>	
+		<span style=" font-size: 11px;">
+		<?php if (!empty(reference::product($product_id)->preorderable)) { ?>
+		<?php echo language::translate('title_eta', 'ETA :'); ?> 
+		<?php } ?>
+		<?php $array = reference::product($product_id)->delivery_status; print_r($array["name"]);?></span>
+		
+		<?php } else if (reference::product($product_id)->quantity <= 0 || reference::product($product_id)->sold_out_status['orderable']) { ?>
+		</br>
+		<?php } ?>
+
+
+      ]]></add>
+		</operation>		
+	</file>
+
+  <file name="includes/templates/*.catalog/views/listing_product_row.inc.php">
+    <operation error="log">
+      <search position="replace"><![CDATA[
+        <div class="name"><?php echo $name; ?></div>
+      ]]></search>
+      <add><![CDATA[
+        <div class="name"><?php echo nl2br($short_description); ?></div>
+      ]]></add>
+    </operation>
+
+          <operation error="log">
+		  <search position="replace">
+			  <![CDATA[<button]]>
+		  </search>
+		  <add>
+			  <![CDATA[<button <?php echo !empty(customer::$data['id']) || (empty(reference::product($product_id)->signin)) ? '':'disabled="disabled"' ?>
+			  ]]>
+		  </add>
+	  </operation>		
+		
+		<operation error="log">
+			<search position="replace" offset="3"><![CDATA[
+      <div class="image-wrapper">
+      ]]></search>
+			<add><![CDATA[
+      <?php if (empty(customer::$data['forbidden'] == 0) || (empty(reference::product($product_id)->forbidden))) { ?>
+        <div class="image-wrapper">
+          <img class="image img-responsive" src="<?php echo document::href_link(WS_DIR_APP . $image['thumbnail']); ?>" srcset="<?php echo document::href_link(WS_DIR_APP . $image['thumbnail']); ?> 1x, <?php echo document::href_link(WS_DIR_APP . $image['thumbnail_2x']); ?> 2x" alt="<?php echo htmlspecialchars($name); ?>" />         
+        </div>       
+        
+        <?php } else { ?>
+        <?php if (empty(customer::$data['forbidden'] == 1) || (!empty(customer::$data['id'])) || (empty(reference::product($product_id)->forbidden))) { ?>
+        <div class="image-wrapper">
+          <img class="image img-responsive" style="max-width: 160px; max-height: 160px;" src="<?php echo WS_DIR_IMAGES; ?>logotype hidden.png" srcset="" alt="<?php echo WS_DIR_IMAGES; ?>logotype hidden.png" />
+        </div>
+        <?php } ?>
+        <?php } ?>
+      
+      ]]></add>
+		</operation>
+		
+		<operation error="log">
+			<search position="replace" offset="6"><![CDATA[
+      <div class="price-wrapper">
+      ]]></search>
+			<add><![CDATA[
+			<?php if (!empty(customer::$data['id']) || (empty(reference::product($product_id)->signin)) || (!empty(reference::product($product_id)->signin)) 
+			|| (empty(reference::product($product_id)->addtocart)) || (!empty(reference::product($product_id)->addtocart))
+			|| (empty(reference::product($product_id)->preorderable)) || (!empty(reference::product($product_id)->preorderable))
+			|| (!empty(reference::product($product_id)->prebackorder))
+			){ ?>
+			
+            <div class="price-wrapper">
+            <?php if (!empty($campaign_price) && (empty(reference::product($product_id)->signin))) { ?> 
+            <s class="regular-price"><?php echo currency::format($regular_price); ?></s> <strong class="campaign-price"><?php echo currency::format($campaign_price); ?></strong>
+            <?php } else { ?>
+            
+            <?php if (empty(customer::$data['id']) && (!empty($campaign_price) || (!empty(reference::product($product_id)->signin)))) { ?> 
+            <span class="price"><strong class="regular-price"><strong><a href="<?php echo document::href_link('login', array('redirect_url' => document::link())); ?>">
+            <?php echo "See Price"; ?></strong></strong></span>
+            <?php } else if (!empty(customer::$data['code'])) { ?>
+            <span class="price"><?php echo currency::format($regular_price); ?></span>
+            
+            <?php } else if ((!empty($quantity_price)) && (!empty(customer::$data['id'])) && (reference::product($product_id)->date_valid_to >= date('Y-m-d H:i:s'))) { ?>
+            <span class="regular-price"><strong><span style=" font-size: 17px;"><?php echo currency::format($quantity_price); ?> - <?php echo currency::format($regular_price); ?></strong> </span> 
+            
+            <?php } else if ($campaign_price) { ?>
+            <s class="regular-price"><?php echo currency::format($regular_price); ?></s> <strong class="campaign-price"><?php echo currency::format($campaign_price); ?></strong>
+            <?php } else { ?>
+            <span style=" font-size: 17px;"><span class="price"><?php echo currency::format($regular_price); ?></span>
+            <?php } ?>            
+            <?php } ?>
+            </div>
+            <?php } ?>            
+      ]]></add>
+		</operation>		
+	</file>
+	
+	
+	
+</modification>
+
+<!--
+280
+            <?php if (!empty(reference::product($product_id)->master_insane_deal_price) && (!empty(reference::product($product_id)->insaneprice) && (!empty($campaign_price) && (empty(reference::product($product_id)->signin)) ))) { ?> 
+            <s class="regular-price"><?php echo currency::format (reference::product($product_id)->original_price); ?></s> <strong class="campaign-price"></br><?php echo currency::format($campaign_price); ?></strong>
+
+            <?php } else if (!empty(reference::product($product_id)->disable_master_insane_deal_price) && (!empty(reference::product($product_id)->insaneprice) && (!empty($campaign_price) && (empty(reference::product($product_id)->signin)) ))) { ?> 
+            <s class="regular-price"><?php echo currency::format (reference::product($product_id)->original_price); ?></s> <strong class="campaign-price"></br><?php echo currency::format($campaign_price); ?></strong>
+
+            <?php } else if (!empty(reference::product($product_id)->disable_master_insane_deal_price) && (!empty($campaign_price) && (empty(reference::product($product_id)->signin)) )) { ?> 
+            <s class="regular-price"><?php echo currency::format (reference::product($product_id)->original_price); ?></s> <strong class="campaign-price"></br><?php echo currency::format($campaign_price); ?></strong>
+
+            <?php } else if (!empty(reference::product($product_id)->disable_master_insane_deal_price) && (!empty(reference::product($product_id)->insaneprice) && (!empty($campaign_price) && (empty(reference::product($product_id)->signin)) ))) { ?> 
+            <s class="regular-price"><?php echo currency::format (reference::product($product_id)->original_price); ?></s> <strong class="campaign-price"></br><?php echo currency::format($campaign_price); ?></strong>
+
+  
+  -->

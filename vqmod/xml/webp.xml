@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>WebP Image Support</id>
+	<version>1.0</version>
+	<vqmver required="true">2.4.0</vqmver>
+	<author>tim-international.net</author>
+
+	<file name="includes/functions/func_image.inc.php">
+		<operation error="log">
+			<search position="after" offset="2"><![CDATA[
+          $options['extension'] = 'jpg';
+      ]]></search>
+			<add><![CDATA[
+        case 'webp':
+          $options['extension'] = 'webp';
+          break;
+      ]]></add>
+		</operation>
+
+		<operation error="log">
+			<search position="replace" offset="3"><![CDATA[
+  function image_thumbnail($source, $width=0, $height=0, $clipping='FIT_ONLY_BIGGER', $trim=false) {
+      ]]></search>
+			<add><![CDATA[
+  function image_thumbnail($source, $width=0, $height=0, $clipping='FIT_ONLY_BIGGER', $trim=false) {
+    $destination = FS_DIR_APP . 'cache/';
+
+    if (isset($_SERVER['HTTP_ACCEPT']) && preg_match('#image/webp#', $_SERVER['HTTP_ACCEPT'])) {
+
+      $source_webpath = preg_replace('#^('. preg_quote(FS_DIR_APP, '#') .')#', '', str_replace('\\', '/', realpath($source)));
+
+      switch (strtoupper($clipping)) {
+        case 'CROP':
+          $clipping_filename_flag = '_c';
+          break;
+        case 'CROP_ONLY_BIGGER':
+          $clipping_filename_flag = '_cob';
+          break;
+        case 'STRETCH':
+          $clipping_filename_flag = '_s';
+          break;
+        case 'FIT':
+          $clipping_filename_flag = '_f';
+          break;
+        case 'FIT_USE_WHITESPACING':
+          $clipping_filename_flag = '_fwb';
+          break;
+        case 'FIT_ONLY_BIGGER':
+          $clipping_filename_flag = '_fob';
+          break;
+        case 'FIT_ONLY_BIGGER_USE_WHITESPACING':
+          $clipping_filename_flag = '_fobws';
+          break;
+        default:
+          trigger_error('Unknown resample method ('.$options['clipping'].') for image', E_USER_WARNING);
+          return;
+      }
+
+      $destination .= implode('', array(
+        sha1($source_webpath),
+        $trim ? '_t' : null,
+        '_'.(int)$width .'x'. (int)$height,
+        $clipping_filename_flag,
+        settings::get('image_thumbnail_interlaced') ? '_i' : null,
+        '.webp',
+      ));
+
+      $extension = 'webp';
+    }
+
+    return image_process($source, array(
+      'destination' => $destination,
+      'extension' => !empty($extension) ? $extension : null,
+      ]]></add>
+		</operation>
+  </file>
+
+	<file name="includes/entities/ent_image.inc.php">
+		<operation error="log">
+			<search position="after" offset="2"><![CDATA[
+              $this->_image = ImageCreateFromPNG($this->_src);
+      ]]></search>
+			<add><![CDATA[
+            case 'webp':
+              $this->_type = 'png';
+              $this->_image = ImageCreateFromWebP($this->_src);
+              break;
+      ]]></add>
+		</operation>
+
+		<operation error="log">
+			<search position="replace"><![CDATA[
+      if (!in_array(strtolower($type), array('gif', 'jpg', 'png'))) {
+      ]]></search>
+			<add><![CDATA[
+      if (!in_array(strtolower($type), array('gif', 'jpg', 'png', 'webp'))) {
+      ]]></add>
+		</operation>
+
+		<operation error="log">
+			<search position="after" offset="1"><![CDATA[
+               $this->_image->setImageCompression(Imagick::COMPRESSION_JPEG);
+      ]]></search>
+			<add><![CDATA[
+            case 'webp':
+               $this->_image->setImageCompression(Imagick::COMPRESSION_ZIP);
+               break;
+      ]]></add>
+		</operation>
+
+		<operation error="log">
+			<search position="after" offset="3"><![CDATA[
+              $result = ImagePNG($this->_image, $destination);
+      ]]></search>
+			<add><![CDATA[
+            case 'webp':
+              ImageSaveAlpha($this->_image, true);
+              $result = ImageWebP($this->_image, $destination, $quality);
+              ImageDestroy($this->_image);
+              return $result;
+      ]]></add>
+		</operation>
+
+		<operation error="log">
+			<search position="after" offset="3"><![CDATA[
+              $result = ImagePNG($this->_image, false);
+      ]]></search>
+			<add><![CDATA[
+            case 'png':
+              ImageSaveAlpha($this->_image, true);
+              $result = ImageWebP($this->_image, false, $quality);
+              ImageDestroy($this->_image);
+              return $result;
+      ]]></add>
+		</operation>
+
+		<operation error="log">
+			<search position="before"><![CDATA[
+          case 3:
+      ]]></search>
+			<add><![CDATA[
+          case 18:
+            $this->_type = 'webp';
+            break;
+      ]]></add>
+		</operation>
+	</file>
+
+	<file name="includes/library/lib_cache.inc.php">
+		<operation error="log">
+			<search position="after"><![CDATA[
+      $dependencies[] = 'site';
+      ]]></search>
+			<add><![CDATA[
+      $dependencies[] = 'webp';
+      ]]></add>
+		</operation>
+
+		<operation error="log">
+			<search position="after" offset="2"><![CDATA[
+            $hash_string .= $_SERVER['REQUEST_URI'];
+      ]]></search>
+			<add><![CDATA[
+          case 'webp':
+            if (isset($_SERVER['HTTP_ACCEPT']) && preg_match('#image/webp#', $_SERVER['HTTP_ACCEPT'])) {
+              $hash_string .= 'webp';
+            }
+            break;
+      ]]></add>
+		</operation>
+  </file>
+
+</modification>

@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification
+    xmlns="https://github.com/vqmod/vqmod"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://github.com/vqmod/vqmod https://raw.githubusercontent.com/vqmod/vqmod/master/vqmod.xsd"
+>
+    <id>ADMIN - add edit links to categories, products, etc</id>
+    <version>1.0</version>
+    <vqmver>2.X</vqmver>
+    <author>Skipper Hosting</author>
+    
+    <file name="includes/templates/*.catalog/views/box_product.inc.php">
+        <operation info="add edit link to product page" error="skip">
+            <search position="replace"><![CDATA[
+    <h1 class="title"><?php echo $name; ?></h1>
+            ]]></search>
+            <add><![CDATA[
+            
+    <?php error_reporting(0); ?>
+    <h1 class="title"><?php echo nl2br($name); 
+    if (user::$data['status']) {
+        echo ' <a title="Edit Product" target="_blank" href="' .document::link(WS_DIR_ADMIN, array('app' => 'catalog', 'doc' => 'edit_product', 'product_id' => $product_id)) . '">&nbsp;<span style="color: blue;"></br><i class="fa fa-cog"></i></a>';
+    }
+    if (user::$data['status']) {
+    echo ' <a title="Clone Product" target="_blank" href="' . document::link(WS_DIR_ADMIN, array('app' => 'catalog', 'doc' => 'edit_product', 'clone_id' => $product_id)) .'">&nbsp;<span style="color: green;"><i class="fa fa-copy"></i></a>'; 
+    }
+    
+    
+    ?>
+    <?php if (!empty(user::$data['status'])) { ?>
+    
+    <?php echo $product['wishlist_customer'] ?>
+
+    <?php if (!empty(reference::product($product_id)->oversize_parcel)) { ?>
+    &nbsp;<span style="color: #a15300;"><i class="fa fa-dropbox"></span></i>
+    <?php } ?>  
+
+    <?php if (!empty(reference::product($product_id)->keywords)) { ?>
+    &nbsp;<span style="color: #9500ff;"><i class="fa fa-key"></span></i>
+    <?php } ?>  
+    
+    <?php if (!empty(reference::product($product_id)->attributes)) { ?>
+    &nbsp;<span style="color: #ffae0d;"><i class="fa fa-info-circle"></span></i>
+    <?php } ?>    
+    
+    <?php if (!empty(reference::product($product_id)->webp)) { ?>
+    &nbsp;<span style="color: black;"><i class="fa fa-image"></span></i>     
+    <?php } ?>
+
+    <?php if (!empty(reference::product($product_id)->free_shipping)) { ?>
+    &nbsp;<span style="color: #69004e;"><i class="fa fa-truck"></span></i>
+    <?php } ?>   
+
+    <?php if (!empty(reference::product($product_id)->no_free_shipping)) { ?>
+    &nbsp;<span style="color: #ff0059;"><i class="fa fa-truck"></span></i>
+    <?php } ?>  
+    
+    </br>
+
+    <?php if (!empty(reference::product($product_id)->specialprice)) { ?>
+    &nbsp;<span style="color: #ffee00;"><i class="fa fa-star"></span></i>
+    <?php } ?>   
+    
+    <?php if (!empty(reference::product($product_id)->customer_specialprice)) { ?>
+    &nbsp;<span style="color: #23d400;"><i class="fa fa-star"></span></i>
+    <?php } ?>  
+    
+    <?php if (!empty(reference::product($product_id)->wholesale_specialprice)) { ?>
+    &nbsp;<span style="color: #0055d4;"><i class="fa fa-star"></span></i>
+    <?php } ?>      
+   
+    <?php if (!empty(reference::product($product_id)->insaneprice)) { ?>
+    &nbsp;<span style="color: red;"><i class="fa fa-star"></span></i>
+    <?php } ?> 
+    
+    <?php if (!empty(reference::product($product_id)->no_customer_group_prices)) { ?>
+    &nbsp;<span style="color: black;"><i class="fa fa-star"></span></i>
+    <?php } ?>  
+    
+   
+    <?php } ?>
+    </h1>
+    
+    <div>
+            ]]></add>
+        </operation>
+    </file>
+    
+    <file name="includes/templates/*.catalog/views/listing_product_column.inc.php">
+        <operation info="add edit link to product thumbnail" error="skip">
+            <search position="replace"><![CDATA[
+        <div class="name"><?php echo $name; ?></div>
+            ]]></search>
+            <add><![CDATA[
+    <?php error_reporting(0); ?>
+    <b><div class="name"><div class="form-group col-md-6"> <?php echo nl2br ($short_description) ; 
+    if (user::$data['status']) {
+    echo ' <a title="Edit Product" target="_blank" href="' . document::link(WS_DIR_ADMIN, array('app' => 'catalog', 'doc' => 'edit_product', 'product_id' => $product_id)) .'"> <br/><span style="color: blue;"><i class="fa fa-cog">&nbsp;</i></a>';
+    }
+   
+    if (user::$data['status']) {
+    echo ' <a title="Clone Product" target="_blank" href="' . document::link(WS_DIR_ADMIN, array('app' => 'catalog', 'doc' => 'edit_product', 'clone_id' => $product_id)) .'"><span style="color: green;"><i class="fa fa-copy"></i></a>'; 
+    }    
+
+    ?></b>
+    <?php if (!empty(user::$data['status'])) { ?>
+
+    <?php if (!empty(reference::product($product_id)->oversize_parcel)) { ?>
+    &nbsp;<span style="color: #a15300;"><i class="fa fa-dropbox"></span></i>
+    <?php } ?>  
+
+    <?php if (!empty(reference::product($product_id)->keywords)) { ?>
+    &nbsp;<span style="color: #9500ff;"><i class="fa fa-key"></span></i>
+    <?php } ?>  
+    
+    <?php if (!empty(reference::product($product_id)->attributes)) { ?>
+    &nbsp;<span style="color: #ffae0d;"><i class="fa fa-info-circle"></span></i>
+    <?php } ?>    
+    
+    <?php if (!empty(reference::product($product_id)->webp)) { ?>
+    &nbsp;<span style="color: black;"><i class="fa fa-image"></span></i>     
+    <?php } ?>
+    
+    <?php if (!empty(reference::product($product_id)->disable_sign_in)) { ?>
+    &nbsp;<span style="color: red;"><i class="fa fa-image"></span></i>     
+    <?php } ?>    
+    
+    <?php if (!empty(reference::product($product_id)->free_shipping)) { ?>
+    &nbsp;<span style="color: #69004e;"><i class="fa fa-truck"></span></i>
+    <?php } ?>   
+    
+    <?php if (!empty(reference::product($product_id)->no_free_shipping)) { ?>
+    &nbsp;<span style="color: #ff0059;"><i class="fa fa-truck"></span></i>
+    <?php } ?>      
+    
+    <?php } ?> 
+    </div>
+    </div>
+            ]]></add>
+        </operation>
+        
+        <operation info="add edit link to product thumbnail" error="skip">
+            <search position="after"><![CDATA[
+        <div class="manufacturer-name"><?php echo !empty($manufacturer) ? $manufacturer['name'] : '&nbsp;'; ?></div>
+            ]]></search>
+            <add><![CDATA[      
+
+    <?php if (!empty(user::$data['status'])) { ?>
+
+    <?php if (!empty(reference::product($product_id)->specialprice)) { ?>
+    &nbsp;<span style="color: #ffee00;"><i class="fa fa-star"></span></i>
+    <?php } ?>   
+    
+    <?php if (!empty(reference::product($product_id)->customer_specialprice)) { ?>
+    &nbsp;<span style="color: #23d400;"><i class="fa fa-star"></span></i>
+    <?php } ?>  
+    
+    <?php if (!empty(reference::product($product_id)->customer_insaneprice)) { ?>
+    &nbsp;<span style="color: #23d400;"><i class="fa fa-star"></span></i>
+    <?php } ?>      
+    
+    <?php if (!empty(reference::product($product_id)->wholesale_specialprice)) { ?>
+    &nbsp;<span style="color: #0055d4;"><i class="fa fa-star"></span></i>
+    <?php } ?>      
+   
+    <?php if (!empty(reference::product($product_id)->insaneprice)) { ?>
+    &nbsp;<span style="color: red;"><i class="fa fa-star"></span></i>
+    <?php } ?> 
+    
+    <?php if (!empty(reference::product($product_id)->no_customer_group_prices)) { ?>
+    &nbsp;<span style="color: black;"><i class="fa fa-star"></span></i>
+    <?php } ?>     
+    </br>
+    
+    <span style="color: black;"><?php echo number_format("$opening_quantity"); ?> pcs &nbsp;&nbsp;&nbsp;<?php echo number_format("$quantity"); ?> pcs </br>
+    
+        <?php echo strtr("%length x %width x %height %class", array(
+          '%length' => (float)reference::product($product_id)->dim_x,
+          '%width' => (float)reference::product($product_id)->dim_y,
+          '%height' => (float)reference::product($product_id)->dim_z,
+          '%class' => reference::product($product_id)->dim_class,
+        ));
+      ?>
+    </br>
+    
+    <?php if (!empty(user::$data['status'])) { ?>
+    <?php echo weight::format(reference::product($product_id)->weight, reference::product($product_id)->weight_class, ); ?></span></br>
+    <?php if ($sku) { ?>
+    <?php echo $sku; ?></br>
+    <?php echo $mpn; ?>
+    <?php } ?> 
+    <?php if (empty($mpn)) { ?>
+    </br>
+    <?php } ?> 
+    <?php } ?> 
+     <?php } ?> 
+            ]]></add>
+        </operation>
+        
+    </file>
+ 
+    <file name="includes/templates/*.catalog/pages/category.inc.php">
+        <operation info="add edit link to category page" error="skip">
+            <search position="replace"><![CDATA[
+    <h1 class="title"><?php echo $h1_title; ?></h1>
+            ]]></search>
+            <add><![CDATA[
+    <h1 class="title hidden-xs"><?php echo $h1_title; 
+    if (user::$data['status']) {
+        echo ' <a style="position: absolute; z-index: 10;" title="Edit Category" target="_blank" href="' .
+            document::link(WS_DIR_ADMIN, array('app' => 'catalog', 'doc' => 'edit_category', 'category_id' => $id)) .
+        '"><i class="fa fa-cog"></i></a>';
+    }
+    ?></h1>
+            ]]></add>
+        </operation>
+    </file>
+
+
+    
+</modification>
+
+<!--
+
+185
+    <file name="includes/templates/*.catalog/views/box_site_menu.inc.php">
+        <operation info="add edit link to site menu items" error="skip">
+            <search position="before"><![CDATA[
+      return $output;
+            ]]></search>
+            <add><![CDATA[
+    if (user::$data['status']) {
+        $_types = [
+            'page'=>['pages','edit_page','pages_id'],
+            'category'=>['catalog','edit_category','category_id'],
+            'manufacturer'=>['catalog','edit_manufacturer','manufacturer_id'],
+        ];
+        $output = '<a style="position: inherit; z-index: 10;" title="Edit '.$item['type'].'" target="_blank" href="' .
+            document::link(WS_DIR_ADMIN, array('app' => $_types[$item['type']][0], 'doc' => $_types[$item['type']][1], $_types[$item['type']][2] => $item['id'])) .
+        '"><i class="fa fa-cog"></i></a>' . $output;
+    }
+            ]]></add>
+        </operation>
+    </file>
+
+        <file name="includes/templates/*.catalog/views/box_site_footer.inc.php">
+        <operation info="add edit link to site footer categories" error="skip">
+            <search position="replace"><![CDATA[
+        <?php foreach ($categories as $category) echo '<li><a href="'. htmlspecialchars($category['link']) .'">'. $category['name'] .'</a></li>' . PHP_EOL; ?>
+            ]]></search>
+            <add><![CDATA[
+        <?php foreach ($categories as $category) {
+            echo '<li>';
+            if (user::$data['status']) {
+                echo '<a style="position: inherit; z-index: 10;" title="Edit Category" target="_blank" href="' .
+                    document::link(WS_DIR_ADMIN, array('app' => 'catalog', 'doc' => 'edit_category', 'category_id' => $category['id'])) .
+                '"><i class="fa fa-cog"></i></a>';
+            }
+            echo '<a href="'. htmlspecialchars($category['link']) .'">'. $category['name'] .'</a></li>' . PHP_EOL; 
+        } ?>
+            ]]></add>
+        </operation>
+        <operation info="add edit link to site footer manufacturers" error="skip">
+            <search position="replace"><![CDATA[
+      <?php foreach ($manufacturers as $manufacturer) echo '<li><a href="'. htmlspecialchars($manufacturer['link']) .'">'. $manufacturer['name'] .'</a></li>' . PHP_EOL; ?>
+            ]]></search>
+            <add><![CDATA[
+        <?php foreach ($manufacturers as $manufacturer) {
+            echo '<li>';
+            if (user::$data['status']) {
+                echo '<a style="position: inherit; z-index: 10;" title="Edit Manufacturer" target="_blank" href="' .
+                    document::link(WS_DIR_ADMIN, array('app' => 'catalog', 'doc' => 'edit_manufacturer', 'manufacturer_id' => $manufacturer['id'])) .
+                '"><i class="fa fa-cog"></i></a>';
+            }
+            echo '<a href="'. htmlspecialchars($manufacturer['link']) .'">'. $manufacturer['name'] .'</a></li>' . PHP_EOL;
+        } ?>
+            ]]></add>
+        </operation>
+        <operation info="add edit link to site footer items" error="skip">
+            <search position="replace"><![CDATA[
+        <?php foreach ($pages as $page) echo '<li><a href="'. htmlspecialchars($page['link']) .'">'. $page['title'] .'</a></li>' . PHP_EOL; ?>
+            ]]></search>
+            <add><![CDATA[
+        <?php foreach ($pages as $page) {
+            echo '<li>';
+            if (user::$data['status']) {
+                echo '<a style="position: inherit; z-index: 10;" title="Edit Page" target="_blank" href="' .
+                    document::link(WS_DIR_ADMIN, array('app' => 'pages', 'doc' => 'edit_page', 'pages_id' => $page['id'])) .
+                '"><i class="fa fa-cog"></i></a>';
+            }
+            echo '<a href="'. htmlspecialchars($page['link']) .'">'. $page['title'] .'</a></li>' . PHP_EOL;
+        } ?>
+            ]]></add>
+        </operation>
+    </file> 
+    
+    -->

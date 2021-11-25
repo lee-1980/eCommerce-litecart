@@ -1,0 +1,24 @@
+/* Breadcrumbs - Bootstrap Compatible */
+
+ul.breadcrumb {
+  margin: 0 0 @default-gutter-size 0;
+  padding: @default-gutter-size/2 @default-gutter-size;
+  margin-bottom: @default-gutter-size;
+  list-style: none;
+  background-image: url("/images/customize/Gold Brush Breadcrumb.png");
+//  animation: slideInLeft 1s linear ;
+  background-repeat: repeat;
+  background-position: left;
+  border-radius: @default-border-radius;
+  li {
+    display: inline-block;
+    &::before {
+      content: "/\00a0";
+      padding: 0 5px;
+      color: #ccc;
+    }
+    a {
+      color: inherit;
+    }
+  }
+}

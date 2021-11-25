@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Custom Func Form Single</id>
+	<version>2.0</version>
+	<vqmver required="true">2.4.0</vqmver>
+	<author>ittoysline.com</author>
+	
+
+     
+<file name="/includes/functions/func_form.inc.php">
+    
+ <!-- Upload Multiple Picture -->
+ 
+        <operation error="log">
+           <search position="replace">
+         <![CDATA[ return '<input '. (!preg_match('#class="([^"]+)?"#', $parameters) ? 'class="form-control"' : '') .' type="file" name="'. htmlspecialchars($name) .'"'. (($parameters) ? ' '.$parameters : false) .' />'; ]]>
+           </search>
+           <add>
+         <![CDATA[ return '<input '. (!preg_match('#class="([^"]+)?"#', $parameters) ? 'class="form-control"' : '') .' type="file" multiple="multiple" name="'. htmlspecialchars($name) .'"'. (($parameters) ? ' '.$parameters : false) .' />'; ]]>
+          </add>
+          </operation>
+
+        <operation error="log">
+           <search position="replace" offset="7">
+             function form_draw_datetime_field($name, $value=true, $parameters='', $type ='') {
+           </search>
+           <add>
+             function form_draw_datetime_field($name, $value=true, $parameters='', $type ='') {
+             if ($value === true) $value = form_reinsert_value($name);
+
+             if (!in_array(substr($value, 0, 10), array('', '0000-00-00', '1970-00-00', '1970-01-01'))) {
+             $value = date('Y-m-d\TH:i', strtotime($value));
+             } else {
+             if ($type == "default_price_1"){
+               if(strpos($name,"start_date")){
+                $value = date('Y-m-d\TH:i', strtotime("Today"));
+              }
+               else if(strpos($name,"end_date")){
+                $value = date('Y-m-d\TH:i', strtotime("12:00am 1 day"));
+              }
+               else{
+                $value = date('Y-m-d\TH:i', strtotime("12:00"));
+              }
+             }  
+
+             else if ($type == "default_price_2"){
+               if(strpos($name,"start_date")){
+                $value = date('Y-m-d\TH:i', strtotime("12:00am 1 day"));
+              }
+               else if(strpos($name,"end_date")){
+                $value = date('Y-m-d\TH:i', strtotime("12:00am 2 day"));
+              }
+               else{
+                $value = date('Y-m-d\TH:i', strtotime("12:00"));
+              }
+             }   
+             
+             else if ($type == "default_price_3"){
+               if(strpos($name,"start_date")){
+                $value = date('Y-m-d\TH:i', strtotime("12:00am 2 day"));
+              }
+               else if(strpos($name,"end_date")){
+                $value = date('Y-m-d\TH:i', strtotime("12:00am 10 years"));
+              }
+               else{
+                $value = date('Y-m-d\TH:i', strtotime("12:00"));
+              }
+             } 
+             
+             else if ($type == "guest_price_1"){
+               if(strpos($name,"start_date")){
+                $value = date('Y-m-d\TH:i', strtotime("Today"));
+              }
+               else if(strpos($name,"end_date")){
+                $value = date('Y-m-d\TH:i', strtotime("12:00am 1 day"));
+              }
+               else{
+                $value = date('Y-m-d\TH:i', strtotime("12:00"));
+              }
+             } 
+             
+             else if ($type == "guest_price_2"){
+               if(strpos($name,"start_date")){
+                $value = date('Y-m-d\TH:i', strtotime("12:00am 1 day"));
+              }
+               else if(strpos($name,"end_date")){
+                $value = date('Y-m-d\TH:i', strtotime("12:00am 2 day"));
+              }
+               else{
+                $value = date('Y-m-d\TH:i', strtotime("12:00"));
+              }
+             }   
+             
+             else if ($type == "guest_price_3"){
+               if(strpos($name,"start_date")){
+                $value = date('Y-m-d\TH:i', strtotime("12:00am 2 day"));
+              }
+               else if(strpos($name,"end_date")){
+                $value = date('Y-m-d\TH:i', strtotime("12:00am 10 years"));
+              }
+               else{
+                $value = date('Y-m-d\TH:i', strtotime("12:00"));
+              }
+             }             
+             
+             else if ($type == "wholesale_price_1"){
+               if(strpos($name,"start_date")){
+                $value = date('Y-m-d\TH:i', strtotime("Today"));
+              }
+               else if(strpos($name,"end_date")){
+                $value = date('Y-m-d\TH:i', strtotime("12:00am 1 day"));
+              }
+               else{
+                $value = date('Y-m-d\TH:i', strtotime("12:00"));
+              }
+             }
+             
+             else if ($type == "wholesale_price_2"){
+               if(strpos($name,"start_date")){
+                $value = date('Y-m-d\TH:i', strtotime("12:00am 1 day"));
+              }
+               else if(strpos($name,"end_date")){
+                $value = date('Y-m-d\TH:i', strtotime("12:00am 2 day"));
+              }
+               else{
+                $value = date('Y-m-d\TH:i', strtotime("12:00"));
+              }
+             }               
+
+             else if ($type == "fake_sold_out_date_price_1"){
+               if(strpos($name,"start_date")){
+                $value = date('Y-m-d\TH:i', strtotime("Today"));
+              }
+               else if(strpos($name,"end_date")){
+                $value = date('Y-m-d\TH:i', strtotime("now + 3 hours"));
+              }
+               else{
+                $value = date('Y-m-d\TH:i', strtotime("12:00"));
+              }
+             }
+             
+             else if ($type == "fake_sold_out_date_price_2"){
+               if(strpos($name,"start_date")){
+                $value = date('Y-m-d\TH:i', strtotime("now + 3 hours"));
+              }
+               else if(strpos($name,"end_date")){
+                $value = date('Y-m-d\TH:i', strtotime("now + 6 hours"));
+              }
+               else{
+                $value = date('Y-m-d\TH:i', strtotime("12:00"));
+              }
+             }             
+             
+             else if ($type == "sign_in_date_price_1"){
+               if(strpos($name,"start_date")){
+                $value = date('Y-m-d\TH:i', strtotime("Today"));
+              }
+               else if(strpos($name,"end_date")){
+                $value = date('Y-m-d\TH:i', strtotime("12:00am 1 day"));
+              }
+               else{
+                $value = date('Y-m-d\TH:i', strtotime("12:00"));
+              }
+             }             
+             
+             else{
+                $value ="";
+              }
+             }
+          </add>
+          </operation>          
+          </file>
+  
+</modification>
+          
+

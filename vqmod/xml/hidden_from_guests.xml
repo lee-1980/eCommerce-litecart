@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Hidden From Guests</id>
+	<version>2.0</version>
+	<vqmver required="true">2.4.0</vqmver>
+	<author>tim-international.net</author>
+
+
+
+  <file name="includes/templates/*.catalog/views/listing_product_column.inc.php">
+		<operation error="log">
+			<search position="before" ><![CDATA[
+      <div class="price-wrapper">
+      ]]></search>
+			<add><![CDATA[
+      <?php if (!empty(customer::$data['id']) || (empty(reference::product($product_id)->hidden))) { ?>
+      ]]></add>
+		</operation>
+		
+		<operation error="log">
+			<search position="before" offset="2"><![CDATA[
+      <button class="preview btn btn-default btn-sm" data-toggle="lightbox" data-target="<?php echo htmlspecialchars($link) ?>" data-require-window-width="768" data-max-width="980">
+      ]]></search>
+			<add><![CDATA[
+          <?php } ?>
+          </a>
+      ]]></add>
+		</operation>		
+		
+	</file>
+
+  <file name="includes/templates/*.catalog/views/box_product.inc.php">
+		<operation error="log">
+			<search position="before"><![CDATA[
+      <div class="images row">
+      ]]></search>
+			<add><![CDATA[
+      
+      <?php if (!empty(customer::$data['id']) || (empty(reference::product($product_id)->hidden))) { ?>	
+      ]]></add>
+		</operation>
+
+		<operation error="log">
+			<search position="after"><![CDATA[
+       <?php echo functions::form_draw_form_end(); ?>
+      ]]></search>
+			<add><![CDATA[
+			
+        <?php } else { ?>
+          <div style="text-align: center;">
+          <p><a href="<?php echo document::href_link('login', array('redirect_url' => document::link())); ?>"><?php echo language::translate('text_Kindly_sign_in_to_see_image_/_price_/_order_this_item', 'Kindly sign in to see image / price / order this item'); ?></a></p
+        <?php } ?>
+       
+      ]]></add>
+		</operation>
+	</file>
+
+</modification>

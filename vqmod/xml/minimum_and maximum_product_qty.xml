@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Minimum Product Quantity</id>
+	<version>1.1</version>
+	<vqmver required="true">2.4.0</vqmver>
+	<author>s22</author>
+
+	<file name="pages/product.inc.php">
+		<operation error="log">
+			<search position="after"><![CDATA[
+	'gtin' => $product->gtin,
+      	]]></search>
+			<add><![CDATA[
+    'min_qty' => $product->min_qty,
+      	]]></add>
+		</operation>
+	</file>
+
+	<file name="includes/library/lib_cart.inc.php">
+		<operation error="log">
+			<search position="before"><![CDATA[
+	if (!$product->id) {
+      ]]></search>
+			<add><![CDATA[
+    if ($product->min_qty && $quantity < $product->min_qty) {
+        throw new Exception(strtr(language::translate('error_minimum_purchase_for_this_item_is_1', 'Minimum purchase for this item is %minquantity.'), array('%minquantity' => round($product->min_qty, $product->quantity_unit['decimals']))));
+    }
+      ]]></add>
+		</operation>
+	</file>
+
+	<file name="includes/templates/*.catalog/views/box_product.inc.php">
+		<operation error="log">
+			<search position="before"><![CDATA[
+      <?php if (!$catalog_only_mode) { ?>
+      	]]></search>
+			<add><![CDATA[
+      <div style="margin:0 0 1em 0; color:red;">
+		<strong><?php
+		  $display_qty = '1';
+		  if ($min_qty) {
+		    echo language::translate('warn_item_min_qty', 'The minimum purchase of this product is').' '.$min_qty;
+			$display_qty = $min_qty;
+		  }
+		?></strong>
+      </div>
+    
+      	]]></add>
+		</operation>
+
+		<operation error="log">
+			<search position="replace"><![CDATA[
+	 <?php echo (!empty($quantity_unit['decimals'])) ? functions::form_draw_decimal_field('quantity', isset($_POST['quantity']) ? true : 1, $quantity_unit['decimals'], 1, null) : (functions::form_draw_number_field('quantity', isset($_POST['quantity']) ? true : 1, 1)); ?>
+      	]]></search>
+			<add><![CDATA[
+     <?php echo (!empty($quantity_unit['decimals'])) ? functions::form_draw_decimal_field('quantity', isset($_POST['quantity']) ? true : $display_qty, $quantity_unit['decimals'], 1, null) : (functions::form_draw_number_field('quantity', isset($_POST['quantity']) ? true : $display_qty, 1)); ?>
+      	]]></add>
+		</operation>
+	</file>
+
+	<file name="admin/catalog.app/edit_product.inc.php">
+		<operation error="log">
+			<search position="after"><![CDATA[
+        'options_stock',
+      ]]></search>
+			<add><![CDATA[
+        'min_qty',
+      ]]></add>
+		</operation>
+
+		<operation error="log">
+			<search position="before"><![CDATA[
+            <div class="row" style="max-width: 960px;">
+      ]]></search>
+			<add><![CDATA[
+         <div class="row" style="max-width: 960px;">
+          <div class="form-group col-md-4">
+            <label><?php echo language::translate('title_min_qty', 'Minimum Quantity'); ?></label>
+            <?php echo functions::form_draw_decimal_field('min_qty', true); ?>
+          </div>
+
+          <div class="form-group col-md-4">
+            <label><?php echo language::translate('title_max_qty', 'Maximum Quantity'); ?></label>
+            <?php echo functions::form_draw_decimal_field('max_qty', true); ?>
+          </div> 
+          
+          <div class="form-group col-md-4">
+      <label><?php echo language::translate('title_opening_quantity', 'Opening Quantity'); ?></label>
+        <?php foreach (array_keys(language::$languages) as $language_code) echo functions::form_draw_regional_textarea($language_code, 'opening_quantity['. $language_code .']', true, 'style="height: 32px;"'); ?>
+      </div>        
+         </div>   
+      ]]></add>
+		</operation>
+
+	</file>
+
+	<file name="includes/entities/ent_product.inc.php">
+		<operation error="log">
+			<search position="after"><![CDATA[
+            taric = '". database::input($this->data['taric']) ."',
+      ]]></search>
+			<add><![CDATA[
+            min_qty = '". database::input($this->data['min_qty']) ."',
+      ]]></add>
+		</operation>
+	</file>
+
+
+
+</modification>
+
+<!--
+
+NOTES:
+• You need to create a field in lc_products called `min_qty`
+
+ALTER TABLE `lc_products`
+ADD COLUMN `min_qty` INT(4) AFTER `purchases`;
+
+-->

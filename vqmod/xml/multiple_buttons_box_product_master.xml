@@ -1,0 +1,926 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+  <id>Multiple Button box Product Master</id>
+  <version>2.0</version>
+  <vqmver required="true">2.4.0</vqmver>
+  <author>tim-international.net</author>
+
+  <file name="admin/catalog.app/edit_product.inc.php">
+    <operation error="log">
+      <search position="after"><![CDATA[
+      if (empty($_POST['attributes'])) $_POST['attributes'] = array();
+      ]]></search>
+      <add><![CDATA[
+      if (!isset($_POST['preorderable'])) $_POST['preorderable'] = 0;
+      if (!isset($_POST['backorder'])) $_POST['backorder'] = 0;
+      if (!isset($_POST['addtocart'])) $_POST['addtocart'] = 0;
+      if (!isset($_POST['pending'])) $_POST['pending'] = 0;
+      if (!isset($_POST['pending_guest'])) $_POST['pending_guest'] = 0;
+      if (!isset($_POST['insanedeal'])) $_POST['insanedeal'] = 0;
+      if (!isset($_POST['insaneprice'])) $_POST['insaneprice'] = 0;
+      if (!isset($_POST['prebackorder'])) $_POST['prebackorder'] = 0;
+      if (!isset($_POST['signin'])) $_POST['signin'] = 0;
+      if (!isset($_POST['forbidden'])) $_POST['forbidden'] = 0;
+      if (!isset($_POST['newarrival'])) $_POST['newarrival'] = 0;
+      if (!isset($_POST['master_guest_special_price'])) $_POST['master_guest_special_price'] = 0;
+      if (!isset($_POST['master_customer_special_price'])) $_POST['master_customer_special_price'] = 0;      
+      if (!isset($_POST['master_wholesale_special_price'])) $_POST['master_wholesale_special_price'] = 0;
+      if (!isset($_POST['master_insane_deal_price'])) $_POST['master_insane_deal_price'] = 0; 
+      if (!isset($_POST['disable_master_guest_special_price'])) $_POST['disable_master_guest_special_price'] = 0; 
+      if (!isset($_POST['disable_master_customer_special_price'])) $_POST['disable_master_customer_special_price'] = 0;
+      if (!isset($_POST['disable_master_wholesale_special_price'])) $_POST['disable_master_wholesale_special_price'] = 0;
+      if (!isset($_POST['disable_master_insane_deal_price'])) $_POST['disable_master_insane_deal_price'] = 0;     
+      if (!isset($_POST['specialoffer'])) $_POST['specialoffer'] = 0;
+      if (!isset($_POST['customer_specialprice'])) $_POST['customer_specialprice'] = 0;
+      if (!isset($_POST['guest_insaneprice'])) $_POST['guest_insaneprice'] = 0;
+      if (!isset($_POST['customer_insaneprice'])) $_POST['customer_insaneprice'] = 0;
+      if (!isset($_POST['wholesale_specialprice'])) $_POST['wholesale_specialprice'] = 0;
+      if (!isset($_POST['wholesale_soldout'])) $_POST['wholesale_soldout'] = 0;
+      if (!isset($_POST['disable_wholesale_soldout'])) $_POST['disable_wholesale_soldout'] = 0;
+      if (!isset($_POST['preowned'])) $_POST['preowned'] = 0;
+      if (!isset($_POST['restock'])) $_POST['restock'] = 0;
+      if (!isset($_POST['hidden'])) $_POST['hidden'] = 0;
+      if (!isset($_POST['hide_product'])) $_POST['hide_product'] = 0;
+      if (!isset($_POST['specialprice'])) $_POST['specialprice'] = 0;
+      if (!isset($_POST['sign_in'])) $_POST['sign_in'] = 0;
+      if (!isset($_POST['disable_sign_in'])) $_POST['disable_sign_in'] = 0;
+      if (!isset($_POST['sign_in_deal'])) $_POST['sign_in_deal'] = 0;
+      if (!isset($_POST['free_shipping'])) $_POST['free_shipping'] = 0;
+      if (!isset($_POST['no_free_shipping'])) $_POST['no_free_shipping'] = 0;
+      if (!isset($_POST['webp'])) $_POST['webp'] = 0;
+      if (!isset($_POST['no_customer_group_prices'])) $_POST['no_customer_group_prices'] = 0;
+      if (!isset($_POST['vip'])) $_POST['vip'] = 0;
+      if (!isset($_POST['fake_sold_out'])) $_POST['fake_sold_out'] = 0;
+
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+      <search position="after" index="1"><![CDATA[
+        'status',
+      ]]></search>
+      <add><![CDATA[
+        'preorderable',
+        'backorder',
+        'addtocart',
+        'pending',
+        'pending_guest',
+        'insanedeal',
+        'insaneprice',
+        'prebackorder',
+        'signin',
+        'forbidden',
+        'newarrival',
+        'specialoffer',
+        'preowned',
+        'restock',
+        'hidden',
+        'hide_product',
+        'master_guest_special_price',
+        'master_customer_special_price',
+        'master_wholesale_special_price',
+        'master_insane_deal_price',
+        'disable_master_guest_special_price',
+        'disable_master_guest_special_price',
+        'disable_master_customer_special_price',
+        'disable_master_wholesale_special_price',
+        'disable_master_insane_deal_price',        
+        'specialprice',
+        'guest_insaneprice',
+        'customer_specialprice',
+        'customer_insaneprice',
+        'wholesale_specialprice',
+        'wholesale_soldout',
+        'disable_wholesale_soldout',
+        'sign_in',
+        'sign_in_deal',
+        'free_shipping',
+        'no_free_shipping',
+        'webp',
+        'no_customer_group_prices',
+        'disable_sign_in',
+        'vip',
+        'fake_sold_out',
+
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+      <search position="after" offset="2"><![CDATA[
+            <label><?php echo language::translate('title_status', 'Status'); ?></label>
+      ]]></search>
+      <add><![CDATA[
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+/* Create three equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+  
+  height: auto; /* Should be removed. Only for demonstration */
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+</style>
+<h2>Shopee</h2>
+      <div class="form-group">
+        <label><?php echo language::translate('title_shopee', 'Shopee'); ?></label>
+        <?php foreach (array_keys(language::$languages) as $language_code) echo functions::form_draw_regional_textarea($language_code, 'shopee['. $language_code .']', true, 'style="height: 32px;"'); ?>
+      </div>
+
+      <div class="form-group">
+        <label><?php echo language::translate('title_shopee_backend', 'Shopee Backend'); ?></label>
+        <?php foreach (array_keys(language::$languages) as $language_code) echo functions::form_draw_regional_textarea($language_code, 'shopee_backend['. $language_code .']', true, 'style="height: 32px;"'); ?>
+      </div>
+
+<h2>Lazada</h2>
+      <div class="form-group">
+        <label><?php echo language::translate('title_lazada', 'Lazada'); ?></label>
+        <?php foreach (array_keys(language::$languages) as $language_code) echo functions::form_draw_regional_textarea($language_code, 'lazada['. $language_code .']', true, 'style="height: 32px;"'); ?>
+      </div>
+
+      <div class="form-group">
+        <label><?php echo language::translate('title_lazada_backend', 'Lazada Backend'); ?></label>
+        <?php foreach (array_keys(language::$languages) as $language_code) echo functions::form_draw_regional_textarea($language_code, 'lazada_backend['. $language_code .']', true, 'style="height: 32px;"'); ?>
+      </div>      
+<h2>Options</h2>
+<div class="row">
+  <div class="column" style="width: 165px;">
+
+            <div class="checkbox">
+             <label><?php echo functions::form_draw_checkbox('webp', '1', true); ?> <?php echo language::translate('title_webp', 'Webp'); ?></label>            
+            </div>
+  
+            <div class="checkbox">
+              <label><?php echo functions::form_draw_checkbox('signin', '1', true); ?> <?php echo language::translate('title_signin', 'Signin'); ?></label>
+            </div>  
+
+            <div class="checkbox">
+              <label><?php echo functions::form_draw_checkbox('disable_sign_in', '1', true); ?> <?php echo language::translate('title_disable_sign_in', 'Disable Sign In'); ?></label>
+            </div>  
+
+            <div class="checkbox">
+             <label><?php echo functions::form_draw_checkbox('pending_guest', '1', true); ?> <?php echo language::translate('title_pending_guest', 'Pending Guest'); ?></label>            
+            </div>
+
+            <div class="checkbox">
+              <label><?php echo functions::form_draw_checkbox('hide_product', '1', true); ?> <?php echo language::translate('title_hide_product', 'Hide Product'); ?></label>
+            </div>
+
+            <div class="checkbox">
+             <label><?php echo functions::form_draw_checkbox('hidden', '1', true); ?> <?php echo language::translate('title_hidden', 'Hidden'); ?></label>            
+            </div>
+
+            <div class="checkbox">
+              <label><?php echo functions::form_draw_checkbox('forbidden', '1', true); ?> <?php echo language::translate('title_forbidden', 'Forbidden'); ?></label>
+            </div>
+
+            <div class="checkbox">
+             <label><?php echo functions::form_draw_checkbox('insanedeal', '1', true); ?> <?php echo language::translate('title_insane_deal', 'Insane Deal'); ?></label>             
+            </div>
+          </div>
+
+  <div class="column" style="width: 165px;"> 
+
+            <div class="checkbox">
+              <label><?php echo functions::form_draw_checkbox('preorderable', '1', true); ?> <?php echo language::translate('title_preorderable', 'Pre-order'); ?></label>
+            </div>
+
+            <div class="checkbox">
+             <label><?php echo functions::form_draw_checkbox('pending', '1', true); ?> <?php echo language::translate('title_pending', 'Pending'); ?></label>            
+            </div>
+  
+            <div class="checkbox">
+             <label><?php echo functions::form_draw_checkbox('restock', '1', true); ?> <?php echo language::translate('title_restock', 'restock'); ?></label>
+            </div>
+            
+            <div class="checkbox">
+              <label><?php echo functions::form_draw_checkbox('backorder', '1', true); ?> <?php echo language::translate('title_backorder', 'Backorder'); ?></label>
+            </div>
+
+            <div class="checkbox">
+             <label><?php echo functions::form_draw_checkbox('preowned', '1', true); ?> <?php echo language::translate('title_pre_-_owned', 'Pre-owned'); ?></label>
+            </div>
+
+            <div class="checkbox">
+              <label><?php echo functions::form_draw_checkbox('newarrival', '1', true); ?> <?php echo language::translate('title_newarrival', 'newarrival'); ?></label>
+            </div>
+
+            <div class="checkbox">
+             <label><?php echo functions::form_draw_checkbox('addtocart', '1', true); ?> <?php echo language::translate('title_addtocart', 'Add To Cart'); ?></label>
+            </div>
+             
+            <div class="checkbox">
+             <label><?php echo functions::form_draw_checkbox('specialoffer', '1', true); ?> <?php echo language::translate('title_specialoffer', 'Special Offer'); ?></label>
+            </div>
+
+            <div class="checkbox">
+              <label><?php echo functions::form_draw_checkbox('prebackorder', '1', true); ?> <?php echo language::translate('title_prebackorder', 'Pre-Backorder'); ?></label>
+            </div>
+          </div>
+          
+</div>
+</br>
+
+      ]]></add>
+    </operation>
+  </file>
+
+<!-- Entities -->
+  <file name="includes/entities/ent_product.inc.php">
+    <operation error="log">
+      <search position="before"><![CDATA[
+        date_valid_from = '". database::input($this->data['date_valid_from']) ."',
+      ]]></search>
+      <add><![CDATA[
+        preorderable = ". (!empty($this->data['preorderable']) ? 1 : 0) .",
+        backorder = ". (!empty($this->data['backorder']) ? 1 : 0) .",
+        addtocart = ". (!empty($this->data['addtocart']) ? 1 : 0) .",
+        pending = ". (!empty($this->data['pending']) ? 1 : 0) .",
+        pending_guest = ". (!empty($this->data['pending_guest']) ? 1 : 0) .",
+        insanedeal = ". (!empty($this->data['insanedeal']) ? 1 : 0) .",
+        insaneprice = ". (!empty($this->data['insaneprice']) ? 1 : 0) .",
+        prebackorder = ". (!empty($this->data['prebackorder']) ? 1 : 0) .",
+        signin = ". (!empty($this->data['signin']) ? 1 : 0) .",
+        newarrival = ". (!empty($this->data['newarrival']) ? 1 : 0) .",
+        master_guest_special_price = ". (!empty($this->data['master_guest_special_price']) ? 1 : 0) .",
+        master_customer_special_price = ". (!empty($this->data['master_customer_special_price']) ? 1 : 0) .",  
+        master_wholesale_special_price = ". (!empty($this->data['master_wholesale_special_price']) ? 1 : 0) .", 
+        master_insane_deal_price = ". (!empty($this->data['master_insane_deal_price']) ? 1 : 0) .",  
+        disable_master_guest_special_price = ". (!empty($this->data['disable_master_guest_special_price']) ? 1 : 0) .", 
+        disable_master_customer_special_price = ". (!empty($this->data['disable_master_customer_special_price']) ? 1 : 0) .", 
+        disable_master_wholesale_special_price = ". (!empty($this->data['disable_master_wholesale_special_price']) ? 1 : 0) .",
+        disable_master_insane_deal_price = ". (!empty($this->data['disable_master_insane_deal_price']) ? 1 : 0) .",
+        specialoffer = ". (!empty($this->data['specialoffer']) ? 1 : 0) .",
+        forbidden = ". (!empty($this->data['forbidden']) ? 1 : 0) .",
+        preowned = ". (!empty($this->data['preowned']) ? 1 : 0) .",
+        restock = ". (!empty($this->data['restock']) ? 1 : 0) .",
+        hidden = ". (!empty($this->data['hidden']) ? 1 : 0) .",
+        hide_product = ". (!empty($this->data['hide_product']) ? 1 : 0) .",
+        specialprice = ". (!empty($this->data['specialprice']) ? 1 : 0) .",
+        customer_specialprice = ". (!empty($this->data['customer_specialprice']) ? 1 : 0) .",
+        guest_insaneprice = ". (!empty($this->data['guest_insaneprice']) ? 1 : 0) .",
+        customer_insaneprice = ". (!empty($this->data['customer_insaneprice']) ? 1 : 0) .",
+        wholesale_specialprice = ". (!empty($this->data['wholesale_specialprice']) ? 1 : 0) .", 
+        wholesale_soldout = ". (!empty($this->data['wholesale_soldout']) ? 1 : 0) .",
+        disable_wholesale_soldout = ". (!empty($this->data['disable_wholesale_soldout']) ? 1 : 0) .",
+        sign_in = ". (!empty($this->data['sign_in']) ? 1 : 0) .",
+        disable_sign_in = ". (!empty($this->data['disable_sign_in']) ? 1 : 0) .",
+        sign_in_deal = ". (!empty($this->data['sign_in_deal']) ? 1 : 0) .",
+        free_shipping =  ". (!empty($this->data['free_shipping']) ? 1 : 0) .",
+        no_free_shipping =  ". (!empty($this->data['no_free_shipping']) ? 1 : 0) .",
+        webp = ". (!empty($this->data['webp']) ? 1 : 0) .",
+        no_customer_group_prices = ". (!empty($this->data['no_customer_group_prices']) ? 1 : 0) .",
+        vip = ". (!empty($this->data['vip']) ? 1 : 0) .",
+        fake_sold_out = ". (!empty($this->data['fake_sold_out']) ? 1 : 0) .",
+
+
+      ]]></add>
+    </operation>
+  </file>
+
+<!-- Functions Catalog -->
+  <file name="includes/functions/func_catalog.inc.php">
+    <operation error="log">
+      <search position="replace" offset=""><![CDATA[
+        and (p.date_valid_from <= '". date('Y-m-d H:i:s') ."')
+      ]]></search>
+      <add><![CDATA[
+        and (preorderable || backorder || newarrival || pending || pending_guest || addtocart || prebackorder || signin || specialoffer || restock != 0 or p.date_valid_from <= '". date('Y-m-d H:i:s') ."')
+      ]]></add>
+    </operation>
+    
+    <operation error="log">
+	     <search position="replace" offset=""><![CDATA[
+        and (year(p.date_valid_to) < '1971' or p.date_valid_to >= '". date('Y-m-d H:i:s') ."')
+      ]]></search>
+			<add><![CDATA[
+        and (year(p.date_valid_to) > '1971' or p.date_valid_to <= '". date('Y-m-d H:i:s') ."')
+      ]]></add>
+		</operation>
+	</file>
+
+<!-- Search -->
+  <file path="pages/" name="search.inc.php">
+    <operation error="log">
+      <search position="replace"><![CDATA[
+      and (date_valid_from <= '". date('Y-m-d H:i:s') ."')
+      ]]></search>
+      <add><![CDATA[
+      and (preorderable || backorder || newarrival || pending || pending_guest || addtocart || prebackorder || signin || specialoffer || restock != 0 or date_valid_from <= '". date('Y-m-d H:i:s') ."')
+      
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+			<search position="replace"><![CDATA[
+      and (year(date_valid_to) < '1971' or date_valid_to >= '". date('Y-m-d H:i:s') ."')
+      ]]></search>
+			<add><![CDATA[
+      and (year(date_valid_to) > '1971' or date_valid_to <= '". date('Y-m-d H:i:s') ."')
+      ]]></add>
+		</operation>
+	</file>
+
+<!-- Functions Draw 
+  <file name="includes/functions/func_draw.inc.php">
+    <operation error="log">
+      <search position="after" offset="1"><![CDATA[
+      $sticker = '<div class="sticker new" title="'. language::translate('title_new', 'New') .'">'. language::translate('sticker_new', 'New') .'</div>';
+      ]]></search>
+      <add><![CDATA[
+      if (reference::product($product['id'])->preorderable && reference::product($product['id'])->date_valid_from > date('Y-m-d H:i:s')) {
+        $sticker = '<div class="sticker preorder" title="'. language::translate('title_preorder', 'Pre-Order') .'">'. language::translate('sticker_preorder', 'Pre-Order') .'</div>';
+      }
+      ]]></add>
+    </operation>
+  </file>
+-->
+
+<!-- Page -->
+  <file name="pages/product.inc.php">
+     <operation error="log">
+      <search position="replace" offset="3"><![CDATA[
+   if ($product->date_valid_from > date('Y-m-d H:i:s')) {
+      ]]></search>
+      <add><![CDATA[
+
+      ]]></add>
+    </operation> 
+    
+     <operation error="log">
+      <search position="replace" offset="3"><![CDATA[
+   if (substr($product->date_valid_to, 0, 10) != '0000-00-00' && substr($product->date_valid_to, 0, 4) > '1971' && $product->date_valid_to < date('Y-m-d H:i:s')) {
+      ]]></search>
+      <add><![CDATA[
+
+      ]]></add>
+    </operation>        
+      
+    <operation error="log">
+      <search position="before"><![CDATA[
+  if (empty($_GET['category_id']) && empty($product->manufacturer)) {
+      ]]></search>
+      <add><![CDATA[
+
+  if ($product->preorderable && $product->date_valid_from > date('Y-m-d H:i:s')) {
+    notices::add('notices', sprintf(language::translate('notice_product_available_for_preordering', 'The product is available for preordering but will not ship until release date %s'), strftime(language::$selected['format_date'], strtotime($product->date_valid_from))), 'preorder');
+  }
+
+  if ($product->pending_guest && $product->date_valid_to > date('Y-m-d H:i:s') || ($product->pending)) {
+    notices::add('notices', sprintf(language::translate('notice_product_available_for_pending_guest', 'The product is available for prebackorder but will not ship until release date %s'), strftime(language::$selected['format_date'], strtotime($product->date_valid_from))), 'preorder');
+  }   
+  
+  if ($product->prebackorder && $product->date_valid_to < date('Y-m-d H:i:s')) {
+    notices::add('notices', sprintf(language::translate('notice_product_available_for_prebackorder', 'The product is available for prebackorder but will not ship until release date %s'), strftime(language::$selected['format_date'], strtotime($product->date_valid_from))), 'preorder');
+  }  
+  
+  if ($product->backorder && $product->date_valid_from > date('Y-m-d H:i:s')) {
+    notices::add('notices', sprintf(language::translate('notice_product_available_for_backorder', 'The product is available for backorder but will not ship until release date %s'), strftime(language::$selected['format_date'], strtotime($product->date_valid_from))), 'backorder');
+  } 
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+      <search position="before" offset="1"><![CDATA[
+  list($width, $height) = functions::image_scale_by_width(160, settings::get('product_image_ratio'));
+      ]]></search>
+      <add><![CDATA[
+  if ($product->preorderable && $product->date_valid_from <=> date('Y-m-d H:i:s') && ($product->quantity > 0 && !empty($product->sold_out_status['orderable']))) {
+    $box_product->snippets['stock_status_value'] = language::translate('title_preorder', 'Pre-Order');
+  }
+  
+  if ($product->backorder && $product->date_valid_from <=> date('Y-m-d H:i:s') && ($product->quantity > 0 && !empty($product->sold_out_status['orderable']))) {
+    $box_product->snippets['stock_status_value'] = language::translate('title_backorder', 'backorder');
+  }
+  
+  if ($product->addtocart && $product->date_valid_from <=> date('Y-m-d H:i:s') && ($product->quantity > 0 && !empty($product->sold_out_status['orderable']))) {
+    $box_product->snippets['stock_status_value'] = language::translate('title_addtocart', 'addtocart');
+  }
+  
+  if ($product->pending && $product->date_valid_from <=> date('Y-m-d H:i:s') && ($product->quantity > 0 && !empty($product->sold_out_status['orderable']))) {
+    $box_product->snippets['stock_status_value'] = language::translate('title_pending', 'pending');
+  }  
+  
+  if ($product->pending_guest && $product->date_valid_from <=> date('Y-m-d H:i:s') && ($product->quantity > 0 && !empty($product->sold_out_status['orderable']))) {
+    $box_product->snippets['stock_status_value'] = language::translate('title_pending_guest', 'Pending Guest');
+  }   
+  
+  if ($product->insanedeal && $product->date_valid_from <=> date('Y-m-d H:i:s') && ($product->quantity > 0 && !empty($product->sold_out_status['orderable']))) {
+    $box_product->snippets['stock_status_value'] = language::translate('title_insanedeal', 'insanedeal');
+  } 
+  
+  if ($product->specialoffer && $product->date_valid_from <=> date('Y-m-d H:i:s') && ($product->quantity > 0 && !empty($product->sold_out_status['orderable']))) {
+    $box_product->snippets['stock_status_value'] = language::translate('title_specialoffer', 'specialoffer');
+  }
+  
+  if ($product->forbidden && $product->date_valid_from <=> date('Y-m-d H:i:s') && ($product->quantity > 0 && !empty($product->sold_out_status['orderable']))) {
+    $box_product->snippets['stock_status_value'] = language::translate('title_forbidden', 'forbidden');
+  }   
+  
+  if ($product->prebackorder && $product->date_valid_from <=> date('Y-m-d H:i:s') && ($product->quantity > 0 && !empty($product->sold_out_status['orderable']))) {
+    $box_product->snippets['stock_status_value'] = language::translate('title_prebackorder', 'prebackorder');
+  }   
+
+  if ($product->hidden && $product->date_valid_from <=> date('Y-m-d H:i:s') && ($product->quantity > 0 && !empty($product->sold_out_status['orderable']))) {
+    $box_product->snippets['stock_status_value'] = language::translate('title_hidden', 'hidden');
+  }   
+  
+  if ($product->hide_product && $product->date_valid_from <=> date('Y-m-d H:i:s') && ($product->quantity > 0 && !empty($product->sold_out_status['orderable']))) {
+    $box_product->snippets['stock_status_value'] = language::translate('title_hide_product', 'Hide Product');
+  }   
+  
+  if ($product->specialprice && $product->date_valid_from <=> date('Y-m-d H:i:s') && ($product->quantity > 0 && !empty($product->sold_out_status['orderable']))) {
+    $box_product->snippets['stock_status_value'] = language::translate('title_specialprice', 'Special Price');
+  }  
+  
+  if ($product->sign_in && $product->date_valid_from <=> date('Y-m-d H:i:s') && ($product->quantity > 0 && !empty($product->sold_out_status['orderable']))) {
+    $box_product->snippets['stock_status_value'] = language::translate('title_sign_in', 'Sign In');
+  }  
+  
+  if ($product->signin && $product->date_valid_from <=> date('Y-m-d H:i:s') && ($product->quantity > 0 && !empty($product->sold_out_status['orderable']))) {
+    $box_product->snippets['stock_status_value'] = language::translate('title_signin', 'Sign In');
+  }   
+      ]]></add>
+    </operation>
+    
+
+    <operation error="log">
+      <search position="after"><![CDATA[
+    'orderable' => $product->sold_out_status['orderable'],
+      ]]></search>
+      <add><![CDATA[
+    'preorderable' => ($product->preorderable && $product->date_valid_from > date('Y-m-d H:i:s')) ? true : false,
+    'backorder' => ($product->backorder && $product->date_valid_from > date('Y-m-d H:i:s')) ? true : false,
+    'insanedeal' => ($product->insanedeal && $product->date_valid_from > date('Y-m-d H:i:s')) ? true : false,
+    'insaneprice' => ($product->insaneprice && $product->date_valid_from > date('Y-m-d H:i:s')) ? true : false,
+    'forbidden' => ($product->forbidden && $product->date_valid_from > date('Y-m-d H:i:s')) ? true : false,
+    'newarrival' => ($product->newarrival && $product->date_valid_from > date('Y-m-d H:i:s')) ? true : false,
+    'preowned' => ($product->preowned&& $product->date_valid_from > date('')) ? true : false,
+    'restock' => ($product->restock && $product->date_valid_from <=> date('')) ? true : false,
+    'addtocart' => ($product->addtocarte && $product->date_valid_from <=> date('Y-m-d H:i:s')) ? true : false,
+    'specialoffer' => ($product->specialoffer && $product->date_valid_from <=> date('Y-m-d H:i:s')) ? true : false,
+    'pending' => ($product->pending && $product->date_valid_from <=> date('Y-m-d H:i:s')) ? true : false,
+    'pending_guest' => ($product->pending_guest && $product->date_valid_from <=> date('Y-m-d H:i:s')) ? true : false,    
+    'hidden' => ($product->hidden && $product->date_valid_from <=> date('Y-m-d H:i:s')) ? true : false,
+    'hide_product' => ($product->hide_product && $product->date_valid_from <=> date('Y-m-d H:i:s')) ? true : false,
+    'master_guest_special_price' => ($product->master_guest_special_price && $product->date_valid_from <=> date('Y-m-d H:i:s')) ? true : false,
+    'master_customer_special_price' => ($product->master_customer_special_price && $product->date_valid_from <=> date('Y-m-d H:i:s')) ? true : false,
+    'master_wholesale_special_price' => ($product->master_wholesale_special_price && $product->date_valid_from <=> date('Y-m-d H:i:s')) ? true : false,
+    'master_insane_deal_price' => ($product->master_insane_deal_price && $product->date_valid_from <=> date('Y-m-d H:i:s')) ? true : false,
+    'disable_master_guest_special_price' => ($product->disable_master_guest_special_price && $product->date_valid_from <=> date('Y-m-d H:i:s')) ? true : false,
+    'disable_master_customer_special_price' => ($product->disable_master_customer_special_price && $product->date_valid_from <=> date('Y-m-d H:i:s')) ? true : false,
+    'disable_master_wholesale_special_price' => ($product->disable_master_wholesale_special_price && $product->date_valid_from <=> date('Y-m-d H:i:s')) ? true : false,
+    'disable_master_insane_deal_price' => ($product->disable_master_insane_deal_price && $product->date_valid_from <=> date('Y-m-d H:i:s')) ? true : false,
+    'customer_specialprice' => ($product->customer_specialprice && $product->date_valid_from <=> date('Y-m-d H:i:s')) ? true : false,
+    'guest_insaneprice' => ($product->guest_insaneprice && $product->date_valid_from <=> date('Y-m-d H:i:s')) ? true : false,
+    'customer_insaneprice' => ($product->customer_insaneprice && $product->date_valid_from <=> date('Y-m-d H:i:s')) ? true : false,
+    'wholesale_specialprice' => ($product->wholesale_specialprice && $product->date_valid_from <=> date('Y-m-d H:i:s')) ? true : false,
+    'specialprice' => ($product->specialprice && $product->date_valid_from <=> date('Y-m-d H:i:s')) ? true : false,
+    'guest_insaneprice' => ($product->guest_insaneprice && $product->date_valid_from <=> date('Y-m-d H:i:s')) ? true : false,    
+    'customer_specialprice' => ($product->customer_specialprice && $product->date_valid_from <=> date('Y-m-d H:i:s')) ? true : false,
+    'customer_insaneprice' => ($product->customer_insaneprice && $product->date_valid_from <=> date('Y-m-d H:i:s')) ? true : false,
+    'wholesale_specialprice' => ($product->wholesale_specialprice && $product->date_valid_from <=> date('Y-m-d H:i:s')) ? true : false,  
+    'wholesale_soldout' => ($product->wholesale_soldout && $product->date_valid_from <=> date('Y-m-d H:i:s')) ? true : false, 
+    'disable_wholesale_soldout' => ($product->disable_wholesale_soldout && $product->date_valid_from <=> date('Y-m-d H:i:s')) ? true : false, 
+    'signin' => ($product->signin && $product->date_valid_from <=> date('Y-m-d H:i:s')) ? true : false,
+    'sign_in' => ($product->sign_in && $product->date_valid_from <=> date('Y-m-d H:i:s')) ? true : false,
+    'sign_in_deal' => ($product->sign_in_deal && $product->date_valid_from <=> date('Y-m-d H:i:s')) ? true : false,
+    'no_customer_group_prices' => ($product->sign_in_deal && $product->date_valid_from <=> date('Y-m-d H:i:s')) ? true : false,
+    'signin' => ($product->signin && $product->date_valid_to <=> date('Y-m-d H:i:s')) ? true : false,    
+    'prebackorder' => ($product->prebackorder && $product->date_valid_to < date('Y-m-d H:i:s')) ? true : false,
+    'disable_sign_in' => ($product->disable_sign_in && $product->date_valid_to <=> date('Y-m-d H:i:s')) ? true : false,    
+      ]]></add>
+    </operation>
+
+
+  </file>
+
+  	<file name="includes/templates/*.catalog/views/box_product.inc.php">
+		<operation error="log">
+			<search position="replace"><![CDATA[
+       <?php if ($quantity > 0) { ?>
+      ]]></search>
+			<add><![CDATA[
+	  
+		<?php if (!empty(reference::product($product_id)->date_valid_from < date('Y-m-d H:i:s') && reference::product($product_id)->preorderable)) { ?>
+          <div class="stock-available">
+            <?php echo language::translate('title_stock_status', 'Stock Status'); ?>:
+            <span class="value"><font color="#c26b00"><?php echo language::translate('title_order_closed', 'Order Closed'); ?></font></span>
+          </div>
+        <?php if ($delivery_status) { ?>
+        <div class="stock-delivery">
+          <?php echo language::translate('title_delivery_status', 'Delivery Status'); ?>:
+          <span class="value"><?php echo $delivery_status; ?></span>
+        </div>
+        <?php } ?>  	
+
+         <?php } else if ((!empty(reference::product($product_id)->date_valid_from <=> date('Y-m-d H:i:s') && ($quantity <= 0 || $orderable)))) { ?>
+           <div class="stock-unavailable">
+            <?php echo language::translate('title_stock_status', 'Stock Status'); ?>:
+            <span class="value"><font color="#FF0000"><?php echo language::translate('title_sold_out', 'Sold Out'); ?></font></span>
+          </div>
+
+        <?php } else if (!empty(reference::product($product_id)->fake_sold_out) && (!empty(reference::product($product_id)->fake_sold_out_date_price_prices))) { ?>
+          <div class="stock-available">
+            <?php echo language::translate('title_stock_status', 'Stock Status'); ?>:
+            <span class="value"><font color="#FF0000"><?php echo language::translate('title_sold_out', 'Sold Out'); ?></font></span>
+          </div>
+        <?php if ($delivery_status) { ?>
+        <div class="stock-delivery">
+          <?php echo language::translate('title_delivery_status', 'Delivery Status'); ?>:
+          <span class="value"><?php echo $delivery_status; ?></span>
+        </div>
+        <?php } ?> 
+
+        <?php } else if (!empty(reference::product($product_id)->date_valid_to > date('Y-m-d H:i:s') && reference::product($product_id)->pending_guest)) { ?>
+          <div class="stock-available">
+            <?php echo language::translate('title_stock_status', 'Stock Status'); ?>:
+            <span class="value"><font color="#1E74FF"><?php echo language::translate('title_pending', 'Pending'); ?></font></span>
+          </div>
+        <?php if ($delivery_status) { ?>
+        <div class="stock-delivery">
+          <?php echo language::translate('title_delivery_status', 'Delivery Status'); ?>:
+          <span class="value"><?php echo $delivery_status; ?></span>
+        </div>
+        <?php } ?> 
+ 
+        <?php } else if (!empty(reference::product($product_id)->date_valid_to < date('Y-m-d H:i:s') && reference::product($product_id)->prebackorder)) { ?>
+          <div class="stock-available">
+            <?php echo language::translate('title_stock_status', 'Stock Status'); ?>:
+            <span class="value"><font color="#0241B2"><?php echo language::translate('title_prebackorder', 'Pre-Backorder'); ?></font></span>
+          </div>
+        <?php if ($delivery_status) { ?>
+        <div class="stock-delivery">
+          <?php echo language::translate('title_delivery_status', 'Delivery Status'); ?>:
+          <span class="value"><?php echo $delivery_status; ?></span>
+        </div>
+        <?php } ?> 
+        
+        <?php } else if (!empty(reference::product($product_id)->date_valid_from > date('Y-m-d H:i:s') && reference::product($product_id)->preorderable)) { ?>
+          <div class="stock-available">
+            <?php echo language::translate('title_stock_status', 'Stock Status'); ?>:
+            <span class="value"><font color="#0241B2"><?php echo language::translate('title_preorder', 'Pre-Order'); ?></font></span>
+          </div>
+        <?php if ($delivery_status) { ?>
+        <div class="stock-delivery">
+          <?php echo language::translate('title_delivery_status', 'Delivery Status'); ?>:
+          <span class="value"><?php echo $delivery_status; ?></span>
+        </div>
+        <?php } ?> 
+        
+        <?php } else if (!empty(reference::product($product_id)->date_valid_to < date('Y-m-d H:i:s') && reference::product($product_id)->newarrival)) { ?>
+          <div class="stock-available">
+            <?php echo language::translate('title_stock_status', 'Stock Status'); ?>:
+            <span class="value"><font color="#009900"><?php echo language::translate('title_available', 'Available'); ?></font></span>
+          </div>
+        <?php if ($delivery_status) { ?>
+        <div class="stock-delivery">
+          <?php echo language::translate('title_delivery_status', 'Delivery Status'); ?>:
+          <span class="value"><?php echo $delivery_status; ?></span>
+        </div>
+        <?php } ?>  
+
+         <?php } else if (!empty(reference::product($product_id)->date_valid_from > date('Y-m-d H:i:s') && reference::product($product_id)->backorder)) { ?>
+           <div class="stock-available">
+            <?php echo language::translate('title_stock_status', 'Stock Status'); ?>:
+            <span class="value"><font color="#732C00"><?php echo language::translate('title_backorder', 'Backorder'); ?></font></span>
+          </div>
+        <?php if ($delivery_status) { ?>
+        <div class="stock-delivery">
+          <?php echo language::translate('title_delivery_status', 'Delivery Status'); ?>:
+          <span class="value"><?php echo $delivery_status; ?></span>
+        </div>
+        <?php } ?> 
+        
+         <?php } else if ($backorder && (reference::product($product_id)->date_valid_to > date('Y-m-d H:i:s'))) { ?>
+           <div class="stock-available">
+            <?php echo language::translate('title_stock_status', 'Stock Status'); ?>:
+            <span class="value"><font color="#c26b00"><?php echo language::translate('title_order_closed', 'Order Closed'); ?></font></span>
+          </div>
+        <?php if ($delivery_status) { ?>
+        <div class="stock-delivery">
+          <?php echo language::translate('title_delivery_status', 'Delivery Status'); ?>:
+          <span class="value"><?php echo $delivery_status; ?></span>
+        </div>
+        <?php } ?> 
+        
+        <?php if ($delivery_status) { ?>
+        <div class="stock-delivery">
+          <?php echo language::translate('title_delivery_status', 'Delivery Status'); ?>:
+          <span class="value"><?php echo $delivery_status; ?></span>
+        </div>
+        <?php } ?>
+        
+        <?php } else if ($quantity > 0) { ?>
+      ]]></add>
+		</operation>
+
+		<operation error="log">
+			<search position="replace"><![CDATA[
+              <?php echo '<button class="btn btn-success" name="add_cart_product" value="true" type="submit"'. (($quantity <= 0 && !$orderable) ? ' disabled="disabled"' : '') .'>'. language::translate('title_add_to_cart', 'Add To Cart') .'</button>'; ?>
+
+      ]]></search>
+			<add><![CDATA[
+			
+	            <?php if (!empty(reference::product($product_id)->fake_sold_out) && (!empty(reference::product($product_id)->fake_sold_out_date_price_prices)) && (!empty($campaign_price))
+	            || (reference::product($product_id)->date_valid_from < date('Y-m-d H:i:s') && (!empty(reference::product($product_id)->preorderable))) && (reference::product($product_id)->quantity <= 0 || reference::product($product_id)->sold_out_status['orderable'])
+	            ) { ?>
+	            <button class="sold_out_2" disabled="disabled" name="add_cart_product" style="background-image:url('/images/customize/Dark Red.jpg');" value="true">
+	            <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	            <b><i> <?php echo language::translate('title_sold_out', 'Sold Out'); ?></i></b></button> 
+
+	            <?php } else if (reference::product($product_id)->date_valid_from < date('Y-m-d H:i:s') && (!empty(reference::product($product_id)->preorderable))) { ?>
+                <button class="btn btn-success btn-block_product" name="add_cart_product" style="background-image:url('/images/customize/Gray.jpg');" disabled="disabled" type="submit">
+	            <span style="color: #fcbd35;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	            <b><i><?php echo language::translate('title_order_closed', 'Order Closed'); ?></i></b></button>	
+	            
+	            <?php } else if ((!empty(reference::product($product_id)->preorderable) && (!empty(reference::product($product_id)->guest_insaneprice) && (!empty(reference::product($product_id)->specialprice) && (!empty(reference::product($product_id)->guest_price_prices && ($quantity > 0 || !empty($product->sold_out_status['orderable']))))))) 
+				|| (!empty(customer::$data['id']) && (empty(customer::$data['code']) && (empty(customer::$data['enable_wholesale_price']) && (!empty(reference::product($product_id)->preorderable)  && (!empty(reference::product($product_id)->customer_insaneprice) && (!empty(reference::product($product_id)->customer_specialprice) && (!empty(reference::product($product_id)->default_price_price && ($quantity > 0 || !empty($product->sold_out_status['orderable']))))))))))
+				|| (!empty(reference::product($product_id)->insaneprice) && (!empty($campaign_price && ($quantity > 0 || !empty($product->sold_out_status['orderable'])))) && (reference::product($product_id)->date_valid_from >= date('Y-m-d H:i:s') && reference::product($product_id)->preorderable))
+				){ ?>
+                <button class="btn btn-success btn-block_product" name="add_cart_product" style="background-image:url('/images/customize/Blue Red.jpg');" value="true" type="submit">
+	            <span style="color: #fff;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	            <b><i><?php echo language::translate('title_insane_preorder', 'Insane Pre-Order !!'); ?></i></b></button>
+
+                <?php } else if (!empty(reference::product($product_id)->insaneprice) && (!empty($campaign_price && ($quantity > 0 || !empty($product->sold_out_status['orderable'])))) && (reference::product($product_id)->date_valid_from >= date('Y-m-d H:i:s') && reference::product($product_id)->backorder)) { ?>
+                <button class="btn btn-success btn-block_product" name="add_cart_product" style="background-image:url('/images/customize/Orange Red.jpg');" value="true" type="submit">
+	            <span style="color: #b6ff9c;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	            <b><i><?php echo language::translate('title_insane_backorder', 'Insane Backorder'); ?></i></b></button>			
+
+                <?php } else if  (!empty($campaign_price) && (!empty(reference::product($product_id)->preorderable) && (reference::product($product_id)->date_valid_from > date('Y-m-d H:i:s')) )) { ?> 
+                <button class="btn btn-success btn-block_product" name="add_cart_product" style="background-image:url('/images/customize/Gray.jpg');" disabled="disabled" type="submit">
+	            <span style="color: #fcbd35;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	            <b><i><?php echo language::translate('title_order_closed', 'Order Closed'); ?></i></b></button>
+
+	            <?php } else if (!empty($campaign_price && ($quantity <= 0 || !empty($product->sold_out_status['orderable'])))) { ?>
+	            <button class="sold_out_2" disabled="disabled" name="add_cart_product" style="background-image:url('/images/customize/Dark Red.jpg');" value="true">
+	            <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	            <b><i> <?php echo language::translate('title_sold_out', 'Sold Out'); ?></i></b></button> 
+
+                <?php } else if ((!empty(customer::$data['id']) && (empty(customer::$data['code']) && (empty(customer::$data['enable_wholesale_price']) && (!empty(reference::product($product_id)->customer_insaneprice) && (!empty(reference::product($product_id)->customer_specialprice) && (!empty(reference::product($product_id)->default_price_price && ($quantity > 0 || !empty($product->sold_out_status['orderable']))))))))) 
+                || (!empty(reference::product($product_id)->specialprice) && (!empty(reference::product($product_id)->guest_insaneprice) && (!empty(reference::product($product_id)->guest_price_prices && ($quantity > 0 || !empty($product->sold_out_status['orderable']))))))
+                ) { ?>
+                <button class="btn btn-success btn-block_product" name="add_cart_product" style="background-image:url('/images/customize/Red.jpg');" value="true" type="submit">
+	            <span style="color: #fff;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	            <b><i><?php echo language::translate('title_insane_deal_!!', 'Insane Deal !!'); ?></i></b></button>
+	            
+	            <?php } else if (!empty(customer::$data['id']) && (!empty(customer::$data['code']) && (!empty(reference::product($product_id)->insaneprice) && (!empty($campaign_price) && ($quantity > 0 || !empty($product->sold_out_status['orderable'])))))
+	            || (!empty(customer::$data['id']) && (!empty(customer::$data['code']) && (($quantity > 0 || !empty($product->sold_out_status['orderable'])) && ((!empty(reference::product($product_id)->insaneprice) && (!empty($campaign_price) && (!empty(reference::product($product_id)->sign_in_deal))))))))
+	            || (reference::product($product_id)->date_valid_from <=> date('Y-m-d H:i:s') && (!empty(reference::product($product_id)->insanedeal)))
+	            ) { ?>
+                <button class="btn btn-success btn-block_product" name="add_cart_product" style="background-image:url('/images/customize/Red.jpg');" value="true" type="submit">
+	            <span style="color: #fff;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	            <b><i><?php echo language::translate('title_insane_deal_!!', 'Insane Deal !!'); ?></i></b></button>
+
+            	<?php } else if (!empty(customer::$data['vip']) && (!empty(reference::product($product_id)->vip) && (empty(reference::product($product_id)->no_customer_group_prices) && (!empty(reference::product($product_id)->preorderable) && (!empty(reference::product($product_id)->fake_sold_out_date_price_prices)) && (reference::product($product_id)->quantity > 0 || reference::product($product_id)->sold_out_status['orderable']))))) { 
+            	if(isset($vip_purchased) && !empty($vip_purchased)) { ?>
+                <button class="btn btn-success btn-block_product" name="add_cart_product" style="background-image:url('/images/customize/Pure White.jpg'); opacity: 0.5;"  type="submit" disabled="disabled">
+                <?php } else { ?>
+                <button class="btn btn-success btn-block_product" name="add_cart_product" style="background-image:url('/images/customize/Pure White.jpg');"  type="submit">
+                <?php } ?> 
+	            <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	            <b><i><?php echo language::translate('title_vip_order', 'V.I.P Order'); ?></i></b></button> 
+	            
+            	<?php } else if (!empty(customer::$data['vip']) && (!empty(reference::product($product_id)->vip) && (empty(reference::product($product_id)->no_customer_group_prices) && (!empty(reference::product($product_id)->addtocart) && (!empty(reference::product($product_id)->fake_sold_out_date_price_prices)) && (reference::product($product_id)->quantity > 0 || reference::product($product_id)->sold_out_status['orderable']))))) { 
+            	if(isset($vip_purchased) && !empty($vip_purchased)) { ?>
+                <button class="btn btn-success btn-block_product" name="add_cart_product" style="background-image:url('/images/customize/Black.jpg'); opacity: 0.5;"  type="submit" disabled="disabled">
+                <?php } else{ ?>
+                <button class="btn btn-success btn-block_product" name="add_cart_product" style="background-image:url('/images/customize/Black.jpg');"  type="submit">
+                <?php } ?> 
+	            <span style="color: #fff;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	            <b><i><?php echo language::translate('title_vip_price', 'V.I.P Price'); ?></i></b></button>               
+                
+                
+                
+                
+                
+                
+
+	            
+                <?php } else if (!empty(reference::product($product_id)->fake_sold_out) && (!empty(reference::product($product_id)->fake_sold_out_date_price_prices))
+                || ($preorderable && $prebackorder && ($quantity <= 0 || !empty($product->sold_out_status['orderable'])))
+                || ($addtocart && ($quantity <= 0 || !empty($product->sold_out_status['orderable'])))
+                || (reference::product($product_id)->quantity <= 0 || reference::product($product_id)->sold_out_status['orderable'])
+                || ($backorder && ($quantity <= 0 ))
+                || (!empty(customer::$data['id']) && (empty(customer::$data['code']) && (!empty(reference::product($product_id)->customer_group_prices && ($quantity <= 0 || !empty($product->sold_out_status['orderable']))))))
+                || ($restock && ($quantity <= 0 ))
+                || ($preorderable && ($quantity <= 0 ))
+                ) { ?> 
+ 	            <button class="sold_out_2" disabled="disabled" name="add_cart_product" style="background-image:url('/images/customize/Dark Red.jpg');" value="true">
+	            <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	            <b><i> <?php echo language::translate('title_sold_out', 'Sold Out'); ?></i></b></button>       
+
+                <?php } else if (!empty(reference::product($product_id)->insaneprice) && (!empty($campaign_price))) { ?>
+                <button class="btn btn-success btn-block_product" name="add_cart_product" style="background-image:url('/images/customize/Red.jpg');" value="true" type="submit">
+	            <span style="color: #fff;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	            <b><i><?php echo language::translate('title_insane_deal_!!', 'Insane Deal !!'); ?></i></b></button>	 
+
+                <?php } else if (reference::product($product_id)->date_valid_to > date('Y-m-d H:i:s') && (!empty(customer::$data['id']) && (!empty(customer::$data['code']) && (!empty(reference::product($product_id)->pending_guest))))
+                || (reference::product($product_id)->date_valid_to > date('Y-m-d H:i:s') && (empty(customer::$data['id']) && (!empty(reference::product($product_id)->pending_guest))))
+                ) { ?>
+                <button class="btn btn-success btn-block_product" disabled="disabled" name="add_cart_product" style="background-image:url('/images/customize/Lightblue.jpg');" value="true">
+	            <span style="color: #0000c7;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	            <b><i> <?php echo language::translate('title_pending', 'Pending'); ?></i></b></button> 
+
+	            <?php } else if (reference::product($product_id)->date_valid_from < date('Y-m-d H:i:s') && (!empty(reference::product($product_id)->preorderable))) { ?>
+                <button class="btn btn-success btn-block_product" name="add_cart_product" style="background-image:url('/images/customize/Gray.jpg');" disabled="disabled" type="submit">
+	            <span style="color: #fcbd35;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	            <b><i><?php echo language::translate('title_order_closed', 'Order Closed'); ?></i></b></button>
+	            
+           
+
+                <?php } else if (!empty(reference::product($product_id)->preorderable) && (!empty(reference::product($product_id)->guest_price_prices && ($quantity > 0 || !empty($product->sold_out_status['orderable']))))) { ?>
+                <button class="btn btn-success btn-block_product" name="add_cart_product" style="background-image:url('/images/customize/Blue.jpg');"  type="submit">
+	            <span style="color: #ffffff;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	            <b><i><?php echo language::translate('title_pre_-_order', 'Pre-Order'); ?></i></b></button>
+
+                <?php } else if (reference::product($product_id)->date_valid_to > date('Y-m-d H:i:s') && (!empty(reference::product($product_id)->preorderable))) { ?>
+                <button class="btn btn-success btn-block_product" name="add_cart_product" style="background-image:url('/images/customize/Blue.jpg');"  type="submit">
+	            <span style="color: #ffffff;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	            <b><i><?php echo language::translate('title_pre_-_order', 'Pre-Order'); ?></i></b></button>
+	            
+	            <?php } else if ((reference::product($product_id)->date_valid_from > date('Y-m-d H:i:s') && reference::product($product_id)->prebackorder)
+	            || (reference::product($product_id)->date_valid_to <= date('Y-m-d H:i:s') && (!empty(reference::product($product_id)->prebackorder)))
+	            ) { ?>
+                <button class="btn btn-success btn-block_product" type="submit" name="add_cart_product" style="background-image:url('/images/customize/Purple Blue.jpg');" value="true">
+	            <span style="color: #ffffff;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?> 
+	            <b><i><?php echo language::translate('title_pre_-_backorder', 'Pre-Backorder'); ?></i></b></button>
+	            
+	            <?php } else if (reference::product($product_id)->date_valid_from < date('Y-m-d H:i:s') && (!empty(reference::product($product_id)->prebackorder))) { ?>
+                <button class="btn btn-success btn-block_product" name="add_cart_product" style="background-image:url('/images/customize/Gray.jpg');" disabled="disabled" type="submit">
+	            <span style="color: #fcbd35;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	            <b><i><?php echo language::translate('title_order_closed', 'Order Closed'); ?></i></b></button>	
+	            
+                <?php } else if ($preorderable && ($quantity > 0 || !empty($product->sold_out_status['orderable']))) { ?>
+                <button class="btn btn-success btn-block_product" class="btn btn-default btn-block" name="add_cart_product" style="background-image:url('/images/customize/Blue.jpg');" value="true" type="submit">
+	            <span style="color: #ffffff;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+                <b><i><?php echo language::translate('title_preorder', 'Pre-Order'); ?></i></b></button> 	            
+
+                <?php } else if ($preowned && ($quantity > 0 || !empty($product->sold_out_status['orderable']))) { ?>
+                <button class="btn btn-success btn-block_product" type="submit" name="add_cart_product" style="background-image:url('/images/customize/Yellow.jpg');" value="true">
+	            <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?> 
+	            <b><i><?php echo language::translate('title_pre_-_owned', 'Pre-owned'); ?></i></b></button> 
+
+	            <?php } else if ($backorder && ($quantity > 0 || !empty($product->sold_out_status['orderable']))) { ?>
+                <button class="btn btn-success btn-block_product" type="submit" name="add_cart_product" style="background-image:url('/images/customize/Orange.jpg');" value="true">
+	            <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?> 
+	            <b><i><?php echo language::translate('title_backorder', 'Backorder'); ?></i></b></button>
+
+                <?php } else if (!empty($newarrival) && (!empty(reference::product($product_id)->guest_price_prices && ($quantity > 0 || !empty($product->sold_out_status['orderable']))))) { ?>
+                <button class="btn btn-success btn-block_product" name="add_cart_product" style="background-image:url('/images/customize/Purple.jpg');" value="true" type="submit">
+	            <span style="color: #fcbd35;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	            <b><i><?php echo language::translate('title_new_arrivals', 'New Arrivals'); ?></i></b></button>
+
+	            <?php } else if (reference::product($product_id)->date_valid_from >= date('Y-m-d H:i:s') && (!empty(reference::product($product_id)->restock))) { ?>
+                <button class="btn btn-success btn-block_product" name="add_cart_product" style="background-image:url('/images/customize/Pink.jpg');"  type="submit">
+	            <span style="color: #ffffff;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	            <b><i><?php echo language::translate('title_restock', 'Restock'); ?></i></b></button>
+
+                <?php } else if (!empty(reference::product($product_id)->specialprice) && (!empty(reference::product($product_id)->guest_price_prices && ($quantity > 0 || !empty($product->sold_out_status['orderable']))))
+                || (!empty(customer::$data['id']) && (!empty(reference::product($product_id)->specialprice) && (!empty(reference::product($product_id)->default_price_price && ($quantity > 0 || !empty($product->sold_out_status['orderable']))))))
+                ) { ?>
+                <button class="btn btn-success btn-block_product" name="add_cart_product" style="background-image:url('/images/customize/Goldleaf.jpg');" value="true" type="submit">
+                <span style="color: #cc0000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+                <b><i><?php echo language::translate('title_special_offer', 'Special Offer'); ?></i></b></button>
+
+                <?php } else if ($pending && ($quantity > 0 || !empty($product->sold_out_status['orderable']))) { ?>
+                <button class="btn btn-success btn-block_product" disabled="disabled" name="add_cart_product" style="background-image:url('/images/customize/Lightblue.jpg');" value="true">
+	            <span style="color: #0000c7;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	            <b><i> <?php echo language::translate('title_pending', 'Pending'); ?></i></b></button>  
+                
+	            <?php } else if (reference::product($product_id)->date_valid_from < date('Y-m-d H:i:s') && (!empty(reference::product($product_id)->backorder))
+	            || (reference::product($product_id)->date_valid_from < date('Y-m-d H:i:s') && (!empty(reference::product($product_id)->preorderable)))
+	            ) { ?>
+                <button class="btn btn-success btn-block_product" name="add_cart_product" style="background-image:url('/images/customize/Gray.jpg');" disabled="disabled" type="submit">
+	            <span style="color: #fcbd35;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	            <b><i><?php echo language::translate('title_order_closed', 'Order Closed'); ?></i></b></button>
+
+                <?php } else if ($newarrival && ($quantity > 0 || !empty($product->sold_out_status['orderable']))) { ?>
+                <button class="btn btn-success btn-block_product" name="add_cart_product" style="background-image:url('/images/customize/Purple.jpg');" value="true" type="submit">
+	            <span style="color: #fcbd35;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	            <b><i><?php echo language::translate('title_new_arrivals', 'New Arrivals'); ?></i></b></button>
+
+                <?php } else if (!empty(customer::$data['id']) && (empty(customer::$data['code']) && (!empty(reference::product($product_id)->customer_group_prices && ($quantity > 0 || !empty($product->sold_out_status['orderable'])))))) { ?>
+                <button class="btn btn-success btn-block_product" type="submit" name="add_cart_product" style="background-image:url('/images/customize/Goldleaf.jpg');" value="true">
+	            <span style="color: #cc0000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?> 
+	            <b><i><?php echo language::translate('title_special_offer', 'Special Offer'); ?></i></b></button> 
+
+
+                <?php } else if (!empty(customer::$data['id']) && (!empty(reference::product($product_id)->customer_group_prices))) { ?>
+                <button class="btn btn-success btn-block_product" name="add_cart_product" style="background-image:url('/images/customize/Green.jpg');"  type="submit">
+	            <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	            <b><i><?php echo language::translate('title_add_to_cart', 'Add To Cart'); ?></i></b></button>
+
+
+
+	            
+	            <?php } else if (!empty(customer::$data['id']) && (empty($campaign_price) && (!empty(reference::product($product_id)->customer_group_prices)))
+	            || (reference::product($product_id)->date_valid_from <= date('Y-m-d H:i:s') && (!empty(reference::product($product_id)->addtocart)))
+	            || (reference::product($product_id)->date_valid_from >= date('Y-m-d H:i:s') && (!empty(reference::product($product_id)->addtocart)))
+	            || ($addtocart && ($quantity > 0 || !empty($product->sold_out_status['orderable'])))
+	            
+	            ) { ?>
+                <button class="btn btn-success btn-block_product" name="add_cart_product" style="background-image:url('/images/customize/Green.jpg');"  type="submit">
+	            <span style="color: #000000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	            <b><i><?php echo language::translate('title_add_to_cart', 'Add To Cart'); ?></i></b></button>
+
+
+                
+                <?php } else if (!empty(reference::product($product_id)->specialprice) && ($specialoffer && ($quantity > 0 || !empty($product->sold_out_status['orderable'])))
+                || (!empty(reference::product($product_id)->specialprice) && (reference::product($product_id)->date_valid_from >= date('Y-m-d H:i:s') && (!empty(reference::product($product_id)->specialoffer))))
+                ) { ?>
+                <button class="btn btn-success btn-block_product" type="submit" name="add_cart_product" style="background-image:url('/images/customize/Goldleaf.jpg');" value="true">
+	            <span style="color: #cc0000;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?> 
+	            <b><i><?php echo language::translate('title_special_offer', 'Special Offer'); ?></i></b></button> 
+	            
+                <?php } else { ?>
+                <?php echo '<button class="btn btn-success" name="add_cart_product" value="true" type="submit"'. (($quantity <= 0 && !$orderable) ? ' disabled="disabled"' : '') .'>'. language::translate('title_add_to_cart', 'Add To Cart') .'</button>'; ?>
+             <?php } ?>
+      ]]></add>
+		</operation>
+
+   </file>
+  
+  <file name="includes/library/lib_cart.inc.php">
+
+    <operation error="log">
+      <search position="replace" offset="3"><![CDATA[
+      if ($product->date_valid_to > '1971' && $product->date_valid_to < date('Y-m-d H:i:s')) {
+      ]]></search>
+      <add><![CDATA[
+      
+      ]]></add>
+    </operation>    
+
+    <operation error="log">
+      <search position="replace" offset="3"><![CDATA[
+      if ($product->date_valid_from > date('Y-m-d H:i:s')) {
+      ]]></search>
+      <add><![CDATA[
+
+      ]]></add>
+    </operation>
+
+    <operation error="log">
+      <search position="before"><![CDATA[
+        if ($quantity <= 0) {
+      ]]></search>
+      <add><![CDATA[
+
+      ]]></add>
+    </operation>
+    
+  </file>
+</modification>
+
+<!--                 
+
+688
+                <?php } else if (!empty(reference::product($product_id)->stock_quantity_prices && ($quantity > 0 || !empty($product->sold_out_status['orderable'])))) { ?>
+                <button class="btn btn-success btn-block_product" name="add_cart_product" style="background-image:url('/images/customize/Yellow Red.jpg');" value="true" type="submit">
+                <span style="color: #fe0301;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+                <b><i><?php echo language::translate('title_hot_item', 'Hot Item !!'); ?></i></b></button> 
+
+679
+
+
+
+
+
+
+
+
+<?php } else if (!empty($campaign_price)) { ?>
+                <button class="btn btn-success btn-block_product" name="add_cart_product" style="background-image:url('/images/customize/Red.jpg');" value="true" type="submit">
+	            <span style="color: #f6cd0f;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	            <b><i><?php echo language::translate('title_insane_deal_!!', 'Insane Deal !!'); ?></i></b></button> 
+	            
+                <?php } else if (!empty($campaign_price)) { ?>
+                <button class="btn btn-success btn-block_product" name="add_cart_product" style="background-image:url('/images/customize/Red.jpg');" value="true" type="submit">
+	            <span style="color: #f6cd0f;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	            <b><i><?php echo language::translate('title_insane_deal_!!', 'Insane Deal !!'); ?></i></b></button> 	            
+	            
+                <?php } else if (!empty($campaign_price && ($quantity > 0 || !empty($product->sold_out_status['orderable'])))) { ?>
+                <button class="btn btn-success btn-block_product" name="add_cart_product" style="background-image:url('/images/customize/Red.jpg');" value="true" type="submit">
+	            <span style="color: #f6cd0f;"><?php echo functions::draw_fonticon('fa-shopping-cart'); ?>
+	            <b><i><?php echo language::translate('title_insane_deal_!!', 'Insane Deal !!'); ?></i></b></button>		            
+	            
+        <?php } else if (!empty(reference::product($product_id)->date_valid_from != 0)) { ?>
+           <div class="stock-available">
+            <?php echo language::translate('title_stock_status', 'Stock Status'); ?>:
+            <span class="value"><font color="#c26b00"><?php echo language::translate('title_order_closed', 'Order Closed'); ?></font></span>
+          </div>	            
+	            
+	            
+	            -->
